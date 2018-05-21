@@ -43,7 +43,6 @@ This function should only modify configuration layer settings."
              python-test-runner 'pytest
              python-enable-yapf-format-on-save t
              python-sort-imports-on-save t)
-     django
      ansible
      (osx :variables
           osx-dictionary-dictionary-choice "English"
@@ -54,8 +53,7 @@ This function should only modify configuration layer settings."
      emacs-lisp
      git
      github
-     (markdown :variables
-               markdown-live-preview-engine 'vmd)
+     markdown
      neotree
      docker
      org
