@@ -2,7 +2,6 @@
 
 ## layers
 - python
-- yaml
 - helm
 - auto-completion
 - better-defaults
