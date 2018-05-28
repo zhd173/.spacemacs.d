@@ -448,6 +448,14 @@ before packages are loaded."
 (setq neo-theme 'icons)
 (setq importmagic-python-interpreter '"/usr/local/Cellar/python/3.6.5/bin/python3")
 (setq python-shell-interpreter '"/usr/local/Cellar/python/3.6.5/bin/python3")
+(require 'whitespace)
+;; Whitespace
+(setq whitespace-line-column 79)
+(setq whitespace-style '(face lines-tail))
+(add-hook 'python-mode-hook 'whitespace-mode)
+(add-hook 'before-save-hook
+          (lambda ()
+            (delete-trailing-whitespace)))
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
