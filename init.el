@@ -386,7 +386,7 @@ It should only modify the values of Spacemacs settings."
    ;; List of search tool executable names. Spacemacs uses the first installed
    ;; tool of the list. Supported tools are `rg', `ag', `pt', `ack' and `grep'.
    ;; (default '("rg" "ag" "pt" "ack" "grep"))
-   dotspacemacs-search-tools '("rg" "ag" "pt" "ack" "grep")
+   dotspacemacs-search-tools '("ag" "pt" "ack" "grep")
 
    ;; Format specification for setting the frame title.
    ;; %a - the `abbreviated-file-name', or `buffer-name'
@@ -446,16 +446,8 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
 (setq neo-theme 'icons)
-(setq importmagic-python-interpreter '"/usr/local/Cellar/python/3.6.5/bin/python3")
-(setq python-shell-interpreter '"/usr/local/Cellar/python/3.6.5/bin/python3")
-(require 'whitespace)
-;; Whitespace
-(setq whitespace-line-column 79)
-(setq whitespace-style '(face lines-tail))
-(add-hook 'python-mode-hook 'whitespace-mode)
-(add-hook 'before-save-hook
-          (lambda ()
-            (delete-trailing-whitespace)))
+(setq importmagic-python-interpreter '"/usr/local/bin/python")
+(setq python-shell-interpreter '"/usr/local/bin/python")
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
