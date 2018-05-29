@@ -52,6 +52,7 @@ This function should only modify configuration layer settings."
      (ibuffer :variables
               ibuffer-group-buffers-by 'projects)
      ansible
+     emoji
      restclient
      (auto-completion :variables
                       auto-completion-enable-sort-by-usage t
@@ -451,6 +452,8 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
       ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
       ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
   )
+(setq-default dotspacemacs-configuration-layers
+    '((python :variables python-fill-column 79)))
 
 (defun dotspacemacs/user-config ()
   "Configuration for user code:
@@ -476,7 +479,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(restclient-helm helm-xref helm-pydoc helm-projectile helm-mode-manager helm-gtags helm-gitignore helm-flx helm-descbinds helm-company helm-ag helm helm-core yasnippet-snippets yapfify yaml-mode ws-butler winum which-key wgrep uuidgen use-package unfill toc-org string-inflection spaceline-all-the-icons smex restart-emacs request ranger rainbow-mode rainbow-identifiers pyvenv pytest pyenv-mode py-isort prodigy popwin pippel pipenv pip-requirements persp-mode pcre2el password-generator paradox overseer org-projectile org-pomodoro org-mime org-brain open-junk-file ob-restclient ob-http neotree nameless mwim move-text mmm-mode markdown-toc macrostep live-py-mode linum-relative link-hint jinja2-mode ivy-xref ivy-hydra indent-guide importmagic ibuffer-projectile hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link ggtags fuzzy font-lock+ flyspell-correct-ivy flycheck-pos-tip flx fill-column-indicator expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-tutor evil-surround evil-search-highlight-persist evil-org evil-numbers evil-nerd-commenter evil-matchit evil-magit evil-lion evil-iedit-state evil-cleverparens evil-anzu eval-sexp-fu engine-mode elisp-slime-nav editorconfig dumb-jump dockerfile-mode docker diminish cython-mode counsel-projectile counsel-gtags company-statistics company-restclient company-ansible company-anaconda column-enforce-mode color-identifiers-mode centered-cursor-mode bind-map auto-yasnippet auto-highlight-symbol auto-complete auto-compile ansible-doc ansible aggressive-indent adaptive-wrap ace-window ace-link)))
+   '(emojify ht emoji-cheat-sheet-plus company-emoji volatile-highlights vi-tilde-fringe symon smeargle rainbow-delimiters orgit org-present org-download org-bullets magit-gitflow lorem-ipsum ivy-purpose window-purpose imenu-list highlight-indentation helm-make helm helm-core google-translate gh-md flx-ido fancy-battery eyebrowse evil-unimpaired evil-mc evil-lisp-state evil-indent-plus evil-exchange evil-escape evil-ediff evil-args define-word clean-aindent-mode auto-dictionary ac-ispell yasnippet-snippets yapfify yaml-mode ws-butler winum which-key wgrep uuidgen use-package unfill toc-org string-inflection spaceline-all-the-icons smex restart-emacs request ranger rainbow-mode rainbow-identifiers pyvenv pytest pyenv-mode py-isort prodigy popwin pippel pipenv pip-requirements persp-mode pcre2el password-generator paradox overseer org-projectile org-pomodoro org-mime org-brain open-junk-file ob-restclient ob-http neotree nameless mwim move-text mmm-mode markdown-toc macrostep live-py-mode linum-relative link-hint jinja2-mode ivy-xref ivy-hydra indent-guide importmagic ibuffer-projectile hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link ggtags fuzzy font-lock+ flyspell-correct-ivy flycheck-pos-tip flx fill-column-indicator expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-tutor evil-surround evil-search-highlight-persist evil-org evil-numbers evil-nerd-commenter evil-matchit evil-magit evil-lion evil-iedit-state evil-cleverparens evil-anzu eval-sexp-fu engine-mode elisp-slime-nav editorconfig dumb-jump dockerfile-mode docker diminish cython-mode counsel-projectile counsel-gtags company-statistics company-restclient company-ansible company-anaconda column-enforce-mode color-identifiers-mode centered-cursor-mode bind-map auto-yasnippet auto-highlight-symbol auto-complete auto-compile ansible-doc ansible aggressive-indent adaptive-wrap ace-window ace-link)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
