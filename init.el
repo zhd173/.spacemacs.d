@@ -53,7 +53,6 @@ This function should only modify configuration layer settings."
               ibuffer-group-buffers-by 'projects)
      ansible
      restclient
-     ;; helm
      (auto-completion :variables
                       auto-completion-enable-sort-by-usage t
                       auto-completion-enable-snippets-in-popup t
@@ -75,7 +74,7 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(helm-spacemacs-help)
+   dotspacemacs-additional-packages '()
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -90,7 +89,7 @@ This function should only modify configuration layer settings."
                     org-bullets org-repo-todo org-download org-timer
                     livid-mode git-gutter git-gutter-fringe  evil-escape
                     leuven-theme gh-md evil-lisp-state spray lorem-ipsum symon
-                    ac-ispell ace-jump-mode auto-dictionary
+                    ac-ispell ace-jump-mode auto-dictionary helm-spacemacs-help
                     clang-format define-word google-translate disaster epic
                     fancy-battery org-present orgit orglue
                     helm-flyspell flyspell-correct-helm clean-aindent-mode
@@ -493,7 +492,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(auto-complete yasnippet-snippets yapfify yaml-mode xterm-color ws-butler winum which-key wgrep uuidgen use-package unfill toc-org string-inflection spaceline-all-the-icons smex shell-pop restart-emacs request ranger rainbow-mode rainbow-identifiers pyvenv pytest pyenv-mode py-isort prodigy popwin pippel pipenv pip-requirements persp-mode pcre2el password-generator paradox overseer org-projectile org-pomodoro org-mime org-brain open-junk-file ob-restclient ob-http neotree nameless mwim multi-term move-text mmm-mode markdown-toc macrostep live-py-mode linum-relative link-hint jinja2-mode ivy-xref ivy-hydra indent-guide importmagic ibuffer-projectile hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link ggtags fuzzy font-lock+ flyspell-correct-ivy flycheck-pos-tip flx fill-column-indicator expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-tutor evil-surround evil-search-highlight-persist evil-org evil-numbers evil-nerd-commenter evil-matchit evil-magit evil-lion evil-iedit-state evil-cleverparens evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help engine-mode elisp-slime-nav editorconfig dumb-jump dockerfile-mode docker diminish cython-mode counsel-projectile counsel-gtags company-statistics company-restclient company-ansible company-anaconda column-enforce-mode color-identifiers-mode centered-cursor-mode bind-map auto-yasnippet auto-highlight-symbol auto-compile ansible-doc ansible aggressive-indent adaptive-wrap ace-window ace-link)))
+   '(restclient-helm helm-xref helm-pydoc helm-projectile helm-mode-manager helm-gtags helm-gitignore helm-flx helm-descbinds helm-company helm-ag helm helm-core yasnippet-snippets yapfify yaml-mode ws-butler winum which-key wgrep uuidgen use-package unfill toc-org string-inflection spaceline-all-the-icons smex restart-emacs request ranger rainbow-mode rainbow-identifiers pyvenv pytest pyenv-mode py-isort prodigy popwin pippel pipenv pip-requirements persp-mode pcre2el password-generator paradox overseer org-projectile org-pomodoro org-mime org-brain open-junk-file ob-restclient ob-http neotree nameless mwim move-text mmm-mode markdown-toc macrostep live-py-mode linum-relative link-hint jinja2-mode ivy-xref ivy-hydra indent-guide importmagic ibuffer-projectile hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link ggtags fuzzy font-lock+ flyspell-correct-ivy flycheck-pos-tip flx fill-column-indicator expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-tutor evil-surround evil-search-highlight-persist evil-org evil-numbers evil-nerd-commenter evil-matchit evil-magit evil-lion evil-iedit-state evil-cleverparens evil-anzu eval-sexp-fu engine-mode elisp-slime-nav editorconfig dumb-jump dockerfile-mode docker diminish cython-mode counsel-projectile counsel-gtags company-statistics company-restclient company-ansible company-anaconda column-enforce-mode color-identifiers-mode centered-cursor-mode bind-map auto-yasnippet auto-highlight-symbol auto-complete auto-compile ansible-doc ansible aggressive-indent adaptive-wrap ace-window ace-link)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
