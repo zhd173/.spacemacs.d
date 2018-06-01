@@ -34,21 +34,22 @@ This function should only modify configuration layer settings."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(yaml
-     ivy
+     ;; ivy
      ranger
+     helm
      colors
      prodigy
      search-engine
-     (syntax-checking :variables
-                      syntax-checking-enable-by-default nil
-                      syntax-checking-enable-tooltips nil)
-     (spell-checking :variables
-                     spell-checking-enable-by-default nil)
+     spell-checking
+     syntax-checking
      (spacemacs-layouts :variables
                         layouts-enable-autosave nil
                         layout-autosave-delay 300)
      (python :variables
-             python-test-runner 'pytest)
+             python-test-runner 'pytest
+             python-fill-column 79
+             ;; python-sort-imports-on-save t
+             )
      (ibuffer :variables
               ibuffer-group-buffers-by 'projects)
      ansible
@@ -57,8 +58,7 @@ This function should only modify configuration layer settings."
      (auto-completion :variables
                       auto-completion-enable-sort-by-usage t
                       auto-completion-enable-snippets-in-popup t
-                      :disabled-for org markdown)
-     (gtags :disabled-for clojure emacs-lisp javascript latex shell-scripts)
+                      )
      better-defaults
      emacs-lisp
      git
@@ -179,8 +179,7 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark
-                         spacemacs-light)
+   dotspacemacs-themes '(spacemacs-dark)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `vim-powerline' and `vanilla'. The first three
@@ -452,8 +451,6 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
       ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
       ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
   )
-(setq-default dotspacemacs-configuration-layers
-    '((python :variables python-fill-column 79)))
 
 (defun dotspacemacs/user-config ()
   "Configuration for user code:
@@ -463,27 +460,15 @@ Put your configuration code here, except for variables that should be set
 before packages are loaded."
 (setq neo-theme 'icons)
 (setq importmagic-python-interpreter '"/usr/local/Cellar/python/3.6.5/bin/python3")
-(setq python-shell-interpreter '"/usr/local/bin/python")
+(setq python-shell-interpreter '"ipython")
   )
 
-;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+(setq custom-file (expand-file-name "custom.el" dotspacemacs-directory))
+(load custom-file 'no-error 'no-message)
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(emojify ht emoji-cheat-sheet-plus company-emoji volatile-highlights vi-tilde-fringe symon smeargle rainbow-delimiters orgit org-present org-download org-bullets magit-gitflow lorem-ipsum ivy-purpose window-purpose imenu-list highlight-indentation helm-make helm helm-core google-translate gh-md flx-ido fancy-battery eyebrowse evil-unimpaired evil-mc evil-lisp-state evil-indent-plus evil-exchange evil-escape evil-ediff evil-args define-word clean-aindent-mode auto-dictionary ac-ispell yasnippet-snippets yapfify yaml-mode ws-butler winum which-key wgrep uuidgen use-package unfill toc-org string-inflection spaceline-all-the-icons smex restart-emacs request ranger rainbow-mode rainbow-identifiers pyvenv pytest pyenv-mode py-isort prodigy popwin pippel pipenv pip-requirements persp-mode pcre2el password-generator paradox overseer org-projectile org-pomodoro org-mime org-brain open-junk-file ob-restclient ob-http neotree nameless mwim move-text mmm-mode markdown-toc macrostep live-py-mode linum-relative link-hint jinja2-mode ivy-xref ivy-hydra indent-guide importmagic ibuffer-projectile hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link ggtags fuzzy font-lock+ flyspell-correct-ivy flycheck-pos-tip flx fill-column-indicator expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-tutor evil-surround evil-search-highlight-persist evil-org evil-numbers evil-nerd-commenter evil-matchit evil-magit evil-lion evil-iedit-state evil-cleverparens evil-anzu eval-sexp-fu engine-mode elisp-slime-nav editorconfig dumb-jump dockerfile-mode docker diminish cython-mode counsel-projectile counsel-gtags company-statistics company-restclient company-ansible company-anaconda column-enforce-mode color-identifiers-mode centered-cursor-mode bind-map auto-yasnippet auto-highlight-symbol auto-complete auto-compile ansible-doc ansible aggressive-indent adaptive-wrap ace-window ace-link)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 )
