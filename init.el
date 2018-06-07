@@ -460,7 +460,7 @@ Put your configuration code here, except for variables that should be set
 before packages are loaded."
 (setq neo-theme 'icons)
 (setq importmagic-python-interpreter '"/usr/local/Cellar/python/3.6.5/bin/python3")
-(setq python-shell-interpreter '"ipython")
+(setq python-shell-interpreter '"/usr/local/Cellar/python/3.6.5/bin/python3")
   )
 
 ;; auto-generate custom variable definitions.
