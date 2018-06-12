@@ -41,6 +41,7 @@ This function should only modify configuration layer settings."
      ;; ----------------------------------------------------------------
      helm
      (python :variables
+             python-test-runner 'pytest
              python-fill-column 79
              )
      (auto-completion :variables
