@@ -169,7 +169,7 @@ It should only modify the values of Spacemacs settings."
    ;; List sizes may be nil, in which case
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
    dotspacemacs-startup-lists '((recents . 10)
-                                (bookmarks . 5)
+                                (bookmarks . 10)
                                 (projects . 10))
 
    ;; True if the home buffer should respond to resize events. (default t)
