@@ -4,6 +4,7 @@
 
 (defun dotspacemacs/layers ()
   "Layer configuration:
+
 This function should only modify configuration layer settings."
   (setq-default
    ;; Base distribution to use. This is a layer contained in the directory
@@ -33,7 +34,8 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(react
+   '(html
+     ;; react
      javascript
      sql
      helm
@@ -426,6 +428,14 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil)
    dotspacemacs-pretty-docs nil))
 
+(defun dotspacemacs/user-env ()
+  "Environment variables setup.
+This function defines the environment variables for your Emacs session. By
+default it calls `spacemacs/load-spacemacs-env' which loads the environment
+variables declared in `~/.spacemacs.env' or `~/.spacemacs.d/.spacemacs.env'.
+See the header of this file for more information."
+  (spacemacs/load-spacemacs-env))
+
 (defun dotspacemacs/user-init ()
   "Initialization for user code:
 This function is called immediately after `dotspacemacs/init', before layer
@@ -452,6 +462,7 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
   (setq neo-theme 'icons)
+  (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
   (setq importmagic-python-interpreter "ipython")
   (setq python-shell-interpreter "ipython"
         python-shell-interpreter-args "--simple-prompt -i")
