@@ -466,6 +466,12 @@ before packages are loaded."
   (setq importmagic-python-interpreter "ipython")
   (setq python-shell-interpreter "ipython"
         python-shell-interpreter-args "--simple-prompt -i")
+  (setq default-frame-alist
+        `((top . 50)
+          (left . 300)
+          (width . 105)
+          (height . 40)
+          ))
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
