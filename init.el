@@ -4,7 +4,6 @@
 
 (defun dotspacemacs/layers ()
   "Layer configuration:
-
 This function should only modify configuration layer settings."
   (setq-default
    ;; Base distribution to use. This is a layer contained in the directory
@@ -35,10 +34,9 @@ This function should only modify configuration layer settings."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(html
-     ;; react
-     javascript
      sql
      helm
+     (javascript :variables javascript-backend 'tern)
      (python :variables
              python-test-runner 'pytest
              python-fill-column 79
@@ -446,7 +444,8 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
     '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
       ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
       ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
-  )
+ ;; (add-to-list 'exec-path "/usr/local/Cellar/node/10.4.0/bin" t)
+ )
 
 (defun dotspacemacs/user-load ()
   "Library to load while dumping.
@@ -462,7 +461,7 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
   (setq neo-theme 'icons)
-  (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
+  ;; (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
   (setq importmagic-python-interpreter "ipython")
   (setq python-shell-interpreter "ipython"
         python-shell-interpreter-args "--simple-prompt -i")
