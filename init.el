@@ -444,14 +444,13 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
     '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
       ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
       ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
- ;; (add-to-list 'exec-path "/usr/local/Cellar/node/10.4.0/bin" t)
  )
 
 (defun dotspacemacs/user-load ()
   "Library to load while dumping.
-This function is called while dumping Spacemacs configuration. You can
-`require' or `load' the libraries of your choice that will be included
-in the dump."
+This function is called only while dumping Spacemacs configuration. You can
+`require' or `load' the libraries of your choice that will be included in the
+dump."
   )
 
 (defun dotspacemacs/user-config ()
@@ -461,10 +460,7 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
   (setq neo-theme 'icons)
-  ;; (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
-  (setq importmagic-python-interpreter "ipython")
-  (setq python-shell-interpreter "ipython"
-        python-shell-interpreter-args "--simple-prompt -i")
+  (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
   (setq default-frame-alist
         `((top . 50)
           (left . 300)
