@@ -34,18 +34,30 @@ This function should only modify configuration layer settings."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(html
+     better-defaults
      sql
      helm
+     (ibuffer :variables ibuffer-group-buffers-by 'projects)
      (javascript :variables javascript-backend 'tern)
-     (python :variables
-             python-test-runner 'pytest
-             python-fill-column 79
-             )
+     python
      (auto-completion :variables
                       auto-completion-enable-sort-by-usage t
                       auto-completion-enable-snippets-in-popup t
                       )
      emacs-lisp
+     (org :variables
+          org-enable-github-support t
+          org-enable-reveal-js-support t
+          org-enable-bootstrap-support t
+          org-enable-org-journal-support t
+          org-projectile-file "~/orgs/TODOs.org"
+          org-journal-dir "~/orgs/journal/"
+          org-journal-file-format "%Y-%m-%d"
+          org-journal-date-prefix "#+TITLE: "
+          org-journal-date-format "%A, %B %d %Y"
+          org-journal-time-prefix "* "
+          org-journal-time-format "")
+
      git
      markdown
      neotree
@@ -168,8 +180,9 @@ It should only modify the values of Spacemacs settings."
    ;; `recents' `bookmarks' `projects' `agenda' `todos'.
    ;; List sizes may be nil, in which case
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
-   dotspacemacs-startup-lists '((recents . 10)
-                                (bookmarks . 10)
+   dotspacemacs-startup-lists '((recents . 7)
+                                (bookmarks . 5)
+                                (todos . 7)
                                 (projects . 10))
 
    ;; True if the home buffer should respond to resize events. (default t)
@@ -440,6 +453,7 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
+  ;; 替换国内源
  (setq configuration-layer-elpa-archives
     '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
       ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
@@ -459,18 +473,38 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+  ;; 设置 neo 文件图标
   (setq neo-theme 'icons)
+
+  ;; web-mode 添加 Vue 支持
   (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
-  (setq default-frame-alist
-        `((top . 50)
-          (left . 300)
-          (width . 105)
-          (height . 40)
-          ))
-  )
+
+  ;; 初始化窗口大小和位置
+  ;; (setq default-frame-alist
+  ;;       `((top . 50)
+  ;;         (left . 300)
+  ;;         (width . 105)
+  ;;         (height . 40)
+  ;;         ))
+
+  ;; 解决 spacemacs org 与 emacs 自带的 org 冲突问题
+  (with-eval-after-load 'org-agenda
+    (require 'org-projectile)
+    (mapcar '(lambda (file)
+               (when (file-exists-p file)
+                 (push file org-agenda-files)))
+            (org-projectile-todo-files)))
+
+  ;; end of user-config
+    )
+
+  ;; 添加 org clock 至 mode line
+  (setq spaceline-org-clock-p t)
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+
+;; 将 custome-settings 相关变动置于 custom.el 文件
 (setq custom-file (expand-file-name "custom.el" dotspacemacs-directory))
 (load custom-file 'no-error 'no-message)
 (defun dotspacemacs/emacs-custom-settings ()
