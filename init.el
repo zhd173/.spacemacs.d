@@ -39,7 +39,7 @@ This function should only modify configuration layer settings."
      helm
      (ibuffer :variables ibuffer-group-buffers-by 'projects)
      (javascript :variables javascript-backend 'tern)
-     python
+     (python :variables python-test-runner 'pytest)
      (auto-completion :variables
                       auto-completion-enable-sort-by-usage t
                       auto-completion-enable-snippets-in-popup t
@@ -59,7 +59,7 @@ This function should only modify configuration layer settings."
           org-journal-time-format "")
 
      git
-     markdown
+     (markdown :variables markdown-live-preview-engine 'vmd)
      neotree
      emoji
      syntax-checking
@@ -180,9 +180,7 @@ It should only modify the values of Spacemacs settings."
    ;; `recents' `bookmarks' `projects' `agenda' `todos'.
    ;; List sizes may be nil, in which case
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
-   dotspacemacs-startup-lists '((recents . 7)
-                                (bookmarks . 5)
-                                (todos . 7)
+   dotspacemacs-startup-lists '((recents . 15)
                                 (projects . 10))
 
    ;; True if the home buffer should respond to resize events. (default t)
@@ -199,9 +197,9 @@ It should only modify the values of Spacemacs settings."
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(
-                         ;; spacemacs-dark
+                         spacemacs-dark
                          ;; molokai
-                         badwolf
+                         ;; badwolf
                          ;; spacemacs-light
                          )
 
@@ -213,7 +211,7 @@ It should only modify the values of Spacemacs settings."
    ;; additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
    dotspacemacs-mode-line-theme '(all-the-icons :separator arrow :separator-scale 1.5)
-   ;; dotspacemacs-mode-line-theme '(spacemacs :separator arrow :separator-scale 1.5)
+   ;; dotspacemacs-mode-line-theme '(spacemacs :separator alternate :separator-scale 1.5)
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
