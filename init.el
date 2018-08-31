@@ -484,7 +484,8 @@ before packages are loaded."
 
   ;; 将 Spacemacs 作为 Git 默认编辑器
   (global-git-commit-mode t)
-  (setq magit-repository-directories '("~/Botpy/"))
+  (setq magit-repository-directories
+        '("~/Botpy/"))
 
   ;; web-mode 添加 Vue 支持
   (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
