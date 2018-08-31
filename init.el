@@ -460,6 +460,10 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
     '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
       ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
       ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
+
+ ;; git 相关设置
+ ;; (setq-default git-magit-status-fullscreen t)
+
  )
 
 (defun dotspacemacs/user-load ()
@@ -477,6 +481,10 @@ Put your configuration code here, except for variables that should be set
 before packages are loaded."
   ;; 设置 neo 文件图标
   (setq neo-theme 'icons)
+
+  ;; 将 Spacemacs 作为 Git 默认编辑器
+  (global-git-commit-mode t)
+  (setq magit-repository-directories '("~/Botpy/"))
 
   ;; web-mode 添加 Vue 支持
   (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
