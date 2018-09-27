@@ -46,13 +46,18 @@ This function should only modify configuration layer settings."
                       auto-completion-enable-snippets-in-popup t
                       )
      emacs-lisp
+     (c-c++ :variables
+            c-c++-default-mode-for-headers 'c++-mode
+            c-c++-enable-google-style t
+            c-c++-enable-google-newline t
+            c-c++-enable-clang-support t)
      (org :variables
           org-enable-github-support t
           org-enable-reveal-js-support t
           org-enable-bootstrap-support t
           org-enable-org-journal-support t
-          org-projectile-file "~/orgs/TODOs.org"
-          org-journal-dir "~/orgs/journal/"
+          org-projectile-file "~/Documents/orgs/TODOs.org"
+          org-journal-dir "~/Documents/orgs/journal/"
           org-journal-file-format "%Y-%m-%d"
           org-journal-date-prefix "#+TITLE: "
           org-journal-date-format "%A, %B %d %Y"
@@ -199,9 +204,7 @@ It should only modify the values of Spacemacs settings."
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(
                          spacemacs-dark
-                         ;; molokai
-                         ;; badwolf
-                         ;; spacemacs-light
+                         spacemacs-light
                          )
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
