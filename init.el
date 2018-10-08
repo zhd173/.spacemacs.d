@@ -38,6 +38,15 @@ This function should only modify configuration layer settings."
      better-defaults
      sql
      helm
+     (go :variables
+         go-use-gometalinter t
+         ;; go-backend 'lsp
+         go-tab-width 4
+         godoc-at-point-function 'godoc-gogetdoc
+         go-format-before-save t
+         gofmt-command "goimports"
+         go-use-test-args "-race -timeout 10s"
+         )
      (ibuffer :variables ibuffer-group-buffers-by 'projects)
      (javascript :variables javascript-backend 'tern)
      (python :variables python-test-runner 'pytest)
