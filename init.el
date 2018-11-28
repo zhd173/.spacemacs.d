@@ -33,22 +33,30 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(rust
+   '(
      yaml
+     ansible
+     (chrome :variables chrome-exec-path "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
+     (colors :variables
+             colors-colorize-identifiers 'all
+             colors-enable-nyan-cat-progress-bar t
+             )
+     games
      html
      better-defaults
      sql
      helm
-     lsp
+     multiple-cursors
+     protobuf
+     docker
+     ;; lsp
      (go :variables
-         ;; godoc-at-point-function 'godoc-gogetdoc
-         go-use-gometalinter t
-         ;; go-use-golangci-lint t
-         go-backend 'lsp
+         godoc-at-point-function 'godoc-gogetdoc
+         go-use-golangci-lint t
          go-tab-width 4
          go-format-before-save t
          gofmt-command "goimports"
-         go-use-test-args "-race -timeout 10s"
+         ;; go-use-test-args "-race -timeout 10s"
          )
      (ibuffer :variables ibuffer-group-buffers-by 'projects)
      (javascript :variables javascript-backend 'tern)
@@ -58,11 +66,6 @@ This function should only modify configuration layer settings."
                       auto-completion-enable-snippets-in-popup t
                       )
      emacs-lisp
-     (c-c++ :variables
-            c-c++-default-mode-for-headers 'c++-mode
-            c-c++-enable-google-style t
-            c-c++-enable-google-newline t
-            c-c++-enable-clang-support t)
      (org :variables
           org-enable-github-support t
           org-enable-reveal-js-support t
@@ -91,7 +94,9 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages '(
+                                      ;; cnfonts
+                                      )
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -214,10 +219,8 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(
-                         spacemacs-dark
-                         spacemacs-light
-                         )
+   dotspacemacs-themes '(spacemacs-dark
+                         spacemacs-light)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
@@ -472,7 +475,7 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-  ;; 替换国内源
+ ;; 替换国内源
  (setq configuration-layer-elpa-archives
     '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
       ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
@@ -481,6 +484,14 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
  ;; git 相关设置
  ;; (setq-default git-magit-status-fullscreen t)
 
+ (setq paradox-github-token "9ebac6925c38a098a7bd2c193530427650499868")
+ (defun my-flymd-browser-function (url)
+   (let ((process-environment (browse-url-process-environment)))
+     (apply 'start-process
+            (concat "google-chrome " url) nil
+            "/usr/bin/open"
+            (list "google-chrome" "--new-window" "--allow-file-access-from-files" url))))
+ (setq flymd-browser-open-function 'my-flymd-browser-function)
  )
 
 (defun dotspacemacs/user-load ()
@@ -496,6 +507,10 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+  ;; 中英文等宽设置
+  ;; (cnfonts-enable)
+  ;; (cnfonts-set-spacemacs-fallback-fonts)
+
   ;; 设置 neo 文件图标
   (setq neo-theme 'icons)
 
