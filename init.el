@@ -42,9 +42,14 @@ This function should only modify configuration layer settings."
              colors-enable-nyan-cat-progress-bar t
              )
      games
+     imenu-list
+     gpu
      html
+     json
      better-defaults
-     sql
+     (sql :variables sql-capitalize-keywords t
+          sql-capitalize-keywords t
+          sql-capitalize-keywords-blacklist '("name" "varchar"))
      helm
      multiple-cursors
      protobuf
@@ -204,6 +209,7 @@ It should only modify the values of Spacemacs settings."
    ;; List sizes may be nil, in which case
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
    dotspacemacs-startup-lists '((recents . 15)
+                                (bookmarks . 10)
                                 (projects . 10))
 
    ;; True if the home buffer should respond to resize events. (default t)
