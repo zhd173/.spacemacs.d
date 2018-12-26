@@ -33,12 +33,12 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(
+   '(rust
      yaml
      ansible
      (chrome :variables chrome-exec-path "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
      (colors :variables
-             colors-colorize-identifiers 'all
+             colors-colorize-identifiers nil
              colors-enable-nyan-cat-progress-bar t
              )
      games
@@ -61,11 +61,14 @@ This function should only modify configuration layer settings."
          go-tab-width 4
          go-format-before-save t
          gofmt-command "goimports"
-         ;; go-use-test-args "-race -timeout 10s"
+         ;; go-backend 'lsp
+         go-use-test-args "-race -timeout 10s"
          )
      (ibuffer :variables ibuffer-group-buffers-by 'projects)
      (javascript :variables javascript-backend 'tern)
-     (python :variables python-test-runner 'pytest)
+     (python :variables
+             python-backend 'anaconda
+             python-test-runner 'pytest)
      (auto-completion :variables
                       auto-completion-enable-sort-by-usage t
                       auto-completion-enable-snippets-in-popup t
@@ -99,9 +102,7 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(
-                                      ;; cnfonts
-                                      )
+   dotspacemacs-additional-packages '()
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -399,7 +400,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-smartparens-strict-mode nil
 
    ;; If non-nil pressing the closing parenthesis `)' key in insert mode passes
-   ;; over any automatically added closing parenthesis, bracket, quote, etc…
+   ;; over any automatically added closing parenthesis, bracket, quote, etc …
    ;; This can be temporary disabled by pressing `C-q' before `)'. (default nil)
    dotspacemacs-smart-closing-parenthesis nil
 
@@ -498,6 +499,22 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
             "/usr/bin/open"
             (list "google-chrome" "--new-window" "--allow-file-access-from-files" url))))
  (setq flymd-browser-open-function 'my-flymd-browser-function)
+
+ ;; 设置中英文等宽
+ (set-face-attribute
+  'default nil
+  :font (font-spec :name "-*-Source Code Pro-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1"
+                   :weight 'normal
+                   :slant 'normal
+                   :size 14))
+ (dolist (charset '(kana han symbol cjk-misc bopomofo))
+   (set-fontset-font
+    (frame-parameter nil 'font)
+    charset
+    (font-spec :name "-*-Hiragino Sans GB-normal-normal-normal-*-*-*-*-*-p-0-iso10646-1"
+               :weight 'normal
+               :slant 'normal
+               :size 16)))
  )
 
 (defun dotspacemacs/user-load ()
@@ -513,9 +530,6 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
-  ;; 中英文等宽设置
-  ;; (cnfonts-enable)
-  ;; (cnfonts-set-spacemacs-fallback-fonts)
 
   ;; 设置 neo 文件图标
   (setq neo-theme 'icons)
