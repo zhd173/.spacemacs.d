@@ -54,14 +54,14 @@ This function should only modify configuration layer settings."
      multiple-cursors
      protobuf
      docker
-     ;; lsp
+     lsp
      (go :variables
-         godoc-at-point-function 'godoc-gogetdoc
-         go-use-golangci-lint t
+         go-backend 'lsp
+         ;; godoc-at-point-function 'godoc-gogetdoc
+         ;; go-use-golangci-lint t
          go-tab-width 4
          go-format-before-save t
          gofmt-command "goimports"
-         ;; go-backend 'lsp
          go-use-test-args "-race -timeout 10s"
          )
      (ibuffer :variables ibuffer-group-buffers-by 'projects)
@@ -400,7 +400,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-smartparens-strict-mode nil
 
    ;; If non-nil pressing the closing parenthesis `)' key in insert mode passes
-   ;; over any automatically added closing parenthesis, bracket, quote, etc …
+   ;; over any automatically added closing parenthesis, bracket, quote, etc…
    ;; This can be temporary disabled by pressing `C-q' before `)'. (default nil)
    dotspacemacs-smart-closing-parenthesis nil
 
@@ -484,9 +484,13 @@ It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
  ;; 替换国内源
  (setq configuration-layer-elpa-archives
-    '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-      ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
-      ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
+ ;;    '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+ ;;      ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
+ ;;      ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
+       '(("melpa-stable" . "http://stable.melpa.org/packages/")
+	       ("melpa"     . "http://melpa.milkbox.net/packages/")
+	       ("marmalade" . "http://marmalade-repo.org/packages/")
+         ("gnu"       . "http://elpa.gnu.org/packages/")))
 
  ;; git 相关设置
  ;; (setq-default git-magit-status-fullscreen t)
