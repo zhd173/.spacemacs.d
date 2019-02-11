@@ -33,7 +33,8 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(rust
+   '(nginx
+     rust
      yaml
      ansible
      (chrome :variables chrome-exec-path "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
@@ -56,9 +57,9 @@ This function should only modify configuration layer settings."
      docker
      lsp
      (go :variables
-         go-backend 'lsp
-         ;; godoc-at-point-function 'godoc-gogetdoc
-         ;; go-use-golangci-lint t
+         ;; go-backend 'lsp
+         godoc-at-point-function 'godoc-gogetdoc
+         go-use-golangci-lint t
          go-tab-width 4
          go-format-before-save t
          gofmt-command "goimports"
@@ -68,6 +69,9 @@ This function should only modify configuration layer settings."
      (javascript :variables javascript-backend 'tern)
      (python :variables
              python-backend 'anaconda
+             python-pipenv-activate t
+             ;; python-backend 'lsp
+             python-enable-yapf-format-on-save t
              python-test-runner 'pytest)
      (auto-completion :variables
                       auto-completion-enable-sort-by-usage t
@@ -483,14 +487,10 @@ configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
  ;; 替换国内源
- (setq configuration-layer-elpa-archives
+ ;; (setq configuration-layer-elpa-archives
  ;;    '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
  ;;      ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
  ;;      ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
-       '(("melpa-stable" . "http://stable.melpa.org/packages/")
-	       ("melpa"     . "http://melpa.milkbox.net/packages/")
-	       ("marmalade" . "http://marmalade-repo.org/packages/")
-         ("gnu"       . "http://elpa.gnu.org/packages/")))
 
  ;; git 相关设置
  ;; (setq-default git-magit-status-fullscreen t)
@@ -504,21 +504,24 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
             (list "google-chrome" "--new-window" "--allow-file-access-from-files" url))))
  (setq flymd-browser-open-function 'my-flymd-browser-function)
 
+ ;; fix reading error on Mac OS
+ (setq anaconda-mode-localhost-address "localhost")
+
  ;; 设置中英文等宽
- (set-face-attribute
-  'default nil
-  :font (font-spec :name "-*-Source Code Pro-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1"
-                   :weight 'normal
-                   :slant 'normal
-                   :size 14))
- (dolist (charset '(kana han symbol cjk-misc bopomofo))
-   (set-fontset-font
-    (frame-parameter nil 'font)
-    charset
-    (font-spec :name "-*-Hiragino Sans GB-normal-normal-normal-*-*-*-*-*-p-0-iso10646-1"
-               :weight 'normal
-               :slant 'normal
-               :size 16)))
+ ;; (set-face-attribute
+ ;;  'default nil
+ ;;  :font (font-spec :name "-*-Source Code Pro-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1"
+ ;;                   :weight 'normal
+ ;;                   :slant 'normal
+ ;;                   :size 14))
+ ;; (dolist (charset '(kana han symbol cjk-misc bopomofo))
+ ;;   (set-fontset-font
+ ;;    (frame-parameter nil 'font)
+ ;;    charset
+ ;;    (font-spec :name "-*-Hiragino Sans GB-normal-normal-normal-*-*-*-*-*-p-0-iso10646-1"
+ ;;               :weight 'normal
+ ;;               :slant 'normal
+ ;;               :size 16)))
  )
 
 (defun dotspacemacs/user-load ()
@@ -562,11 +565,12 @@ before packages are loaded."
                  (push file org-agenda-files)))
             (org-projectile-todo-files)))
 
+  ;; 添加 org clock 至 mode line
+  (setq spaceline-org-clock-p t)
+
   ;; end of user-config
     )
 
-  ;; 添加 org clock 至 mode line
-  (setq spaceline-org-clock-p t)
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
