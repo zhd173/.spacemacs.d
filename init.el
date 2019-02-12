@@ -33,7 +33,8 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(nginx
+   '(systemd
+     nginx
      rust
      yaml
      ansible
@@ -94,6 +95,9 @@ This function should only modify configuration layer settings."
      git
      (markdown :variables markdown-live-preview-engine 'vmd)
      neotree
+     ;; (treemacs :variables
+     ;;           treemacs-use-follow-mode t
+     ;;           )
      emoji
      syntax-checking
      version-control
@@ -487,10 +491,10 @@ configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
  ;; 替换国内源
- ;; (setq configuration-layer-elpa-archives
- ;;    '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
- ;;      ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
- ;;      ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
+ (setq configuration-layer-elpa-archives
+    '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+      ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
+      ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
 
  ;; git 相关设置
  ;; (setq-default git-magit-status-fullscreen t)
