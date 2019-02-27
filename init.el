@@ -38,14 +38,14 @@ This function should only modify configuration layer settings."
      rust
      yaml
      ansible
-     (chrome :variables chrome-exec-path "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
+     ;; (chrome :variables chrome-exec-path "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
      (colors :variables
              colors-colorize-identifiers nil
              colors-enable-nyan-cat-progress-bar t
              )
      games
      imenu-list
-     gpu
+     ;; gpu
      html
      json
      better-defaults
@@ -56,7 +56,7 @@ This function should only modify configuration layer settings."
      multiple-cursors
      protobuf
      docker
-     lsp
+     ;; lsp
      (go :variables
          ;; go-backend 'lsp
          godoc-at-point-function 'godoc-gogetdoc
@@ -84,6 +84,7 @@ This function should only modify configuration layer settings."
           org-enable-reveal-js-support t
           org-enable-bootstrap-support t
           org-enable-org-journal-support t
+          org-journal-encrypt-journal t
           org-projectile-file "~/Documents/orgs/TODOs.org"
           org-journal-dir "~/Documents/orgs/journal/"
           org-journal-file-format "%Y-%m-%d"
@@ -246,7 +247,7 @@ It should only modify the values of Spacemacs settings."
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
    ;; dotspacemacs-mode-line-theme '(all-the-icons :separator arrow :separator-scale 1.5)
    dotspacemacs-mode-line-theme '(doom :separator arrow :separator-scale 1.5)
-   ;; dotspacemacs-mode-line-theme '(spacemacs :separator alternate :separator-scale 1.5)
+   ;; dotspacemacs-mode-line-theme '(spacemacs :separator arrow :separator-scale 1.5)
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
@@ -491,10 +492,10 @@ configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
  ;; 替换国内源
- (setq configuration-layer-elpa-archives
-    '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-      ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
-      ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
+ ;; (setq configuration-layer-elpa-archives
+ ;;    '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+ ;;      ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
+ ;;      ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
 
  ;; git 相关设置
  ;; (setq-default git-magit-status-fullscreen t)
