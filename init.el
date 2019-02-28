@@ -84,7 +84,7 @@ This function should only modify configuration layer settings."
           org-enable-reveal-js-support t
           org-enable-bootstrap-support t
           org-enable-org-journal-support t
-          org-journal-encrypt-journal t
+          org-journal-encrypt-journal nil
           org-projectile-file "~/Documents/orgs/TODOs.org"
           org-journal-dir "~/Documents/orgs/journal/"
           org-journal-file-format "%Y-%m-%d"
