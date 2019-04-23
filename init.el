@@ -57,11 +57,13 @@ This function should only modify configuration layer settings."
      protobuf
      docker
      ;; lsp
+     ;; dap
      (go :variables
          ;; go-backend 'lsp
          godoc-at-point-function 'godoc-gogetdoc
          go-use-golangci-lint t
          go-tab-width 4
+         ;; run-go-install-on-save t
          go-format-before-save t
          gofmt-command "goimports"
          go-use-test-args "-race -timeout 10s"
@@ -70,9 +72,13 @@ This function should only modify configuration layer settings."
      (javascript :variables javascript-backend 'tern)
      (python :variables
              python-backend 'anaconda
-             python-pipenv-activate t
+             ;; python-pipenv-activate t
              ;; python-backend 'lsp
+             python-formatter 'yapf
              python-enable-yapf-format-on-save t
+             python-format-on-save t
+             python-sort-imports-on-save t
+             python-fill-column 79
              python-test-runner 'pytest)
      (auto-completion :variables
                       auto-completion-enable-sort-by-usage t
@@ -246,8 +252,8 @@ It should only modify the values of Spacemacs settings."
    ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
    ;; dotspacemacs-mode-line-theme '(all-the-icons :separator arrow :separator-scale 1.5)
-   dotspacemacs-mode-line-theme '(doom :separator arrow :separator-scale 1.5)
-   ;; dotspacemacs-mode-line-theme '(spacemacs :separator arrow :separator-scale 1.5)
+   ;; dotspacemacs-mode-line-theme '(doom :separator arrow :separator-scale 1.5)
+   dotspacemacs-mode-line-theme '(spacemacs :separator arrow :separator-scale 1.5)
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
@@ -492,10 +498,18 @@ configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
  ;; 替换国内源
- ;; (setq configuration-layer-elpa-archives
- ;;    '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
- ;;      ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
- ;;      ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
+ (setq configuration-layer-elpa-archives
+    '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+      ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
+      ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
+
+ ;; 强制设定 VIRTUAL_ENV 避免 jedi Too many open files 错误
+ (defun pyenv-venv-wrapper-act (&optional ARG PRED)
+   (setenv "VIRTUAL_ENV" (shell-command-to-string "_pyenv_virtualenv_hook; echo -n $VIRTUAL_ENV")))
+ (advice-add 'pyenv-mode-set :after 'pyenv-venv-wrapper-act)
+ (defun pyenv-venv-wrapper-deact (&optional ARG PRED)
+   (setenv "VIRTUAL_ENV"))
+ (advice-add 'pyenv-mode-unset :after 'pyenv-venv-wrapper-deact)
 
  ;; git 相关设置
  ;; (setq-default git-magit-status-fullscreen t)
@@ -542,6 +556,8 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+
+  (setq anaconda-mode-localhost-address "127.0.0.1")
 
   ;; 设置 neo 文件图标
   (setq neo-theme 'icons)
