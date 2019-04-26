@@ -33,7 +33,8 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(systemd
+   '(shell-scripts
+     systemd
      nginx
      rust
      yaml
@@ -70,15 +71,15 @@ This function should only modify configuration layer settings."
          )
      (ibuffer :variables ibuffer-group-buffers-by 'projects)
      (javascript :variables javascript-backend 'tern)
+     ipython-notebook
      (python :variables
              python-backend 'anaconda
              ;; python-pipenv-activate t
              ;; python-backend 'lsp
+             ;; python-formatter 'black
              python-formatter 'yapf
-             python-enable-yapf-format-on-save t
              python-format-on-save t
              python-sort-imports-on-save t
-             python-fill-column 79
              python-test-runner 'pytest)
      (auto-completion :variables
                       auto-completion-enable-sort-by-usage t
@@ -241,7 +242,8 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark
+   dotspacemacs-themes '(doom-dracula
+                         spacemacs-dark
                          spacemacs-light)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
@@ -252,8 +254,8 @@ It should only modify the values of Spacemacs settings."
    ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
    ;; dotspacemacs-mode-line-theme '(all-the-icons :separator arrow :separator-scale 1.5)
-   ;; dotspacemacs-mode-line-theme '(doom :separator arrow :separator-scale 1.5)
-   dotspacemacs-mode-line-theme '(spacemacs :separator arrow :separator-scale 1.5)
+   dotspacemacs-mode-line-theme 'doom
+   ;; dotspacemacs-mode-line-theme '(spacemacs :separator arrow :separator-scale 1.5)
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
@@ -498,10 +500,10 @@ configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
  ;; 替换国内源
- (setq configuration-layer-elpa-archives
-    '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-      ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
-      ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
+ ;; (setq configuration-layer-elpa-archives
+ ;;    '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+ ;;      ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
+ ;;      ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
 
  ;; 强制设定 VIRTUAL_ENV 避免 jedi Too many open files 错误
  (defun pyenv-venv-wrapper-act (&optional ARG PRED)
