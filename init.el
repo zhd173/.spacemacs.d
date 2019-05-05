@@ -57,7 +57,9 @@ This function should only modify configuration layer settings."
      multiple-cursors
      protobuf
      docker
-     ;; lsp
+     ;; (lsp :variables
+     ;;      lsp-ui-sideline-enable nil
+     ;; )
      ;; dap
      (go :variables
          ;; go-backend 'lsp
@@ -76,8 +78,8 @@ This function should only modify configuration layer settings."
              python-backend 'anaconda
              ;; python-pipenv-activate t
              ;; python-backend 'lsp
-             ;; python-formatter 'black
-             python-formatter 'yapf
+             python-formatter 'black
+             ;; python-formatter 'yapf
              python-format-on-save t
              python-sort-imports-on-save t
              python-test-runner 'pytest)
@@ -91,8 +93,10 @@ This function should only modify configuration layer settings."
           org-enable-reveal-js-support t
           org-enable-bootstrap-support t
           org-enable-org-journal-support t
+          org-enable-hugo-support t
+          org-enable-sticky-header t
           org-journal-encrypt-journal nil
-          org-projectile-file "~/Documents/orgs/TODOs.org"
+          org-projectile-file "~/Documents/orgs/projectile/TODOs.org"
           org-journal-dir "~/Documents/orgs/journal/"
           org-journal-file-format "%Y-%m-%d"
           org-journal-date-prefix "#+TITLE: "
@@ -253,8 +257,8 @@ It should only modify the values of Spacemacs settings."
    ;; refer to the DOCUMENTATION.org for more info on how to create your own
    ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
-   ;; dotspacemacs-mode-line-theme '(all-the-icons :separator arrow :separator-scale 1.5)
-   dotspacemacs-mode-line-theme 'doom
+   dotspacemacs-mode-line-theme '(all-the-icons :separator arrow :separator-scale 1.5)
+   ;; dotspacemacs-mode-line-theme 'doom
    ;; dotspacemacs-mode-line-theme '(spacemacs :separator arrow :separator-scale 1.5)
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
@@ -526,7 +530,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
  (setq flymd-browser-open-function 'my-flymd-browser-function)
 
  ;; fix reading error on Mac OS
- (setq anaconda-mode-localhost-address "localhost")
+ ;; (setq anaconda-mode-localhost-address "localhost")
 
  ;; 设置中英文等宽
  ;; (set-face-attribute
@@ -590,6 +594,15 @@ before packages are loaded."
 
   ;; 添加 org clock 至 mode line
   (setq spaceline-org-clock-p t)
+
+  ;; doom-modeline settings
+  (setq doom-modeline-icon t)
+  (setq doom-modeline-major-mode-icon t)
+  (setq doom-modeline-major-mode-color-icon t)
+  (setq doom-modeline-buffer-state-icon t)
+  (setq doom-modeline-buffer-modification-icon t)
+  (setq doom-modeline-env-enable-python t)
+  (setq doom-modeline-env-enable-go t)
 
   ;; end of user-config
     )
