@@ -122,7 +122,7 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages '(org-pomodoro)
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -592,8 +592,15 @@ before packages are loaded."
                  (push file org-agenda-files)))
             (org-projectile-todo-files)))
 
-  ;; 添加 org clock 至 mode line
+  ;; org settings
   (setq spaceline-org-clock-p t)
+  (setq org-agenda-files (list "~/Documents/orgs/agenda.org"))
+  (setq org-capture-templates
+        '(("m" "Memo Todo" entry (file+headline "~/Documents/orgs/agenda.org" "Memo")
+          "* TODO %?\n")
+         ("t" "Daily Todo" entry (file+olp+datetree "~/Documents/orgs/agenda.org")
+          "* TODO %?\n")
+        ))
 
   ;; doom-modeline settings
   (setq doom-modeline-icon t)
