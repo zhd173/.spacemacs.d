@@ -50,11 +50,12 @@ This function should only modify configuration layer settings."
      html
      json
      better-defaults
-     (sql :variables sql-capitalize-keywords t
+     (sql :variables
           sql-capitalize-keywords t
           sql-capitalize-keywords-blacklist '("name" "varchar"))
      helm
-     multiple-cursors
+     (multiple-cursors :variables
+                       multiple-cursors-backend 'evil-mc)
      protobuf
      docker
      ;; (lsp :variables
@@ -96,6 +97,7 @@ This function should only modify configuration layer settings."
           org-enable-hugo-support t
           org-enable-sticky-header t
           org-journal-encrypt-journal nil
+          org-journal-enable-agenda-integration t
           org-projectile-file "~/Documents/orgs/projectile/TODOs.org"
           org-journal-dir "~/Documents/orgs/journal/"
           org-journal-file-format "%Y-%m-%d"
@@ -229,9 +231,8 @@ It should only modify the values of Spacemacs settings."
    ;; `recents' `bookmarks' `projects' `agenda' `todos'.
    ;; List sizes may be nil, in which case
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
-   dotspacemacs-startup-lists '((recents . 15)
-                                (bookmarks . 10)
-                                (projects . 10))
+   dotspacemacs-startup-lists '((recents . 5)
+                                (projects . 7))
 
    ;; True if the home buffer should respond to resize events. (default t)
    dotspacemacs-startup-buffer-responsive t
@@ -570,8 +571,7 @@ before packages are loaded."
 
   ;; 将 Spacemacs 作为 Git 默认编辑器
   (global-git-commit-mode t)
-  (setq magit-repository-directories
-        '("~/Botpy/"))
+  (setq magit-repository-directories "~/vtou/")
 
   ;; web-mode 添加 Vue 支持
   (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
@@ -596,11 +596,18 @@ before packages are loaded."
   (setq spaceline-org-clock-p t)
   (setq org-agenda-files (list "~/Documents/orgs/agenda.org"))
   (setq org-capture-templates
-        '(("m" "Memo Todo" entry (file+headline "~/Documents/orgs/agenda.org" "Memo")
+        '(("m" "重要备忘" entry (file+olp+datetree "~/Documents/orgs/agenda.org" "重要备忘")
           "* TODO %?\n")
-         ("t" "Daily Todo" entry (file+olp+datetree "~/Documents/orgs/agenda.org")
+         ("l" "学习条目" entry (file+olp+datetree "~/Documents/orgs/agenda.org" "学习条目")
           "* TODO %?\n")
+         ;; ("v" "微投工作" entry (file+olp+datetree "~/Documents/orgs/agenda.org" "微投工作")
+         ;;  "* TODO %?\n")
         ))
+
+  ;; python black formatter settings
+  ;; (setq blacken-skip-string-normalization t)
+  (setq blacken-line-length '88)
+  (setq flycheck-flake8-maximum-line-length '88)
 
   ;; doom-modeline settings
   (setq doom-modeline-icon t)
