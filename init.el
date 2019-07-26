@@ -45,6 +45,9 @@ This function should only modify configuration layer settings."
              colors-enable-nyan-cat-progress-bar t
              )
      games
+     (typescript :variables
+                 typescript-fmt-tool 'typescript-formatter
+                 typescript-fmt-on-save t)
      imenu-list
      ;; gpu
      html
@@ -52,16 +55,17 @@ This function should only modify configuration layer settings."
      better-defaults
      (sql :variables
           sql-capitalize-keywords t
-          sql-capitalize-keywords-blacklist '("name" "varchar"))
+          ;; sql-capitalize-keywords-blacklist '("name" "varchar"),
+          )
      helm
      (multiple-cursors :variables
                        multiple-cursors-backend 'evil-mc)
      protobuf
      docker
-     ;; (lsp :variables
-     ;;      lsp-ui-sideline-enable nil
-     ;; )
-     ;; dap
+     (lsp :variables
+          lsp-ui-sideline-enable nil
+          )
+     dap
      (go :variables
          ;; go-backend 'lsp
          godoc-at-point-function 'godoc-gogetdoc
@@ -114,6 +118,22 @@ This function should only modify configuration layer settings."
      ;;           )
      emoji
      syntax-checking
+     ;; (spell-checking :variables
+     ;;                 spell-checking-enable-auto-dictionary t
+     ;;                 enable-flyspell-auto-completion t)
+     (twitter :variables
+              twittering-use-master-password t)
+     parinfer
+     ;; spotify
+     dash
+     deft
+     epub
+     pdf
+     (wakatime :variables
+               wakatime-api-key  "b76a617d-9948-49dc-8863-e3e50dee662e"
+               wakatime-cli-path "/usr/local/bin/wakatime")
+     debug
+     shell
      version-control
      )
 
@@ -124,7 +144,7 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(org-pomodoro)
+   dotspacemacs-additional-packages '(company-tabnine)
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -237,6 +257,11 @@ It should only modify the values of Spacemacs settings."
    ;; True if the home buffer should respond to resize events. (default t)
    dotspacemacs-startup-buffer-responsive t
 
+   ;; Default major mode for a new empty buffer. Possible values are mode
+   ;; names such as `text-mode'; and `nil' to use Fundamental mode.
+   ;; (default `text-mode')
+   dotspacemacs-new-empty-buffer-major-mode 'text-mode
+
    ;; Default major mode of the scratch buffer (default `text-mode')
    dotspacemacs-scratch-mode 'text-mode
 
@@ -258,18 +283,17 @@ It should only modify the values of Spacemacs settings."
    ;; refer to the DOCUMENTATION.org for more info on how to create your own
    ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
-   dotspacemacs-mode-line-theme '(all-the-icons :separator arrow :separator-scale 1.5)
+   ;; dotspacemacs-mode-line-theme '(all-the-icons :separator arrow :separator-scale 1.5)
    ;; dotspacemacs-mode-line-theme 'doom
-   ;; dotspacemacs-mode-line-theme '(spacemacs :separator arrow :separator-scale 1.5)
+   dotspacemacs-mode-line-theme '(spacemacs :separator arrow :separator-scale 1.5)
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
    dotspacemacs-colorize-cursor-according-to-state t
 
-   ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
-   ;; quickly tweak the mode-line size to make separators look not too crappy.
+   ;; Default font or prioritized list of fonts.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 13
+                               :size 13.0
                                :weight normal
                                :width normal)
 
@@ -372,6 +396,11 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil) (Emacs 24.4+ only)
    dotspacemacs-maximized-at-startup nil
 
+   ;; If non-nil the frame is undecorated when Emacs starts up. Combine this
+   ;; variable with `dotspacemacs-maximized-at-startup' in OSX to obtain
+   ;; borderless fullscreen. (default nil)
+   dotspacemacs-undecorated-at-startup nil
+
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's active or selected.
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
@@ -399,10 +428,14 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-smooth-scrolling t
 
    ;; Control line numbers activation.
-   ;; If set to `t' or `relative' line numbers are turned on in all `prog-mode' and
-   ;; `text-mode' derivatives. If set to `relative', line numbers are relative.
+   ;; If set to `t', `relative' or `visual' then line numbers are enabled in all
+   ;; `prog-mode' and `text-mode' derivatives. If set to `relative', line
+   ;; numbers are relative. If set to `visual', line numbers are also relative,
+   ;; but lines are only visual lines are counted. For example, folded lines
+   ;; will not be counted and wrapped lines are counted as multiple lines.
    ;; This variable can also be set to a property list for finer control:
    ;; '(:relative nil
+   ;;   :visual nil
    ;;   :disabled-for-modes dired-mode
    ;;                       doc-view-mode
    ;;                       markdown-mode
@@ -410,6 +443,7 @@ It should only modify the values of Spacemacs settings."
    ;;                       pdf-view-mode
    ;;                       text-mode
    ;;   :size-limit-kb 1000)
+   ;; When used in a plist, `visual' takes precedence over `relative'.
    ;; (default nil)
    dotspacemacs-line-numbers 'relative
 
@@ -449,7 +483,7 @@ It should only modify the values of Spacemacs settings."
    ;; List of search tool executable names. Spacemacs uses the first installed
    ;; tool of the list. Supported tools are `rg', `ag', `pt', `ack' and `grep'.
    ;; (default '("rg" "ag" "pt" "ack" "grep"))
-   dotspacemacs-search-tools '("ag")
+   dotspacemacs-search-tools '("rg" "ag" "pt" "ack" "grep")
 
    ;; Format specification for setting the frame title.
    ;; %a - the `abbreviated-file-name', or `buffer-name'
@@ -504,58 +538,67 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
- ;; 替换国内源
- ;; (setq configuration-layer-elpa-archives
- ;;    '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
- ;;      ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
- ;;      ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
 
- ;; 强制设定 VIRTUAL_ENV 避免 jedi Too many open files 错误
- (defun pyenv-venv-wrapper-act (&optional ARG PRED)
-   (setenv "VIRTUAL_ENV" (shell-command-to-string "_pyenv_virtualenv_hook; echo -n $VIRTUAL_ENV")))
- (advice-add 'pyenv-mode-set :after 'pyenv-venv-wrapper-act)
- (defun pyenv-venv-wrapper-deact (&optional ARG PRED)
-   (setenv "VIRTUAL_ENV"))
- (advice-add 'pyenv-mode-unset :after 'pyenv-venv-wrapper-deact)
+  ;; Trigger completion immediately.
+  (setq company-idle-delay 0)
+  ;; Use the tab-and-go frontend.
+  ;; Allows TAB to select and complete at the same time.
+  (setq company-frontends
+        '(company-tng-frontend
+          company-pseudo-tooltip-frontend
+          company-echo-metadata-frontend))
 
- ;; git 相关设置
- ;; (setq-default git-magit-status-fullscreen t)
+  ;; 替换国内源
+  ;; (setq configuration-layer-elpa-archives
+  ;;    '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+  ;;      ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
+  ;;      ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
 
- (setq paradox-github-token "9ebac6925c38a098a7bd2c193530427650499868")
- (defun my-flymd-browser-function (url)
-   (let ((process-environment (browse-url-process-environment)))
-     (apply 'start-process
-            (concat "google-chrome " url) nil
-            "/usr/bin/open"
-            (list "google-chrome" "--new-window" "--allow-file-access-from-files" url))))
- (setq flymd-browser-open-function 'my-flymd-browser-function)
+  ;; 强制设定 VIRTUAL_ENV 避免 jedi Too many open files 错误
+  (defun pyenv-venv-wrapper-act (&optional ARG PRED)
+    (setenv "VIRTUAL_ENV" (shell-command-to-string "_pyenv_virtualenv_hook; echo -n $VIRTUAL_ENV")))
+  (advice-add 'pyenv-mode-set :after 'pyenv-venv-wrapper-act)
+  (defun pyenv-venv-wrapper-deact (&optional ARG PRED)
+    (setenv "VIRTUAL_ENV"))
+  (advice-add 'pyenv-mode-unset :after 'pyenv-venv-wrapper-deact)
 
- ;; fix reading error on Mac OS
- ;; (setq anaconda-mode-localhost-address "localhost")
+  ;; git 相关设置
+  ;; (setq-default git-magit-status-fullscreen t)
 
- ;; 设置中英文等宽
- ;; (set-face-attribute
- ;;  'default nil
- ;;  :font (font-spec :name "-*-Source Code Pro-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1"
- ;;                   :weight 'normal
- ;;                   :slant 'normal
- ;;                   :size 14))
- ;; (dolist (charset '(kana han symbol cjk-misc bopomofo))
- ;;   (set-fontset-font
- ;;    (frame-parameter nil 'font)
- ;;    charset
- ;;    (font-spec :name "-*-Hiragino Sans GB-normal-normal-normal-*-*-*-*-*-p-0-iso10646-1"
- ;;               :weight 'normal
- ;;               :slant 'normal
- ;;               :size 16)))
- )
+  (setq paradox-github-token "9ebac6925c38a098a7bd2c193530427650499868")
+  (defun my-flymd-browser-function (url)
+    (let ((process-environment (browse-url-process-environment)))
+      (apply 'start-process
+             (concat "google-chrome " url) nil
+             "/usr/bin/open"
+             (list "google-chrome" "--new-window" "--allow-file-access-from-files" url))))
+  (setq flymd-browser-open-function 'my-flymd-browser-function))
+
+
+;; fix reading error on Mac OS
+;; (setq anaconda-mode-localhost-address "localhost")
+
+;; 设置中英文等宽
+;; (set-face-attribute
+;;  'default nil
+;;  :font (font-spec :name "-*-Source Code Pro-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1"
+;;                   :weight 'normal
+;;                   :slant 'normal
+;;                   :size 14))
+;; (dolist (charset '(kana han symbol cjk-misc bopomofo))
+;;   (set-fontset-font
+;;    (frame-parameter nil 'font)
+;;    charset
+;;    (font-spec :name "-*-Hiragino Sans GB-normal-normal-normal-*-*-*-*-*-p-0-iso10646-1"
+;;               :weight 'normal
+;;               :slant 'normal
+;;               :size 16)))
 
 (defun dotspacemacs/user-load ()
   "Library to load while dumping.
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
-dump."
-  )
+dump.")
 
 (defun dotspacemacs/user-config ()
   "Configuration for user code:
@@ -563,6 +606,9 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+
+  (with-eval-after-load 'company
+    (add-to-list 'company-backends #'company-tabnine))
 
   (setq anaconda-mode-localhost-address "127.0.0.1")
 
@@ -593,16 +639,16 @@ before packages are loaded."
             (org-projectile-todo-files)))
 
   ;; org settings
+  (setq org-src-tab-acts-natively t)
   (setq spaceline-org-clock-p t)
   (setq org-agenda-files (list "~/Documents/orgs/agenda.org"))
   (setq org-capture-templates
         '(("m" "重要备忘" entry (file+olp+datetree "~/Documents/orgs/agenda.org" "重要备忘")
-          "* TODO %?\n")
-         ("l" "学习条目" entry (file+olp+datetree "~/Documents/orgs/agenda.org" "学习条目")
-          "* TODO %?\n")
-         ;; ("v" "微投工作" entry (file+olp+datetree "~/Documents/orgs/agenda.org" "微投工作")
-         ;;  "* TODO %?\n")
-        ))
+           "* TODO %?\n")
+          ("l" "学习条目" entry (file+olp+datetree "~/Documents/orgs/agenda.org" "学习条目")
+           "* TODO %?\n")))
+  ;; ("v" "微投工作" entry (file+olp+datetree "~/Documents/orgs/agenda.org" "微投工作")
+  ;;  "* TODO %?\n")
 
   ;; python black formatter settings
   ;; (setq blacken-skip-string-normalization t)
@@ -617,9 +663,10 @@ before packages are loaded."
   (setq doom-modeline-buffer-modification-icon t)
   (setq doom-modeline-env-enable-python t)
   (setq doom-modeline-env-enable-go t)
+  ;; wakatime settings
+  (setq wakatime-python-bin "/usr/local/bin/python3"))
 
-  ;; end of user-config
-    )
+;; end of user-config
 
 
 ;; Do not write anything past this comment. This is where Emacs will
