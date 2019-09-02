@@ -144,7 +144,7 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(company-tabnine)
+   dotspacemacs-additional-packages '(company-tabnine parrot)
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -175,10 +175,10 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil)
    dotspacemacs-enable-emacs-pdumper nil
 
-   ;; File path pointing to emacs 27.1 executable compiled with support
-   ;; for the portable dumper (this is currently the branch pdumper).
-   ;; (default "emacs-27.0.50")
-   dotspacemacs-emacs-pdumper-executable-file "emacs-27.0.50"
+   ;; Name of executable file pointing to emacs 27+. This executable must be
+   ;; in your PATH.
+   ;; (default "emacs")
+   dotspacemacs-emacs-pdumper-executable-file "emacs"
 
    ;; Name of the Spacemacs dump file. This is the file will be created by the
    ;; portable dumper in the cache directory under dumps sub-directory.
@@ -234,9 +234,6 @@ It should only modify the values of Spacemacs settings."
    ;; (default 'vim)
    dotspacemacs-editing-style 'vim
 
-   ;; If non-nil output loading progress in `*Messages*' buffer. (default nil)
-   dotspacemacs-verbose-loading nil
-
    ;; Specify the startup banner. Default value is `official', it displays
    ;; the official spacemacs logo. An integer value is the index of text
    ;; banner, `random' chooses a random text banner in `core/banners'
@@ -284,8 +281,8 @@ It should only modify the values of Spacemacs settings."
    ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
    ;; dotspacemacs-mode-line-theme '(all-the-icons :separator arrow :separator-scale 1.5)
-   ;; dotspacemacs-mode-line-theme 'doom
-   dotspacemacs-mode-line-theme '(spacemacs :separator arrow :separator-scale 1.5)
+   dotspacemacs-mode-line-theme 'doom
+   ;; dotspacemacs-mode-line-theme '(spacemacs :separator arrow :separator-scale 1.5)
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
@@ -456,7 +453,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-smartparens-strict-mode nil
 
    ;; If non-nil pressing the closing parenthesis `)' key in insert mode passes
-   ;; over any automatically added closing parenthesis, bracket, quote, etc…
+   ;; over any automatically added closing parenthesis, bracket, quote, etc...
    ;; This can be temporary disabled by pressing `C-q' before `)'. (default nil)
    dotspacemacs-smart-closing-parenthesis nil
 
@@ -606,6 +603,8 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+  (nyan-mode)
+  (parrot-mode)
 
   (with-eval-after-load 'company
     (add-to-list 'company-backends #'company-tabnine))
@@ -653,18 +652,41 @@ before packages are loaded."
   ;; python black formatter settings
   ;; (setq blacken-skip-string-normalization t)
   (setq blacken-line-length '88)
-  (setq flycheck-flake8-maximum-line-length '88)
+  (setq flycheck-flake8-maximum-line-length '100)
 
   ;; doom-modeline settings
+  (setq doom-modeline-icon (display-graphic-p))
+  (setq doom-modeline-bar-width '3)
   (setq doom-modeline-icon t)
   (setq doom-modeline-major-mode-icon t)
   (setq doom-modeline-major-mode-color-icon t)
+  (setq doom-modeline-buffer-encoding t)
   (setq doom-modeline-buffer-state-icon t)
+  (setq doom-modeline-minor-modes (featurep 'minions))
+  (setq doom-modeline-enable-word-count t)
   (setq doom-modeline-buffer-modification-icon t)
+  (setq doom-modeline-vcs-max-length '12)
+  (setq doom-modeline-lsp t)
+  (setq doom-modeline-irc t)
+  (setq doom-modeline-irc-stylize 'identity)
+  (setq doom-modeline-persp-name t)
+  (setq doom-modeline-checker-simple-format t)
   (setq doom-modeline-env-enable-python t)
   (setq doom-modeline-env-enable-go t)
+
+  ;; nyan
+  (setq nyan-animate-nyancat t)
+  (setq nyan-bar-length '25)
+  (setq nyan-wavy-trail t)
+  (setq nyan-minimum-window-width '100)
+
+  ;; parrot
+  (setq parrot-set-parrot-type 'nyan)
+  (setq parrot-num-rotations '10)
+
   ;; wakatime settings
   (setq wakatime-python-bin "/usr/local/bin/python3"))
+
 
 ;; end of user-config
 
