@@ -26,7 +26,6 @@ This function should only modify configuration layer settings."
    ;; a layer lazily. (default t)
    dotspacemacs-ask-for-lazy-installation t
 
-   ;; If non-nil layers with lazy install support are lazy installed.
    ;; List of additional paths where to look for configuration layers.
    ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
    dotspacemacs-configuration-layer-path '()
@@ -46,11 +45,15 @@ This function should only modify configuration layer settings."
              )
      games
      (typescript :variables
-                 typescript-fmt-tool 'typescript-formatter
+                 typescript-fmt-tool 'tide
+                 typescript-linter 'tslint
+                 tide-tsserver-executable "/usr/local/bin/tsserver"
+                 typescript-backend 'tide
                  typescript-fmt-on-save t)
      imenu-list
      ;; gpu
      html
+     react
      json
      better-defaults
      (sql :variables
@@ -64,10 +67,11 @@ This function should only modify configuration layer settings."
      docker
      (lsp :variables
           lsp-ui-sideline-enable nil
+          lsp-ui-doc-enable nil
           )
      dap
      (go :variables
-         ;; go-backend 'lsp
+         go-backend 'lsp
          godoc-at-point-function 'godoc-gogetdoc
          go-use-golangci-lint t
          go-tab-width 4
@@ -90,6 +94,7 @@ This function should only modify configuration layer settings."
              python-test-runner 'pytest)
      (auto-completion :variables
                       auto-completion-enable-sort-by-usage t
+                      auto-completion-enable-tabnine t
                       auto-completion-enable-snippets-in-popup t
                       )
      emacs-lisp
@@ -111,7 +116,9 @@ This function should only modify configuration layer settings."
           org-journal-time-format "")
 
      git
-     (markdown :variables markdown-live-preview-engine 'vmd)
+     (markdown :variables
+               markdown-live-preview-engine 'vmd
+               markdown-mmm-auto-modes '("c" "c++" "python" "scala" ("elisp" "emacs-lisp")))
      neotree
      ;; (treemacs :variables
      ;;           treemacs-use-follow-mode t
@@ -212,8 +219,8 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-use-spacelpa nil
 
    ;; If non-nil then verify the signature for downloaded Spacelpa archives.
-   ;; (default nil)
-   dotspacemacs-verify-spacelpa-archives nil
+   ;; (default t)
+   dotspacemacs-verify-spacelpa-archives t
 
    ;; If non-nil then spacemacs will check for updates at startup
    ;; when the current branch is not `develop'. Note that checking for
@@ -248,7 +255,7 @@ It should only modify the values of Spacemacs settings."
    ;; `recents' `bookmarks' `projects' `agenda' `todos'.
    ;; List sizes may be nil, in which case
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
-   dotspacemacs-startup-lists '((recents . 5)
+   dotspacemacs-startup-lists '((recents . 10)
                                 (projects . 7))
 
    ;; True if the home buffer should respond to resize events. (default t)
@@ -536,8 +543,27 @@ configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
 
+  ;; Node path
+  (add-to-list 'exec-path "/usr/local/bin/node" t)
+  (setq-default
+   ;; js2-mode
+   js2-basic-offset 2
+   ;; web-mode
+   css-indent-offset 2
+   web-mode-markup-indent-offset 2
+   web-mode-css-indent-offset 2
+   web-mode-code-indent-offset 2
+   web-mode-attr-indent-offset 2)
+
+  (with-eval-after-load 'web-mode
+    (add-to-list 'web-mode-indentation-params '("lineup-args" . nil))
+    (add-to-list 'web-mode-indentation-params '("lineup-concats" . nil))
+    (add-to-list 'web-mode-indentation-params '("lineup-calls" . nil)))
+
   ;; Trigger completion immediately.
   (setq company-idle-delay 0)
+  (setq company-show-numbers t)
+
   ;; Use the tab-and-go frontend.
   ;; Allows TAB to select and complete at the same time.
   (setq company-frontends
@@ -595,7 +621,8 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   "Library to load while dumping.
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
-dump.")
+dump."
+  )
 
 (defun dotspacemacs/user-config ()
   "Configuration for user code:
@@ -607,7 +634,8 @@ before packages are loaded."
   (parrot-mode)
 
   (with-eval-after-load 'company
-    (add-to-list 'company-backends #'company-tabnine))
+    (push #'company-tabnine company-backends))
+
 
   (setq anaconda-mode-localhost-address "127.0.0.1")
 
