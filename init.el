@@ -35,6 +35,8 @@ This function should only modify configuration layer settings."
    '(shell-scripts
      systemd
      nginx
+     (dap :variables
+          dap-enable-mouse-support t)
      rust
      yaml
      ansible
@@ -96,6 +98,7 @@ This function should only modify configuration layer settings."
                       auto-completion-enable-sort-by-usage t
                       auto-completion-enable-tabnine t
                       auto-completion-enable-snippets-in-popup t
+                      ;; spacemacs-default-company-backends '(company-tabnine)
                       )
      emacs-lisp
      (org :variables
@@ -105,6 +108,7 @@ This function should only modify configuration layer settings."
           org-enable-org-journal-support t
           org-enable-hugo-support t
           org-enable-sticky-header t
+          ;; org-enable-trello-support t
           org-journal-encrypt-journal nil
           org-journal-enable-agenda-integration t
           org-projectile-file "~/Documents/orgs/projectile/TODOs.org"
@@ -136,9 +140,9 @@ This function should only modify configuration layer settings."
      deft
      epub
      pdf
-     (wakatime :variables
-               wakatime-api-key  "b76a617d-9948-49dc-8863-e3e50dee662e"
-               wakatime-cli-path "/usr/local/bin/wakatime")
+     ;; (wakatime :variables
+     ;;           wakatime-api-key  "b76a617d-9948-49dc-8863-e3e50dee662e"
+     ;;           wakatime-cli-path "/usr/local/bin/wakatime")
      debug
      shell
      version-control
@@ -566,10 +570,10 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
 
   ;; Use the tab-and-go frontend.
   ;; Allows TAB to select and complete at the same time.
-  (setq company-frontends
-        '(company-tng-frontend
-          company-pseudo-tooltip-frontend
-          company-echo-metadata-frontend))
+  ;; (setq company-frontends
+  ;;       '(company-tng-frontend
+  ;;         company-pseudo-tooltip-frontend
+  ;;         company-echo-metadata-frontend))
 
   ;; 替换国内源
   ;; (setq configuration-layer-elpa-archives
@@ -603,19 +607,19 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
 
 ;; 设置中英文等宽
 ;; (set-face-attribute
-;;  'default nil
-;;  :font (font-spec :name "-*-Source Code Pro-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1"
-;;                   :weight 'normal
-;;                   :slant 'normal
-;;                   :size 14))
+;; 'default nil
+;; :font (font-spec :name "-*-Source Code Pro-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1"
+;;                  :weight 'normal
+;;                  :slant 'normal
+;;                  :size 14))
 ;; (dolist (charset '(kana han symbol cjk-misc bopomofo))
-;;   (set-fontset-font
-;;    (frame-parameter nil 'font)
-;;    charset
-;;    (font-spec :name "-*-Hiragino Sans GB-normal-normal-normal-*-*-*-*-*-p-0-iso10646-1"
-;;               :weight 'normal
-;;               :slant 'normal
-;;               :size 16)))
+;;  (set-fontset-font
+;;   (frame-parameter nil 'font)
+;;   charset
+;;   (font-spec :name "-*-Hiragino Sans GB-normal-normal-normal-*-*-*-*-*-p-0-iso10646-1"
+;;              :weight 'normal
+;;              :slant 'normal
+;;              :size 16)))
 
 (defun dotspacemacs/user-load ()
   "Library to load while dumping.
@@ -668,6 +672,8 @@ before packages are loaded."
   ;; org settings
   (setq org-src-tab-acts-natively t)
   (setq spaceline-org-clock-p t)
+  (setq org-pomodoro-start-sound-p t)
+  ;; (setq org-pomodoro-clock-break t)
   (setq org-agenda-files (list "~/Documents/orgs/agenda.org"))
   (setq org-capture-templates
         '(("m" "重要备忘" entry (file+olp+datetree "~/Documents/orgs/agenda.org" "重要备忘")
@@ -679,7 +685,7 @@ before packages are loaded."
 
   ;; python black formatter settings
   ;; (setq blacken-skip-string-normalization t)
-  (setq blacken-line-length '88)
+  (setq blacken-line-length '100)
   (setq flycheck-flake8-maximum-line-length '100)
 
   ;; doom-modeline settings
@@ -706,14 +712,39 @@ before packages are loaded."
   (setq nyan-animate-nyancat t)
   (setq nyan-bar-length '25)
   (setq nyan-wavy-trail t)
-  (setq nyan-minimum-window-width '100)
+  (setq nyan-minimum-window-width '70)
 
   ;; parrot
-  (setq parrot-set-parrot-type 'nyan)
   (setq parrot-num-rotations '10)
+  ;; (parrot-set-parrot-type 'confused)
+  (define-key evil-normal-state-map (kbd "[r") 'parrot-rotate-prev-word-at-point)
+  (define-key evil-normal-state-map (kbd "]r") 'parrot-rotate-next-word-at-point)
+  (setq parrot-rotate-dict
+        '(
+          (:rot ("&" "|"))
+          (:rot ("begin" "end") :caps t :upcase t)
+          (:rot ("enable" "disable") :caps t :upcase t)
+          (:rot ("enter" "exit") :caps t :upcase t)
+          (:rot ("get" "set") :caps t :upcase t)
+          (:rot ("in" "out") :caps t :upcase t)
+          (:rot ("min" "max") :caps t :upcase t)
+          (:rot ("on" "off") :caps t :upcase t)
+          (:rot ("prev" "next"))
+          (:rot ("start" "stop") :caps t :upcase t)
+          (:rot ("true" "false") :caps t :upcase t)
+          (:rot ("&&" "||"))
+          (:rot ("==" "!="))
+          (:rot ("." "->"))
+          (:rot ("if" "else" "elif"))
+          (:rot ("ifdef" "ifndef"))
+          (:rot ("int8_t" "int16_t" "int32_t" "int64_t"))
+          (:rot ("uint8_t" "uint16_t" "uint32_t" "uint64_t"))
+          (:rot ("1" "2" "3" "4" "5" "6" "7" "8" "9" "10"))
+          (:rot ("1st" "2nd" "3rd" "4th" "5th" "6th" "7th" "8th" "9th" "10th"))))
 
   ;; wakatime settings
-  (setq wakatime-python-bin "/usr/local/bin/python3"))
+  ;; (setq wakatime-python-bin "/usr/local/bin/python3")
+  )
 
 
 ;; end of user-config
@@ -721,13 +752,3 @@ before packages are loaded."
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
-
-;; 将 custome-settings 相关变动置于 custom.el 文件
-(setq custom-file (expand-file-name "custom.el" dotspacemacs-directory))
-(load custom-file 'no-error 'no-message)
-(defun dotspacemacs/emacs-custom-settings ()
-  "Emacs custom settings.
-This is an auto-generated function, do not modify its content directly, use
-Emacs customize menu instead.
-This function is called at the very end of Spacemacs initialization."
-)
