@@ -40,7 +40,7 @@ This function should only modify configuration layer settings."
      rust
      yaml
      ansible
-     ;; (chrome :variables chrome-exec-path "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
+     (chrome :variables chrome-exec-path "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
      (colors :variables
              colors-colorize-identifiers nil
              colors-enable-nyan-cat-progress-bar t
