@@ -73,7 +73,7 @@ This function should only modify configuration layer settings."
           )
      dap
      (go :variables
-         go-backend 'go-mode
+         go-backend 'lsp
          godoc-at-point-function 'godoc-gogetdoc
          go-use-golangci-lint t
          go-tab-width 4
@@ -83,7 +83,7 @@ This function should only modify configuration layer settings."
          go-use-test-args "-race -timeout 10s"
          )
      (ibuffer :variables ibuffer-group-buffers-by 'projects)
-     (javascript :variables javascript-backend 'tern)
+     (javascript :variables javascript-backend 'lsp)
      ipython-notebook
      (python :variables
              python-backend 'anaconda
@@ -96,7 +96,7 @@ This function should only modify configuration layer settings."
              python-test-runner 'pytest)
      (auto-completion :variables
                       auto-completion-enable-sort-by-usage t
-                      auto-completion-enable-tabnine t
+                      ;; auto-completion-enable-tabnine t
                       auto-completion-enable-snippets-in-popup t
                       ;; spacemacs-default-company-backends '(company-tabnine)
                       )
@@ -139,6 +139,7 @@ This function should only modify configuration layer settings."
      dash
      deft
      epub
+     kubernetes
      pdf
      ;; (wakatime :variables
      ;;           wakatime-api-key  "b76a617d-9948-49dc-8863-e3e50dee662e"
@@ -155,7 +156,9 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(company-tabnine parrot)
+   dotspacemacs-additional-packages '(
+                                      ;; company-tabnine
+                                      parrot)
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -636,8 +639,8 @@ before packages are loaded."
   (nyan-mode)
   (parrot-mode)
 
-  (with-eval-after-load 'company
-    (push #'company-tabnine company-backends))
+  ;; (with-eval-after-load 'company
+  ;;   (push #'company-tabnine company-backends))
 
 
   (setq anaconda-mode-localhost-address "127.0.0.1")
@@ -676,14 +679,16 @@ before packages are loaded."
   (setq spaceline-org-clock-p t)
   (setq org-pomodoro-start-sound-p t)
   ;; (setq org-pomodoro-clock-break t)
+  (setq org-todo-keywords
+        '((sequencep "TODO" "WAIT" "|" "DONE" "CANCEL")))
   (setq org-agenda-files (list "~/Documents/orgs/agenda.org"))
   (setq org-capture-templates
-        '(("m" "重要备忘" entry (file+olp+datetree "~/Documents/orgs/agenda.org" "重要备忘")
+        '(("o" "Others" entry (file+olp+datetree "~/Documents/orgs/agenda.org" "Others")
            "* TODO %?\n")
-          ("l" "学习条目" entry (file+olp+datetree "~/Documents/orgs/agenda.org" "学习条目")
-           "* TODO %?\n")))
-  ;; ("v" "微投工作" entry (file+olp+datetree "~/Documents/orgs/agenda.org" "微投工作")
-  ;;  "* TODO %?\n")
+          ("l" "Learning" entry (file+olp+datetree "~/Documents/orgs/agenda.org" "Learning")
+           "* TODO %?\n")
+          ("j" "Journal entry" entry (function org-journal-find-location)
+           "* %(format-time-string org-journal-time-format)%^{Title}\n%i%?")))
 
   ;; python black formatter settings
   ;; (setq blacken-skip-string-normalization t)
@@ -746,7 +751,6 @@ before packages are loaded."
 
   ;; wakatime settings
   ;; (setq wakatime-python-bin "/usr/local/bin/python3")
-  
 
 
 ;; end of user-config
