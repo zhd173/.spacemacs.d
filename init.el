@@ -68,7 +68,7 @@ This function should only modify configuration layer settings."
      protobuf
      docker
      (lsp :variables
-          lsp-ui-sideline-enable nil
+          lsp-ui-sideline-enable t
           lsp-ui-doc-enable nil
           )
      dap
@@ -113,7 +113,7 @@ This function should only modify configuration layer settings."
           org-journal-enable-agenda-integration t
           org-projectile-file "~/Documents/orgs/projectile/TODOs.org"
           org-journal-dir "~/Documents/orgs/journal/"
-          org-journal-file-format "%Y-%m-%d"
+          org-journal-file-format "%Y-%m-%d.org"
           org-journal-date-prefix "#+TITLE: "
           org-journal-date-format "%A, %B %d %Y"
           org-journal-time-prefix "* "
@@ -123,7 +123,10 @@ This function should only modify configuration layer settings."
      (markdown :variables
                markdown-live-preview-engine 'vmd
                markdown-mmm-auto-modes '("c" "c++" "python" "scala" ("elisp" "emacs-lisp")))
-     neotree
+     (neotree :variables
+              neo-theme 'icons
+              neo-vc-integration '(face)
+              )
      ;; (treemacs :variables
      ;;           treemacs-use-follow-mode t
      ;;           )
@@ -649,7 +652,7 @@ before packages are loaded."
   (with-eval-after-load 'lsp-mode (setq lsp-prefer-flymake :none))
 
   ;; 设置 neo 文件图标
-  (setq neo-theme 'icons)
+  ;; (setq neo-theme 'icons)
 
   ;; 将 Spacemacs 作为 Git 默认编辑器
   (global-git-commit-mode t)
@@ -680,12 +683,16 @@ before packages are loaded."
   (setq org-pomodoro-start-sound-p t)
   ;; (setq org-pomodoro-clock-break t)
   (setq org-todo-keywords
-        '((sequencep "TODO" "WAIT" "|" "DONE" "CANCEL")))
-  (setq org-agenda-files (list "~/Documents/orgs/agenda.org"))
+        '((sequencep "TODO" "WAIT" "|" "CANCEL" "DONE")))
+  ;; (setq org-agenda-files (directory-files-recursively "~/Documents/orgs" "\.org$"))
   (setq org-capture-templates
-        '(("o" "Others" entry (file+olp+datetree "~/Documents/orgs/agenda.org" "Others")
+        '(("d" "Daily" entry (file+olp+datetree "~/Documents/orgs/agenda.org" "Daily")
            "* TODO %?\n")
-          ("l" "Learning" entry (file+olp+datetree "~/Documents/orgs/agenda.org" "Learning")
+          ("s" "SomeDay" entry (file+olp+datetree "~/Documents/orgs/agenda.org" "SomeDay")
+           "* TODO %?\n")
+          ("m" "Maybe" entry (file+olp+datetree "~/Documents/orgs/agenda.org" "Maybe")
+           "* TODO %?\n")
+          ("r" "Reference" entry (file+olp+datetree "~/Documents/orgs/agenda.org" "Reference")
            "* TODO %?\n")
           ("j" "Journal entry" entry (function org-journal-find-location)
            "* %(format-time-string org-journal-time-format)%^{Title}\n%i%?")))
