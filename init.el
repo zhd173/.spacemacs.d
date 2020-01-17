@@ -111,8 +111,9 @@ This function should only modify configuration layer settings."
           ;; org-enable-trello-support t
           org-journal-encrypt-journal nil
           org-journal-enable-agenda-integration t
-          org-projectile-file "~/Documents/orgs/projectile/TODOs.org"
-          org-journal-dir "~/Documents/orgs/journal/"
+          org-projectile-file "~/Dropbox/orgs/projectile/TODOs.org"
+          org-journal-dir "~/Dropbox/orgs/journal/"
+          ;; org-journal-file-type "weekly"
           org-journal-file-format "%Y-%m-%d.org"
           org-journal-date-prefix "#+TITLE: "
           org-journal-date-format "%A, %B %d %Y"
@@ -681,21 +682,33 @@ before packages are loaded."
   (setq org-src-tab-acts-natively t)
   (setq spaceline-org-clock-p t)
   (setq org-pomodoro-start-sound-p t)
+  (setq org-brain-path "~/Dropbox/orgs/brain")
+  (setq org-id-track-globally t)
+  (setq org-id-locations-file "~/Dropbox/orgs/.org-id-locations")
+  (push '("b" "Brain" plain (function org-brain-goto-end)
+          "* %i%?" :empty-lines 1)
+        org-capture-templates)
+  (setq org-brain-visualize-default-choices 'org-brain-path)
+  (setq org-brain-title-max-length 12)
+  ;; (setq org-brain-include-file-entries nil
+  ;;       org-brain-file-entries-use-title nil)
+  (with-eval-after-load 'evil
+    (evil-set-initial-state 'org-brain-visualize-mode 'emacs))
   ;; (setq org-pomodoro-clock-break t)
   (setq org-todo-keywords
-        '((sequencep "TODO" "WAIT" "|" "CANCEL" "DONE")))
-  ;; (setq org-agenda-files (directory-files-recursively "~/Documents/orgs" "\.org$"))
+        '((sequencep "TODO" "DONE")))
+  (setq org-agenda-files (list "~/Dropbox/orgs/agenda.org" ))
   (setq org-capture-templates
-        '(("d" "Daily" entry (file+olp+datetree "~/Documents/orgs/agenda.org" "Daily")
+        '(("d" "Daily" entry (file+olp+datetree "~/Dropbox/orgs/agenda.org" "Daily")
            "* TODO %?\n")
-          ("s" "SomeDay" entry (file+olp+datetree "~/Documents/orgs/agenda.org" "SomeDay")
+          ("s" "SomeDay" entry (file+olp+datetree "~/Dropbox/orgs/agenda.org" "SomeDay")
            "* TODO %?\n")
-          ("m" "Maybe" entry (file+olp+datetree "~/Documents/orgs/agenda.org" "Maybe")
+          ("m" "Maybe" entry (file+olp+datetree "~/Dropbox/orgs/agenda.org" "Maybe")
            "* TODO %?\n")
-          ("r" "Reference" entry (file+olp+datetree "~/Documents/orgs/agenda.org" "Reference")
-           "* TODO %?\n")
-          ("j" "Journal entry" entry (function org-journal-find-location)
-           "* %(format-time-string org-journal-time-format)%^{Title}\n%i%?")))
+          ("r" "Reference" entry (file+olp+datetree "~/Dropbox/orgs/agenda.org" "Reference")
+           "* TODO %?\n")))
+  ;; ("j" "Journal entry" entry (function org-journal-find-location)
+  ;;  "* %(format-time-string org-journal-time-format)%^{Title}\n%i%?")))
 
   ;; python black formatter settings
   ;; (setq blacken-skip-string-normalization t)
