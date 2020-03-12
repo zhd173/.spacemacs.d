@@ -682,8 +682,10 @@ before packages are loaded."
 
   ;; org settings
   (setq org-src-tab-acts-natively t)
+  (setq org-download-screenshot-method "screencapture -i %s")
   (setq spaceline-org-clock-p t)
   (setq org-pomodoro-start-sound-p t)
+  (setq-default org-download-image-dir "~/Dropbox/orgs/images")
   (setq org-brain-path "~/Dropbox/orgs/brain")
   (setq org-id-track-globally t)
   (setq org-id-locations-file "~/Dropbox/orgs/.org-id-locations")
@@ -706,8 +708,9 @@ before packages are loaded."
            "* %(format-time-string org-journal-time-format)%^{Title}\n%i%?")))
 
   ;; org-roam settings
-  (setq org-roam-graph-viewer "/Applications/Google\ Chrome.app/Contents/MacOS/Google Chrome")
-  (setq org-roam-directory "/Users/zhd/Dropbox/orgs/brain/")
+  ;; (setq org-roam-graph-viewer "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
+  (setq org-roam-graph-viewer "/Applications/Firefox.app/Contents/MacOS/firefox")
+  ;; (setq org-roam-directory "/Users/zhd/Dropbox/orgs/brain/")
   (setq org-roam-capture-templates
         '(("r" "ref" plain (function org-roam--capture-get-point)
            "%?"
@@ -720,6 +723,11 @@ before packages are loaded."
            :head "#+TITLE: ${title}\n#+TAGS:"
            :unnarrowed t)))
   (require 'org-roam-protocol)
+  ;; (with-eval-after-load 'org-roam
+  ;;   (with-eval-after-load 'company
+  ;;     (with-eval-after-load 'org
+  ;;       (require 'company-org-roam)
+  ;;       (company-org-roam-init))))
 
   ;; python black formatter settings
   ;; (setq blacken-skip-string-normalization t)
