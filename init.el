@@ -32,7 +32,8 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(shell-scripts
+   '(nginx
+     shell-scripts
      ;; systemd
      ;; nginx
      (dap :variables
@@ -85,21 +86,22 @@ This function should only modify configuration layer settings."
          )
      (ibuffer :variables ibuffer-group-buffers-by 'projects)
      (javascript :variables javascript-backend 'lsp)
+     (java :variables java-backend 'lsp)
      ipython-notebook
      (python :variables
              python-backend 'anaconda
-             ;; python-pipenv-activate t
              ;; python-backend 'lsp
              python-formatter 'black
+             ;; python-pipenv-activate t
+             ;; python-lsp-server 'mspyls
+             ;; python-lsp-git-root "~/code/Others/python-language-server"
              ;; python-formatter 'yapf
              python-format-on-save t
              python-sort-imports-on-save t
              python-test-runner 'pytest)
      (auto-completion :variables
                       auto-completion-enable-sort-by-usage t
-                      ;; auto-completion-enable-tabnine t
                       auto-completion-enable-snippets-in-popup t
-                      ;; spacemacs-default-company-backends '(company-tabnine)
                       )
      emacs-lisp
      (org :variables
@@ -142,7 +144,8 @@ This function should only modify configuration layer settings."
      parinfer
      ;; spotify
      dash
-     deft
+     (deft :variables
+       deft-zetteldeft nil)
      ;; epub
      kubernetes
      pdf
@@ -652,7 +655,7 @@ before packages are loaded."
   (setq anaconda-mode-localhost-address "127.0.0.1")
 
   ;; go layer disable lsp-ui
-  (with-eval-after-load 'lsp-mode (setq lsp-prefer-flymake :none))
+  ;; (with-eval-after-load 'lsp-mode (setq lsp-prefer-flymake :none))
 
   ;; 设置 neo 文件图标
   ;; (setq neo-theme 'icons)
@@ -681,6 +684,7 @@ before packages are loaded."
             (org-projectile-todo-files)))
 
   ;; org settings
+  (setq org-image-actual-width '(500))
   (setq org-src-tab-acts-natively t)
   (setq org-download-screenshot-method "screencapture -i %s")
   (setq spaceline-org-clock-p t)
@@ -690,7 +694,52 @@ before packages are loaded."
   (setq org-id-track-globally t)
   (setq org-id-locations-file "~/Dropbox/orgs/.org-id-locations")
   ;; (setq org-brain-visualize-default-choices 'org-brain-path)
+  (setq org-tag-alist '(("Blog")
+                        ("Reading")
+                        ("Music")
+                        ("Productivity")
+                        ("Car")
+                        ("Apartment")
+                        ("Friends")
+                        ("Travel")
+                        ("Finance")
+                        ("Health")
+                        (:startgrouptag)
+                        ("Project")
+                        (:grouptags)
+                        ("dmall-sym-api")
+                        (:endgrouptag)
+                        (:startgrouptag)
+                        ("Programing")
+                        (:grouptags)
+                        ("CloudNative")
+                        ("SoftwareEngineering")
+                        ("Go")
+                        ("Python")
+                        ("Linux")
+                        ("AI")
+                        ("Monitor")
+                        (:endgrouptag)
+                        (:startgrouptag)
+                        ("CloudNative")
+                        (:grouptags)
+                        ("Kubernetes")
+                        ("istio")
+                        ("ServiceMesh")
+                        (:endgrouptag)
+                        (:startgrouptag)
+                        ("Game")
+                        (:grouptags)
+                        ("GameDevelopment")
+                        ("GameDesign")
+                        ("GameEvaluation")
+                        ("GameStrategy")
+                        (:endgrouptag)))
   (setq org-brain-title-max-length 12)
+  (setq deft-directory "~/Dropbox/orgs")
+  (setq deft-recursive t)
+  (setq deft-extensions '("org" "md" "txt"))
+  (global-set-key [f8] 'deft)
   ;; (setq org-brain-include-file-entries nil
   ;;       org-brain-file-entries-use-title nil)
   (with-eval-after-load 'evil
@@ -715,12 +764,12 @@ before packages are loaded."
         '(("r" "ref" plain (function org-roam--capture-get-point)
            "%?"
            :file-name "%<%Y%m%d%H%M%S>-${slug}"
-           :head "#+TITLE: ${title}\n#+ROAM_KEY: ${ref}\n#+TAGS:"
+           :head "#+TITLE: ${title}\n#+ROAM_KEY: ${ref}\n"
            :unnarrowed t)
           ("d" "default" plain (function org-roam--capture-get-point)
            "%?"
            :file-name "%<%Y%m%d%H%M%S>-${slug}"
-           :head "#+TITLE: ${title}\n#+TAGS:"
+           :head "#+TITLE: ${title}\n"
            :unnarrowed t)))
   (require 'org-roam-protocol)
   ;; (with-eval-after-load 'org-roam
@@ -733,8 +782,7 @@ before packages are loaded."
   ;; (setq blacken-skip-string-normalization t)
   (setq blacken-line-length '100)
   (setq flycheck-flake8-maximum-line-length '100)
-  (setq flycheck-golangci-lint-fast t)
-  ;; (setq flycheck-golangci-lint-disable-linters '("unused" "errcheck" "misspell"))
+  (setq flycheck-golangci-lint-config "~/Dropbox/config/golangci-lint/.golangci.yml")
 
   ;; doom-modeline settings
   (setq doom-modeline-icon (display-graphic-p))
@@ -804,19 +852,19 @@ before packages are loaded."
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(flycheck-checker-error-threshold 20)
- '(package-selected-packages
-   (quote
-    (org-roam emacsql-sqlite emacsql ansi package-build shut-up epl git commander f dash s utop tuareg caml seeing-is-believing rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode robe rbenv rake ocp-indent ob-elixir mvn minitest meghanada maven-test-mode lsp-java groovy-mode groovy-imports pcache gradle-mode flycheck-ocaml merlin flycheck-mix flycheck-credo dune chruby bundler inf-ruby auto-complete-rst alchemist elixir-mode yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vterm volatile-highlights vmd-mode vi-tilde-fringe uuidgen use-package unfill typit twittering-mode toml-mode toc-org tide tagedit systemd symon symbol-overlay sudoku string-inflection sqlup-mode sql-indent spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sass-mode rjsx-mode restart-emacs realgud rainbow-mode rainbow-identifiers rainbow-delimiters racer pytest pyenv-mode py-isort pug-mode protobuf-mode prettier-js popwin pippel pipenv pip-requirements persp-mode pdf-tools pcre2el password-generator parrot parinfer paradox pacmacs ox-twbs ox-hugo ox-gfm overseer orgit org-sticky-header org-re-reveal org-projectile org-present org-pomodoro org-mime org-journal org-download org-cliplink org-bullets org-brain open-junk-file ob-ipython nov nodejs-repl nginx-mode neotree nameless mwim multi-term move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lsp-ui lsp-python-ms lorem-ipsum livid-mode live-py-mode link-hint json-navigator js2-refactor js-doc jinja2-mode insert-shebang indent-guide importmagic impatient-mode ibuffer-projectile hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-gitignore helm-git-grep helm-flx helm-descbinds helm-dash helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc gnuplot gmail-message-mode gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md fuzzy font-lock+ flymd flycheck-rust flycheck-pos-tip flycheck-package flycheck-golangci-lint flycheck-bashate flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emojify emoji-cheat-sheet-plus emmet-mode elisp-slime-nav ein editorconfig edit-server dumb-jump dotenv-mode doom-themes doom-modeline dockerfile-mode docker diminish diff-hl devdocs deft define-word dash-at-point dap-mode cython-mode company-web company-tern company-tabnine company-statistics company-shell company-lsp company-go company-emoji company-ansible company-anaconda column-enforce-mode color-identifiers-mode clean-aindent-mode centered-cursor-mode cargo browse-at-remote blacken auto-yasnippet auto-highlight-symbol auto-compile ansible-doc ansible aggressive-indent ace-link ace-jump-helm-line ac-ispell 2048-game))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-)
+  (custom-set-variables
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(flycheck-checker-error-threshold 400)
+   '(package-selected-packages
+     (quote
+      (unicode-escape names zetteldeft org-roam emacsql-sqlite emacsql ansi package-build shut-up epl git commander f dash s utop tuareg caml seeing-is-believing rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode robe rbenv rake ocp-indent ob-elixir mvn minitest meghanada maven-test-mode lsp-java groovy-mode groovy-imports pcache gradle-mode flycheck-ocaml merlin flycheck-mix flycheck-credo dune chruby bundler inf-ruby auto-complete-rst alchemist elixir-mode yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vterm volatile-highlights vmd-mode vi-tilde-fringe uuidgen use-package unfill typit twittering-mode toml-mode toc-org tide tagedit systemd symon symbol-overlay sudoku string-inflection sqlup-mode sql-indent spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sass-mode rjsx-mode restart-emacs realgud rainbow-mode rainbow-identifiers rainbow-delimiters racer pytest pyenv-mode py-isort pug-mode protobuf-mode prettier-js popwin pippel pipenv pip-requirements persp-mode pdf-tools pcre2el password-generator parrot parinfer paradox pacmacs ox-twbs ox-hugo ox-gfm overseer orgit org-sticky-header org-re-reveal org-projectile org-present org-pomodoro org-mime org-journal org-download org-cliplink org-bullets org-brain open-junk-file ob-ipython nov nodejs-repl nginx-mode neotree nameless mwim multi-term move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lsp-ui lsp-python-ms lorem-ipsum livid-mode live-py-mode link-hint json-navigator js2-refactor js-doc jinja2-mode insert-shebang indent-guide importmagic impatient-mode ibuffer-projectile hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-gitignore helm-git-grep helm-flx helm-descbinds helm-dash helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc gnuplot gmail-message-mode gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md fuzzy font-lock+ flymd flycheck-rust flycheck-pos-tip flycheck-package flycheck-golangci-lint flycheck-bashate flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emojify emoji-cheat-sheet-plus emmet-mode elisp-slime-nav ein editorconfig edit-server dumb-jump dotenv-mode doom-themes doom-modeline dockerfile-mode docker diminish diff-hl devdocs deft define-word dash-at-point dap-mode cython-mode company-web company-tern company-tabnine company-statistics company-shell company-lsp company-go company-emoji company-ansible company-anaconda column-enforce-mode color-identifiers-mode clean-aindent-mode centered-cursor-mode cargo browse-at-remote blacken auto-yasnippet auto-highlight-symbol auto-compile ansible-doc ansible aggressive-indent ace-link ace-jump-helm-line ac-ispell 2048-game))))
+  (custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   )
+  )
