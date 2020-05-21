@@ -34,20 +34,17 @@ This function should only modify configuration layer settings."
    dotspacemacs-configuration-layers
    '(nginx
      shell-scripts
-     ;; systemd
-     ;; nginx
      (dap :variables
           dap-enable-mouse-support t)
-     ;; rust
      yaml
      org-roam
+     ;; systemd
+     ;; rust
      ;; ansible
-     ;; (chrome :variables chrome-exec-path "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
      (colors :variables
              colors-colorize-identifiers nil
              colors-enable-nyan-cat-progress-bar t
              )
-     ;; games
      (typescript :variables
                  typescript-fmt-tool 'tide
                  typescript-linter 'tslint
@@ -55,28 +52,23 @@ This function should only modify configuration layer settings."
                  typescript-backend 'tide
                  typescript-fmt-on-save t)
      imenu-list
-     ;; gpu
      html
      react
      json
      better-defaults
-     ;; (sql :variables
-     ;; sql-capitalize-keywords t
-     ;; sql-capitalize-keywords-blacklist '("name" "varchar"),
-     ;; )
      helm
      (multiple-cursors :variables
                        multiple-cursors-backend 'evil-mc)
      protobuf
      docker
      (lsp :variables
-          lsp-ui-sideline-enable nil
-          lsp-ui-doc-enable nil
+          lsp-ui-sideline-enable t
+          lsp-ui-doc-enable t
           )
      ;; dap
      (go :variables
          go-backend 'lsp
-         ;; godoc-at-point-function 'godoc-gogetdoc
+         godoc-at-point-function 'godoc-gogetdoc
          go-use-golangci-lint t
          go-tab-width 4
          ;; run-go-install-on-save t
@@ -140,15 +132,10 @@ This function should only modify configuration layer settings."
      ;; (spell-checking :variables
      ;;                 spell-checking-enable-auto-dictionary t
      ;;                 enable-flyspell-auto-completion t)
-     ;; (twitter :variables
-     ;;          twittering-use-master-password t)
      parinfer
-     ;; spotify
      dash
      (deft :variables
        deft-zetteldeft nil)
-     ;; epub
-     kubernetes
      pdf
      ;; (wakatime :variables
      ;;           wakatime-api-key  "b76a617d-9948-49dc-8863-e3e50dee662e"
@@ -174,7 +161,7 @@ This function should only modify configuration layer settings."
    dotspacemacs-frozen-packages '()
 
    ;; A list of packages that will not be installed and loaded.
-   dotspacemacs-excluded-packages '(company-tern)
+   dotspacemacs-excluded-packages '()
 
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
@@ -208,9 +195,9 @@ It should only modify the values of Spacemacs settings."
    ;; portable dumper in the cache directory under dumps sub-directory.
    ;; To load it when starting Emacs add the parameter `--dump-file'
    ;; when invoking Emacs 27.1 executable on the command line, for instance:
-   ;;   ./emacs --dump-file=~/.emacs.d/.cache/dumps/spacemacs.pdmp
-   ;; (default spacemacs.pdmp)
-   dotspacemacs-emacs-dumper-dump-file "spacemacs.pdmp"
+   ;;   ./emacs --dump-file=$HOME/.emacs.d/.cache/dumps/spacemacs-27.1.pdmp
+   ;; (default spacemacs-27.1.pdmp)
+   dotspacemacs-emacs-dumper-dump-file (format "spacemacs-%s.pdmp" emacs-version)
 
    ;; If non-nil ELPA repositories are contacted via HTTPS whenever it's
    ;; possible. Set it to nil if you have no way to use HTTPS in your
@@ -229,6 +216,13 @@ It should only modify the values of Spacemacs settings."
    ;; performance issues due to garbage collection operations.
    ;; (default '(100000000 0.1))
    dotspacemacs-gc-cons '(100000000 0.1)
+
+   ;; Set `read-process-output-max' when startup finishes.
+   ;; This defines how much data is read from a foreign process.
+   ;; Setting this >= 1 MB should increase performance for lsp servers
+   ;; in emacs 27.
+   ;; (default (* 1024 1024))
+   dotspacemacs-read-process-output-max (* 1048576 1024)
 
    ;; If non-nil then Spacelpa repository is the primary source to install
    ;; a locked version of packages. If nil then Spacemacs will install the
@@ -257,6 +251,11 @@ It should only modify the values of Spacemacs settings."
    ;; section of the documentation for details on available variables.
    ;; (default 'vim)
    dotspacemacs-editing-style 'vim
+
+   ;; If non-nil show the version string in the Spacemacs buffer. It will
+   ;; appear as (spacemacs version)@(emacs version)
+   ;; (default t)
+   dotspacemacs-startup-buffer-show-version t
 
    ;; Specify the startup banner. Default value is `official', it displays
    ;; the official spacemacs logo. An integer value is the index of text
@@ -337,8 +336,10 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-major-mode-leader-key ","
 
    ;; Major mode leader key accessible in `emacs state' and `insert state'.
-   ;; (default "C-M-m")
-   dotspacemacs-major-mode-emacs-leader-key "C-M-m"
+   ;; (default "C-M-m" for terminal mode, "<M-return>" for GUI mode).
+   ;; Thus M-RET should work as leader key in both GUI and terminal modes.
+   ;; C-M-m also should work in terminal mode, but not in GUI mode.
+   dotspacemacs-major-mode-emacs-leader-key (if window-system "<M-return>" "C-M-m")
 
    ;; These variables control whether separate commands are bound in the GUI to
    ;; the key pairs `C-i', `TAB' and `C-m', `RET'.
@@ -536,6 +537,13 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil)
    dotspacemacs-whitespace-cleanup nil
 
+   ;; If non nil activate `clean-aindent-mode' which tries to correct
+   ;; virtual indentation of simple modes. This can interfer with mode specific
+   ;; indent handling like has been reported for `go-mode'.
+   ;; If it does deactivate it here.
+   ;; (default t)
+   dotspacemacs-use-clean-aindent-mode t
+
    ;; Either nil or a number of seconds. If non-nil zone out after the specified
    ;; number of seconds. (default nil)
    dotspacemacs-zone-out-when-idle nil
@@ -562,23 +570,24 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
 
   ;; Node path
   (add-to-list 'exec-path "/usr/local/bin/node" t)
-  (setq-default
-   ;; js2-mode
-   js2-basic-offset 2
-   ;; web-mode
-   css-indent-offset 2
-   web-mode-markup-indent-offset 2
-   web-mode-css-indent-offset 2
-   web-mode-code-indent-offset 2
-   web-mode-attr-indent-offset 2)
 
-  (with-eval-after-load 'web-mode
-    (add-to-list 'web-mode-indentation-params '("lineup-args" . nil))
-    (add-to-list 'web-mode-indentation-params '("lineup-concats" . nil))
-    (add-to-list 'web-mode-indentation-params '("lineup-calls" . nil)))
+  ;; (setq-default
+  ;;  ;; js2-mode
+  ;;  js2-basic-offset 2
+  ;;  ;; web-mode
+  ;;  css-indent-offset 2
+  ;;  web-mode-markup-indent-offset 2
+  ;;  web-mode-css-indent-offset 2
+  ;;  web-mode-code-indent-offset 2
+  ;;  web-mode-attr-indent-offset 2)
+
+  ;; (with-eval-after-load 'web-mode
+  ;;   (add-to-list 'web-mode-indentation-params '("lineup-args" . nil))
+  ;;   (add-to-list 'web-mode-indentation-params '("lineup-concats" . nil))
+  ;;   (add-to-list 'web-mode-indentation-params '("lineup-calls" . nil)))
 
   ;; Trigger completion immediately.
-  (setq company-idle-delay 0.500)
+  ;; (setq company-idle-delay 0.500)
   (setq company-show-numbers t)
 
   ;; Use the tab-and-go frontend.
@@ -588,9 +597,9 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   ;;         company-pseudo-tooltip-frontend
   ;;         company-echo-metadata-frontend))
 
-  (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                           ("marmalade" . "https://marmalade-repo.org/packages/")
-                           ("melpa" . "http://melpa.org/packages/")))
+  ;; (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+  ;;                          ("marmalade" . "https://marmalade-repo.org/packages/")
+  ;;                          ("melpa" . "http://melpa.org/packages/")))
 
   ;; 替换国内源
   ;; (setq configuration-layer-elpa-archives
@@ -599,28 +608,25 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   ;;      ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
 
   ;; 强制设定 VIRTUAL_ENV 避免 jedi Too many open files 错误
-  (defun pyenv-venv-wrapper-act (&optional ARG PRED)
-    (setenv "VIRTUAL_ENV" (shell-command-to-string "_pyenv_virtualenv_hook; echo -n $VIRTUAL_ENV")))
-  (advice-add 'pyenv-mode-set :after 'pyenv-venv-wrapper-act)
-  (defun pyenv-venv-wrapper-deact (&optional ARG PRED)
-    (setenv "VIRTUAL_ENV"))
-  (advice-add 'pyenv-mode-unset :after 'pyenv-venv-wrapper-deact)
+  ;; (defun pyenv-venv-wrapper-act (&optional ARG PRED)
+  ;;   (setenv "VIRTUAL_ENV" (shell-command-to-string "_pyenv_virtualenv_hook; echo -n $VIRTUAL_ENV")))
+  ;; (advice-add 'pyenv-mode-set :after 'pyenv-venv-wrapper-act)
+  ;; (defun pyenv-venv-wrapper-deact (&optional ARG PRED)
+  ;;   (setenv "VIRTUAL_ENV"))
+  ;; (advice-add 'pyenv-mode-unset :after 'pyenv-venv-wrapper-deact)
 
   ;; git 相关设置
   ;; (setq-default git-magit-status-fullscreen t)
 
-  (setq paradox-github-token "9ebac6925c38a098a7bd2c193530427650499868")
-  (defun my-flymd-browser-function (url)
-    (let ((process-environment (browse-url-process-environment)))
-      (apply 'start-process
-             (concat "google-chrome " url) nil
-             "/usr/bin/open"
-             (list "google-chrome" "--new-window" "--allow-file-access-from-files" url))))
-  (setq flymd-browser-open-function 'my-flymd-browser-function))
+  ;; (defun my-flymd-browser-function (url)
+  ;;   (let ((process-environment (browse-url-process-environment)))
+  ;;     (apply 'start-process
+  ;;            (concat "google-chrome " url) nil
+  ;;            "/usr/bin/open"
+  ;;            (list "google-chrome" "--new-window" "--allow-file-access-from-files" url))))
+  ;; (setq flymd-browser-open-function 'my-flymd-browser-function)
+  )
 
-
-;; fix reading error on Mac OS
-;; (setq anaconda-mode-localhost-address "localhost")
 
 ;; 设置中英文等宽
 ;; (set-face-attribute
@@ -642,7 +648,8 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   "Library to load while dumping.
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
-dump.")
+dump."
+  )
 
 (defun dotspacemacs/user-config ()
   "Configuration for user code:
@@ -657,10 +664,8 @@ before packages are loaded."
   ;;   (push #'company-tabnine company-backends))
 
 
-  (setq anaconda-mode-localhost-address "127.0.0.1")
+  ;; (setq anaconda-mode-localhost-address "127.0.0.1")
 
-  ;; go layer disable lsp-ui
-  ;; (with-eval-after-load 'lsp-mode (setq lsp-prefer-flymake :none))
 
   ;; 设置 neo 文件图标
   ;; (setq neo-theme 'icons)
@@ -670,7 +675,7 @@ before packages are loaded."
   (setq magit-repository-directories "~/vtou/")
 
   ;; web-mode 添加 Vue 支持
-  (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
+  ;; (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
 
   ;; 初始化窗口大小和位置
   ;; (setq default-frame-alist
@@ -790,11 +795,10 @@ before packages are loaded."
   (setq flycheck-golangci-lint-config "~/Dropbox/config/golangci-lint/.golangci.yml")
 
   ;; lsp config
-  (setq lsp-diagnostic-package nil)
-  (setq lsp-prefer-capf t)
-  (setq lsp-idle-delay 0.500)
-  (setq lsp-print-performance t)
-  (setq read-process-output-max (* 1024 1024))
+  ;; (setq lsp-diagnostic-package nil)
+  ;; (setq lsp-prefer-capf t)
+  ;; (setq lsp-idle-delay 0.500)
+  ;; (setq lsp-print-performance t)
 
   ;; doom-modeline settings
   (setq doom-modeline-icon (display-graphic-p))
@@ -869,7 +873,7 @@ This function is called at the very end of Spacemacs initialization."
    ;; If you edit it by hand, you could mess it up, so be careful.
    ;; Your init file should contain only one such instance.
    ;; If there is more than one, they won't work right.
-   '(flycheck-checker-error-threshold 400)
+   '(flycheck-checker-error-threshold 4000)
    '(package-selected-packages
      (quote
       (unicode-escape names zetteldeft org-roam emacsql-sqlite emacsql ansi package-build shut-up epl git commander f dash s utop tuareg caml seeing-is-believing rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode robe rbenv rake ocp-indent ob-elixir mvn minitest meghanada maven-test-mode lsp-java groovy-mode groovy-imports pcache gradle-mode flycheck-ocaml merlin flycheck-mix flycheck-credo dune chruby bundler inf-ruby auto-complete-rst alchemist elixir-mode yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vterm volatile-highlights vmd-mode vi-tilde-fringe uuidgen use-package unfill typit twittering-mode toml-mode toc-org tide tagedit systemd symon symbol-overlay sudoku string-inflection sqlup-mode sql-indent spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sass-mode rjsx-mode restart-emacs realgud rainbow-mode rainbow-identifiers rainbow-delimiters racer pytest pyenv-mode py-isort pug-mode protobuf-mode prettier-js popwin pippel pipenv pip-requirements persp-mode pdf-tools pcre2el password-generator parrot parinfer paradox pacmacs ox-twbs ox-hugo ox-gfm overseer orgit org-sticky-header org-re-reveal org-projectile org-present org-pomodoro org-mime org-journal org-download org-cliplink org-bullets org-brain open-junk-file ob-ipython nov nodejs-repl nginx-mode neotree nameless mwim multi-term move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lsp-ui lsp-python-ms lorem-ipsum livid-mode live-py-mode link-hint json-navigator js2-refactor js-doc jinja2-mode insert-shebang indent-guide importmagic impatient-mode ibuffer-projectile hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-gitignore helm-git-grep helm-flx helm-descbinds helm-dash helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc gnuplot gmail-message-mode gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md fuzzy font-lock+ flymd flycheck-rust flycheck-pos-tip flycheck-package flycheck-golangci-lint flycheck-bashate flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emojify emoji-cheat-sheet-plus emmet-mode elisp-slime-nav ein editorconfig edit-server dumb-jump dotenv-mode doom-themes doom-modeline dockerfile-mode docker diminish diff-hl devdocs deft define-word dash-at-point dap-mode cython-mode company-web company-tabnine company-statistics company-shell company-lsp company-go company-emoji company-ansible company-anaconda column-enforce-mode color-identifiers-mode clean-aindent-mode centered-cursor-mode cargo browse-at-remote blacken auto-yasnippet auto-highlight-symbol auto-compile ansible-doc ansible aggressive-indent ace-link ace-jump-helm-line ac-ispell 2048-game))))
