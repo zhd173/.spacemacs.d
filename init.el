@@ -32,78 +32,34 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(nginx
-     shell-scripts
-     (dap :variables
-          dap-enable-mouse-support t)
-     yaml
-     org-roam
-     ;; systemd
-     ;; rust
-     ;; ansible
-     (colors :variables
-             colors-colorize-identifiers nil
-             colors-enable-nyan-cat-progress-bar t
-             )
-     (typescript :variables
-                 typescript-fmt-tool 'tide
-                 typescript-linter 'tslint
-                 tide-tsserver-executable "/usr/local/bin/tsserver"
-                 typescript-backend 'tide
-                 typescript-fmt-on-save t)
-     imenu-list
-     html
-     react
-     json
-     better-defaults
-     helm
-     (multiple-cursors :variables
-                       multiple-cursors-backend 'evil-mc)
-     protobuf
-     docker
-     (lsp :variables
-          lsp-ui-sideline-enable t
-          lsp-ui-doc-enable t
-          )
-     ;; dap
+   '(
+     ;; ----------------------------------------------------------------
+     ;; Example of useful layers you may want to use right away.
+     ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
+     ;; `M-m f e R' (Emacs style) to install them.
+     ;; ----------------------------------------------------------------
+     auto-completion
+     emacs-lisp
+     lsp
      (go :variables
-         go-backend 'lsp
-         godoc-at-point-function 'godoc-gogetdoc
-         go-use-golangci-lint t
-         go-tab-width 4
-         ;; run-go-install-on-save t
-         go-format-before-save t
-         gofmt-command "goimports"
-         go-use-test-args "-race -timeout 10s"
-         )
+         go-format-before-save t)
+     git
      (ibuffer :variables ibuffer-group-buffers-by 'projects)
      (javascript :variables javascript-backend 'lsp)
      (java :variables java-backend 'lsp)
      ipython-notebook
-     (python :variables
-             python-backend 'anaconda
-             ;; python-backend 'lsp
-             python-formatter 'black
-             ;; python-pipenv-activate t
-             ;; python-lsp-server 'mspyls
-             ;; python-lsp-git-root "~/code/Others/python-language-server"
-             ;; python-formatter 'yapf
-             python-format-on-save t
-             python-sort-imports-on-save t
-             python-test-runner 'pytest)
-     (auto-completion :variables
-                      auto-completion-enable-sort-by-usage t
-                      auto-completion-enable-snippets-in-popup t
-                      )
-     emacs-lisp
+     helm
+     (markdown :variables
+               markdown-live-preview-engine 'vmd
+               markdown-mmm-auto-modes '("c" "c++" "python" "scala" ("elisp" "emacs-lisp")))
+     protobuf
+     (multiple-cursors :variables
+                       multiple-cursors-backend 'evil-mc)
      (org :variables
           org-enable-github-support t
           org-enable-reveal-js-support t
           org-enable-bootstrap-support t
           org-enable-org-journal-support t
-          org-enable-hugo-support t
-          org-enable-sticky-header t
-          ;; org-enable-trello-support t
           org-journal-encrypt-journal nil
           org-journal-enable-agenda-integration t
           org-projectile-file "~/Dropbox/orgs/projectile/TODOs.org"
@@ -114,35 +70,52 @@ This function should only modify configuration layer settings."
           org-journal-date-format "%A, %B %d %Y"
           org-journal-time-prefix "* "
           org-journal-time-format "")
-
-     git
-     (markdown :variables
-               markdown-live-preview-engine 'vmd
-               markdown-mmm-auto-modes '("c" "c++" "python" "scala" ("elisp" "emacs-lisp")))
+     (dap :variables
+          dap-enable-mouse-support t)
+     yaml
+     org-roam
+     (colors :variables
+             colors-colorize-identifiers nil
+             colors-enable-nyan-cat-progress-bar t)
+     (typescript :variables
+                 typescript-fmt-tool 'tide
+                 typescript-linter 'tslint
+                 tide-tsserver-executable "/usr/local/bin/tsserver"
+                 typescript-backend 'tide
+                 typescript-fmt-on-save t)
+     (python :variables
+             python-backend 'anaconda
+             ;; python-backend 'lsp
+             python-formatter 'black
+             ;; python-formatter 'yapf
+             python-format-on-save t
+             python-sort-imports-on-save t
+             python-test-runner 'pytest)
+     auto-completion
+     imenu-list
+     html
+     react
+     json
+     better-defaults
      (neotree :variables
               neo-theme 'icons
-              neo-vc-integration '(face)
-              )
-     ;; (treemacs :variables
-     ;;           treemacs-use-filewatch-mode t
-     ;;           treemacs-use-follow-mode tag
-     ;;           )
-     emoji
+              neo-vc-integration '(face))
      syntax-checking
-     ;; (spell-checking :variables
-     ;;                 spell-checking-enable-auto-dictionary t
-     ;;                 enable-flyspell-auto-completion t)
-     parinfer
-     dash
      (deft :variables
        deft-zetteldeft nil)
+     (shell :variables
+            shell-default-height 30
+            shell-default-position 'bottom)
      pdf
-     ;; (wakatime :variables
-     ;;           wakatime-api-key  "b76a617d-9948-49dc-8863-e3e50dee662e"
-     ;;           wakatime-cli-path "/usr/local/bin/wakatime")
-     debug
-     shell
      version-control
+     debug
+     ;; spell-checking
+     ;; (treemacs :variables
+     ;;           treemacs-use-follow-mode t
+     ;;           treemacs-use-filewatch-mode t
+     ;;           treemacs-use-git-mode 'deferred
+     ;;           treemacs-lock-width t
+     ;;           )
      )
 
    ;; List of additional packages that will be installed without being
@@ -152,10 +125,7 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(
-                                      ;; company-tabnine
-                                      ;; org-roam-protocol
-                                      parrot)
+   dotspacemacs-additional-packages '(parrot)
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -222,7 +192,7 @@ It should only modify the values of Spacemacs settings."
    ;; Setting this >= 1 MB should increase performance for lsp servers
    ;; in emacs 27.
    ;; (default (* 1024 1024))
-   dotspacemacs-read-process-output-max (* 1048576 1024)
+   dotspacemacs-read-process-output-max (* 1024 1024)
 
    ;; If non-nil then Spacelpa repository is the primary source to install
    ;; a locked version of packages. If nil then Spacemacs will install the
@@ -567,82 +537,21 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-
-  ;; Node path
-  (add-to-list 'exec-path "/usr/local/bin/node" t)
-
-  ;; (setq-default
-  ;;  ;; js2-mode
-  ;;  js2-basic-offset 2
-  ;;  ;; web-mode
-  ;;  css-indent-offset 2
-  ;;  web-mode-markup-indent-offset 2
-  ;;  web-mode-css-indent-offset 2
-  ;;  web-mode-code-indent-offset 2
-  ;;  web-mode-attr-indent-offset 2)
-
-  ;; (with-eval-after-load 'web-mode
-  ;;   (add-to-list 'web-mode-indentation-params '("lineup-args" . nil))
-  ;;   (add-to-list 'web-mode-indentation-params '("lineup-concats" . nil))
-  ;;   (add-to-list 'web-mode-indentation-params '("lineup-calls" . nil)))
-
   ;; Trigger completion immediately.
-  ;; (setq company-idle-delay 0.500)
-  (setq company-show-numbers t)
+  ;; (setq company-idle-delay 0.2)
+  ;; (setq company-minimum-prefix-length 1)
+  ;; (setq company-selection-wrap-around t)
+  ;; (setq company-tooltip-align-annotations nil)
+  ;; (setq company-show-numbers t)
 
-  ;; Use the tab-and-go frontend.
-  ;; Allows TAB to select and complete at the same time.
-  ;; (setq company-frontends
-  ;;       '(company-tng-frontend
-  ;;         company-pseudo-tooltip-frontend
-  ;;         company-echo-metadata-frontend))
-
-  ;; (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-  ;;                          ("marmalade" . "https://marmalade-repo.org/packages/")
-  ;;                          ("melpa" . "http://melpa.org/packages/")))
-
-  ;; 替换国内源
+  ;; Replace melpa repo
   ;; (setq configuration-layer-elpa-archives
   ;;    '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
   ;;      ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
   ;;      ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
 
-  ;; 强制设定 VIRTUAL_ENV 避免 jedi Too many open files 错误
-  ;; (defun pyenv-venv-wrapper-act (&optional ARG PRED)
-  ;;   (setenv "VIRTUAL_ENV" (shell-command-to-string "_pyenv_virtualenv_hook; echo -n $VIRTUAL_ENV")))
-  ;; (advice-add 'pyenv-mode-set :after 'pyenv-venv-wrapper-act)
-  ;; (defun pyenv-venv-wrapper-deact (&optional ARG PRED)
-  ;;   (setenv "VIRTUAL_ENV"))
-  ;; (advice-add 'pyenv-mode-unset :after 'pyenv-venv-wrapper-deact)
-
-  ;; git 相关设置
-  ;; (setq-default git-magit-status-fullscreen t)
-
-  ;; (defun my-flymd-browser-function (url)
-  ;;   (let ((process-environment (browse-url-process-environment)))
-  ;;     (apply 'start-process
-  ;;            (concat "google-chrome " url) nil
-  ;;            "/usr/bin/open"
-  ;;            (list "google-chrome" "--new-window" "--allow-file-access-from-files" url))))
-  ;; (setq flymd-browser-open-function 'my-flymd-browser-function)
+  ;; end of user init
   )
-
-
-;; 设置中英文等宽
-;; (set-face-attribute
-;; 'default nil
-;; :font (font-spec :name "-*-Source Code Pro-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1"
-;;                  :weight 'normal
-;;                  :slant 'normal
-;;                  :size 14))
-;; (dolist (charset '(kana han symbol cjk-misc bopomofo))
-;;  (set-fontset-font
-;;   (frame-parameter nil 'font)
-;;   charset
-;;   (font-spec :name "-*-Hiragino Sans GB-normal-normal-normal-*-*-*-*-*-p-0-iso10646-1"
-;;              :weight 'normal
-;;              :slant 'normal
-;;              :size 16)))
 
 (defun dotspacemacs/user-load ()
   "Library to load while dumping.
@@ -657,43 +566,16 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+  ;; nyan and parrot
   (nyan-mode)
   (parrot-mode)
 
-  ;; (with-eval-after-load 'company
-  ;;   (push #'company-tabnine company-backends))
-
-
-  ;; (setq anaconda-mode-localhost-address "127.0.0.1")
-
-
-  ;; 设置 neo 文件图标
-  ;; (setq neo-theme 'icons)
-
-  ;; 将 Spacemacs 作为 Git 默认编辑器
+  ;; git configs
   (global-git-commit-mode t)
-  (setq magit-repository-directories "~/vtou/")
+  (setq magit-repository-directories
+        '(("~/dmall/" . 2) ("~/code/" . 2)))
 
-  ;; web-mode 添加 Vue 支持
-  ;; (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
-
-  ;; 初始化窗口大小和位置
-  ;; (setq default-frame-alist
-  ;;       `((top . 50)
-  ;;         (left . 300)
-  ;;         (width . 105)
-  ;;         (height . 40)
-  ;;         ))
-
-  ;; 解决 spacemacs org 与 emacs 自带的 org 冲突问题
-  (with-eval-after-load 'org-agenda
-    (require 'org-projectile)
-    (mapcar '(lambda (file)
-               (when (file-exists-p file)
-                 (push file org-agenda-files)))
-            (org-projectile-todo-files)))
-
-  ;; org settings
+  ;;org configs
   (setq org-image-actual-width '(500))
   (setq org-src-tab-acts-natively t)
   (setq org-download-screenshot-method "screencapture -i %s")
@@ -703,7 +585,6 @@ before packages are loaded."
   (setq org-brain-path "~/Dropbox/orgs/brain")
   (setq org-id-track-globally t)
   (setq org-id-locations-file "~/Dropbox/orgs/.org-id-locations")
-  ;; (setq org-brain-visualize-default-choices 'org-brain-path)
   (setq org-tag-alist '(("Blog")
                         ("Reading")
                         ("Music")
@@ -750,11 +631,8 @@ before packages are loaded."
   (setq deft-recursive t)
   (setq deft-extensions '("org" "md" "txt"))
   (global-set-key [f8] 'deft)
-  ;; (setq org-brain-include-file-entries nil
-  ;;       org-brain-file-entries-use-title nil)
   (with-eval-after-load 'evil
     (evil-set-initial-state 'org-brain-visualize-mode 'emacs))
-  ;; (setq org-pomodoro-clock-break t)
   (setq org-todo-keywords
         '((sequencep "TODO" "DONE")))
   (setq org-agenda-files (list "~/Dropbox/orgs/agenda.org"))
@@ -765,11 +643,7 @@ before packages are loaded."
            "* TODO %?\n")
           ("j" "Journal entry" entry (function org-journal-find-location)
            "* %(format-time-string org-journal-time-format)%^{Title}\n%i%?")))
-
-  ;; org-roam settings
-  ;; (setq org-roam-graph-viewer "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
   (setq org-roam-graph-viewer "/Applications/Firefox.app/Contents/MacOS/firefox")
-  ;; (setq org-roam-directory "/Users/zhd/Dropbox/orgs/brain/")
   (setq org-roam-capture-templates
         '(("r" "ref" plain (function org-roam--capture-get-point)
            "%?"
@@ -782,24 +656,15 @@ before packages are loaded."
            :head "#+TITLE: ${title}\n"
            :unnarrowed t)))
   (require 'org-roam-protocol)
-  ;; (with-eval-after-load 'org-roam
-  ;;   (with-eval-after-load 'company
-  ;;     (with-eval-after-load 'org
-  ;;       (require 'company-org-roam)
-  ;;       (company-org-roam-init))))
 
-  ;; python black formatter settings
-  ;; (setq blacken-skip-string-normalization t)
+  ;; python configs
   (setq blacken-line-length '100)
   (setq flycheck-flake8-maximum-line-length '100)
+
+  ;; go configs
   (setq flycheck-golangci-lint-config "~/Dropbox/config/golangci-lint/.golangci.yml")
 
-  ;; lsp config
-  ;; (setq lsp-diagnostic-package nil)
-  ;; (setq lsp-prefer-capf t)
-  ;; (setq lsp-idle-delay 0.500)
-  ;; (setq lsp-print-performance t)
-
+  ;; doom configs
   ;; doom-modeline settings
   (setq doom-modeline-icon (display-graphic-p))
   (setq doom-modeline-bar-width '3)
@@ -825,41 +690,7 @@ before packages are loaded."
   (setq nyan-bar-length '15)
   (setq nyan-wavy-trail t)
   (setq nyan-minimum-window-width '70)
-
-  ;; parrot
-  (setq parrot-num-rotations '10)
-  (parrot-set-parrot-type 'confused)
-  (define-key evil-normal-state-map (kbd "[r") 'parrot-rotate-prev-word-at-point)
-  (define-key evil-normal-state-map (kbd "]r") 'parrot-rotate-next-word-at-point)
-  (setq parrot-rotate-dict
-        '(
-          (:rot ("&" "|"))
-          (:rot ("begin" "end") :caps t :upcase t)
-          (:rot ("enable" "disable") :caps t :upcase t)
-          (:rot ("enter" "exit") :caps t :upcase t)
-          (:rot ("get" "set") :caps t :upcase t)
-          (:rot ("in" "out") :caps t :upcase t)
-          (:rot ("min" "max") :caps t :upcase t)
-          (:rot ("on" "off") :caps t :upcase t)
-          (:rot ("prev" "next"))
-          (:rot ("start" "stop") :caps t :upcase t)
-          (:rot ("true" "false") :caps t :upcase t)
-          (:rot ("&&" "||"))
-          (:rot ("==" "!="))
-          (:rot ("." "->"))
-          (:rot ("if" "else" "elif"))
-          (:rot ("ifdef" "ifndef"))
-          (:rot ("int8_t" "int16_t" "int32_t" "int64_t"))
-          (:rot ("uint8_t" "uint16_t" "uint32_t" "uint64_t"))
-          (:rot ("1" "2" "3" "4" "5" "6" "7" "8" "9" "10"))
-          (:rot ("1st" "2nd" "3rd" "4th" "5th" "6th" "7th" "8th" "9th" "10th")))))
-
-  ;; wakatime settings
-  ;; (setq wakatime-python-bin "/usr/local/bin/python3")
-  ;; )
-
-;; end of user-config
-
+  )
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
@@ -868,19 +699,17 @@ before packages are loaded."
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
-  (custom-set-variables
-   ;; custom-set-variables was added by Custom.
-   ;; If you edit it by hand, you could mess it up, so be careful.
-   ;; Your init file should contain only one such instance.
-   ;; If there is more than one, they won't work right.
-   '(flycheck-checker-error-threshold 4000)
-   '(package-selected-packages
-     (quote
-      (unicode-escape names zetteldeft org-roam emacsql-sqlite emacsql ansi package-build shut-up epl git commander f dash s utop tuareg caml seeing-is-believing rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode robe rbenv rake ocp-indent ob-elixir mvn minitest meghanada maven-test-mode lsp-java groovy-mode groovy-imports pcache gradle-mode flycheck-ocaml merlin flycheck-mix flycheck-credo dune chruby bundler inf-ruby auto-complete-rst alchemist elixir-mode yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vterm volatile-highlights vmd-mode vi-tilde-fringe uuidgen use-package unfill typit twittering-mode toml-mode toc-org tide tagedit systemd symon symbol-overlay sudoku string-inflection sqlup-mode sql-indent spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sass-mode rjsx-mode restart-emacs realgud rainbow-mode rainbow-identifiers rainbow-delimiters racer pytest pyenv-mode py-isort pug-mode protobuf-mode prettier-js popwin pippel pipenv pip-requirements persp-mode pdf-tools pcre2el password-generator parrot parinfer paradox pacmacs ox-twbs ox-hugo ox-gfm overseer orgit org-sticky-header org-re-reveal org-projectile org-present org-pomodoro org-mime org-journal org-download org-cliplink org-bullets org-brain open-junk-file ob-ipython nov nodejs-repl nginx-mode neotree nameless mwim multi-term move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lsp-ui lsp-python-ms lorem-ipsum livid-mode live-py-mode link-hint json-navigator js2-refactor js-doc jinja2-mode insert-shebang indent-guide importmagic impatient-mode ibuffer-projectile hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-gitignore helm-git-grep helm-flx helm-descbinds helm-dash helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc gnuplot gmail-message-mode gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md fuzzy font-lock+ flymd flycheck-rust flycheck-pos-tip flycheck-package flycheck-golangci-lint flycheck-bashate flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emojify emoji-cheat-sheet-plus emmet-mode elisp-slime-nav ein editorconfig edit-server dumb-jump dotenv-mode doom-themes doom-modeline dockerfile-mode docker diminish diff-hl devdocs deft define-word dash-at-point dap-mode cython-mode company-web company-tabnine company-statistics company-shell company-lsp company-go company-emoji company-ansible company-anaconda column-enforce-mode color-identifiers-mode clean-aindent-mode centered-cursor-mode cargo browse-at-remote blacken auto-yasnippet auto-highlight-symbol auto-compile ansible-doc ansible aggressive-indent ace-link ace-jump-helm-line ac-ispell 2048-game))))
-  (custom-set-faces
-   ;; custom-set-faces was added by Custom.
-   ;; If you edit it by hand, you could mess it up, so be careful.
-   ;; Your init file should contain only one such instance.
-   ;; If there is more than one, they won't work right.
-   )
-  )
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(doom-themes helm-gtags godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc ggtags flycheck-golangci-lint dap-mode lsp-treemacs bui lsp-mode markdown-mode dash-functional counsel-gtags counsel swiper ivy company-go go-mode company ws-butler writeroom-mode winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package treemacs-projectile treemacs-persp treemacs-icons-dired treemacs-evil toc-org symon symbol-overlay string-inflection spaceline-all-the-icons restart-emacs request rainbow-delimiters popwin pcre2el password-generator paradox overseer org-plus-contrib org-bullets open-junk-file nameless move-text macrostep lorem-ipsum link-hint indent-guide hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-mode-manager helm-make helm-ls-git helm-flx helm-descbinds helm-ag google-translate golden-ratio font-lock+ flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu emr elisp-slime-nav editorconfig dumb-jump dotenv-mode diminish devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile aggressive-indent ace-link ace-jump-helm-line)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+)
