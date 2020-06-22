@@ -130,7 +130,7 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(parrot)
+   dotspacemacs-additional-packages '(parrot org-roam-server)
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -648,6 +648,7 @@ before packages are loaded."
            "* TODO %?\n")
           ("j" "Journal entry" entry (function org-journal-find-location)
            "* %(format-time-string org-journal-time-format)%^{Title}\n%i%?")))
+  (require 'org-roam-protocol)
   (setq org-roam-graph-viewer "/Applications/Firefox.app/Contents/MacOS/firefox")
   (setq org-roam-capture-templates
         '(("r" "ref" plain (function org-roam--capture-get-point)
@@ -660,6 +661,15 @@ before packages are loaded."
            :file-name "%<%Y%m%d%H%M%S>-${slug}"
            :head "#+TITLE: ${title}\n"
            :unnarrowed t)))
+
+  (setq org-roam-server-host "127.0.0.1"
+        org-roam-server-port 6666
+        org-roam-server-export-inline-images t
+        org-roam-server-authenticate nil
+        org-roam-server-network-arrows nil
+        org-roam-server-network-label-truncate t
+        org-roam-server-network-label-truncate-length 60
+        org-roam-server-network-label-wrap-length 20)
 
   ;; add projectile TODOs into agenda
   (with-eval-after-load 'org-agenda
