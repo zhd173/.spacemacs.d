@@ -40,6 +40,9 @@ This function should only modify configuration layer settings."
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      auto-completion
+     (plantuml :variables
+               plantuml-jar-path "~/Dropbox/orgs/tools/plantuml.jar"
+               org-plantuml-jar-path "~/Dropbox/orgs/tools/plantuml.jar")
      emacs-lisp
      (lsp :variables
          lsp-gopls-codelens nil)
@@ -581,7 +584,7 @@ before packages are loaded."
         '(("~/dmall/" . 2) ("~/code/" . 2)))
 
   ;;org configs
-  (setq org-image-actual-width '(500))
+  (setq org-image-actual-width '(700))
   (setq org-src-tab-acts-natively t)
   (setq org-download-screenshot-method "screencapture -i %s")
   (setq spaceline-org-clock-p t)
@@ -663,7 +666,7 @@ before packages are loaded."
            :unnarrowed t)))
 
   (setq org-roam-server-host "127.0.0.1"
-        org-roam-server-port 6666
+        org-roam-server-port 8089
         org-roam-server-export-inline-images t
         org-roam-server-authenticate nil
         org-roam-server-network-arrows nil
