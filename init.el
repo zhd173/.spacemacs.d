@@ -33,6 +33,7 @@ This function should only modify configuration layer settings."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(vimscript
+     emoji
      shell-scripts
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
@@ -42,6 +43,7 @@ This function should only modify configuration layer settings."
      auto-completion
      (plantuml :variables
                plantuml-jar-path "~/Dropbox/orgs/tools/plantuml.jar"
+               plantuml-indent-level 4
                org-plantuml-jar-path "~/Dropbox/orgs/tools/plantuml.jar")
      emacs-lisp
      (lsp :variables
@@ -50,6 +52,7 @@ This function should only modify configuration layer settings."
          go-format-before-save t
          gofmt-command "goimports"
          go-tab-width 4
+         go-use-test-args "-v -coverprofile=coverage.out"
          )
      git
      (ibuffer :variables ibuffer-group-buffers-by 'projects)
@@ -558,6 +561,22 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   ;;      ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
   ;;      ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
 
+  ;; 设置中英文等宽
+  ;; (set-face-attribute
+  ;;  'default nil
+  ;;  :font (font-spec :name "-*-Source Code Pro-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1"
+  ;;                   :weight 'normal
+  ;;                   :slant 'normal
+  ;;                   :size 14))
+  ;; (dolist (charset '(kana han symbol cjk-misc bopomofo))
+  ;;   (set-fontset-font
+  ;;    (frame-parameter nil 'font)
+  ;;    charset
+  ;;    (font-spec :name "-*-Hiragino Sans GB-normal-normal-normal-*-*-*-*-*-p-0-iso10646-1"
+  ;;               :weight 'normal
+  ;;               :slant 'normal
+  ;;               :size 16)))
+
   ;; end of user init
   )
 
@@ -577,6 +596,9 @@ before packages are loaded."
   ;; nyan and parrot
   (nyan-mode)
   (parrot-mode)
+
+  ;; go-coverage
+  ;; (setq go-coverage-display-buffer-func 'display-buffer-same-window)
 
   ;; git configs
   (global-git-commit-mode t)
@@ -665,7 +687,7 @@ before packages are loaded."
            :head "#+TITLE: ${title}\n"
            :unnarrowed t)))
 
-  (setq org-roam-server-host "127.0.0.1"
+  (setq org-roam-server-host "0.0.0.0"
         org-roam-server-port 8089
         org-roam-server-export-inline-images t
         org-roam-server-authenticate nil
@@ -685,6 +707,9 @@ before packages are loaded."
   ;; python configs
   (setq blacken-line-length '100)
   (setq flycheck-flake8-maximum-line-length '100)
+
+  ;; plantuml
+  (setq plantuml-output-type "svg")
 
   ;; go configs
   (setq flycheck-golangci-lint-config "~/Dropbox/config/golangci-lint/.golangci.yml")
@@ -729,8 +754,10 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(org-agenda-files
+   '("~/Dropbox/orgs/projectile/TODOs.org" "~/Dropbox/orgs/projectile/TODOs.org" "~/Dropbox/orgs/agenda.org" "/Users/zhd/Dropbox/orgs/journal/2020-08-31.org"))
  '(package-selected-packages
-   '(vimrc-mode dactyl-mode insert-shebang flycheck-bashate fish-mode company-shell utop tuareg caml seeing-is-believing rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode robe rbenv rake ocp-indent ob-elixir minitest flycheck-ocaml merlin flycheck-credo emojify emoji-cheat-sheet-plus dune company-emoji chruby bundler inf-ruby alchemist elixir-mode doom-themes helm-gtags godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc ggtags flycheck-golangci-lint dap-mode lsp-treemacs bui lsp-mode markdown-mode dash-functional counsel-gtags counsel swiper ivy company-go go-mode company ws-butler writeroom-mode winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package treemacs-projectile treemacs-persp treemacs-icons-dired treemacs-evil toc-org symon symbol-overlay string-inflection spaceline-all-the-icons restart-emacs request rainbow-delimiters popwin pcre2el password-generator paradox overseer org-plus-contrib org-bullets open-junk-file nameless move-text macrostep lorem-ipsum link-hint indent-guide hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-mode-manager helm-make helm-ls-git helm-flx helm-descbinds helm-ag google-translate golden-ratio font-lock+ flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu emr elisp-slime-nav editorconfig dumb-jump dotenv-mode diminish devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile aggressive-indent ace-link ace-jump-helm-line)))
+   '(utop tuareg caml seeing-is-believing rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode robe rbenv rake ocp-indent ob-elixir minitest flycheck-ocaml merlin flycheck-credo dune chruby bundler inf-ruby alchemist elixir-mode yapfify yaml-mode xterm-color ws-butler winum which-key web-mode web-beautify volatile-highlights vmd-mode vimrc-mode vi-tilde-fringe uuidgen use-package unfill toc-org tide typescript-mode tagedit spaceline powerline smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs rainbow-mode rainbow-identifiers rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode popwin pip-requirements persp-mode pcre2el parrot paradox spinner ox-twbs ox-reveal orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-plus-contrib org-mime org-download org-bullets open-junk-file neotree mwim multi-term move-text mmm-mode markdown-toc markdown-mode magit-gitflow magit-popup macrostep lorem-ipsum livid-mode skewer-mode simple-httpd live-py-mode linum-relative link-hint json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc insert-shebang indent-guide imenu-list ibuffer-projectile hydra lv hy-mode dash-functional hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haml-mode google-translate golden-ratio go-guru go-eldoc gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flycheck-pos-tip pos-tip flycheck pkg-info epl flx-ido flx fish-mode fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit magit git-commit with-editor transient evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav ein exec-path-from-shell polymode deferred request anaphora websocket dumb-jump diminish diff-hl deft define-word dactyl-mode cython-mode company-web web-completion-data company-statistics company-shell company-go go-mode company-emacs-eclim eclim company-anaconda company column-enforce-mode color-identifiers-mode coffee-mode clean-aindent-mode bind-map bind-key auto-yasnippet yasnippet auto-highlight-symbol auto-compile packed anaconda-mode pythonic f dash s aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core async ac-ispell auto-complete popup doom-dracula-theme)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
