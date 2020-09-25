@@ -69,7 +69,7 @@ This function should only modify configuration layer settings."
          go-format-before-save t
          ;; gofmt-command "goimports"
          go-tab-width 4
-         go-use-golangci-lint t
+         ;; go-use-golangci-lint t
          godoc-at-point-function 'godoc-gogetdoc
          go-use-test-args "-v -coverprofile=coverage.out"
          )
@@ -137,15 +137,15 @@ This function should only modify configuration layer settings."
      version-control
      debug
      ;; spell-checking
-     ;; (neotree :variables
-     ;;          neo-theme 'icons
-     ;;          neo-vc-integration '(face))
-     (treemacs :variables
-               treemacs-use-follow-mode t
-               treemacs-use-filewatch-mode t
-               treemacs-use-git-mode 'deferred
-               treemacs-lock-width t
-               )
+     (neotree :variables
+              neo-theme 'icons
+              neo-vc-integration '(face))
+     ;; (treemacs :variables
+     ;;           treemacs-use-follow-mode t
+     ;;           treemacs-use-filewatch-mode t
+     ;;           treemacs-use-git-mode 'deferred
+     ;;           treemacs-lock-width t
+     ;;           )
      )
 
    ;; List of additional packages that will be installed without being
@@ -774,26 +774,12 @@ before packages are loaded."
   (setq nyan-minimum-window-width '70)
   )
 
-;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+(setq custom-file (expand-file-name "custom.el" dotspacemacs-directory))
+(load custom-file 'no-error 'no-message)
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(org-agenda-files
-   '("~/Dropbox/orgs/projectile/TODOs.org" "~/Dropbox/orgs/projectile/TODOs.org" "~/Dropbox/orgs/projectile/TODOs.org" "~/Dropbox/orgs/projectile/TODOs.org" "~/Dropbox/orgs/projectile/TODOs.org" "~/Dropbox/orgs/projectile/TODOs.org" "~/Dropbox/orgs/projectile/TODOs.org" "~/Dropbox/orgs/agenda.org" "/Users/zhd/Dropbox/orgs/journal/2020-09-18.org"))
- '(package-selected-packages
-   '(utop tuareg caml seeing-is-believing rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode robe rbenv rake ocp-indent ob-elixir minitest flycheck-ocaml merlin flycheck-credo dune chruby bundler inf-ruby alchemist elixir-mode yapfify yaml-mode xterm-color ws-butler winum which-key web-mode web-beautify volatile-highlights vmd-mode vimrc-mode vi-tilde-fringe uuidgen use-package unfill toc-org tide typescript-mode tagedit spaceline powerline smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs rainbow-mode rainbow-identifiers rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode popwin pip-requirements persp-mode pcre2el parrot paradox spinner ox-twbs ox-reveal orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-plus-contrib org-mime org-download org-bullets open-junk-file neotree mwim multi-term move-text mmm-mode markdown-toc markdown-mode magit-gitflow magit-popup macrostep lorem-ipsum livid-mode skewer-mode simple-httpd live-py-mode linum-relative link-hint json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc insert-shebang indent-guide imenu-list ibuffer-projectile hydra lv hy-mode dash-functional hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haml-mode google-translate golden-ratio go-guru go-eldoc gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flycheck-pos-tip pos-tip flycheck pkg-info epl flx-ido flx fish-mode fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit magit git-commit with-editor transient evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav ein exec-path-from-shell polymode deferred request anaphora websocket dumb-jump diminish diff-hl deft define-word dactyl-mode cython-mode company-web web-completion-data company-statistics company-shell company-go go-mode company-emacs-eclim eclim company-anaconda company column-enforce-mode color-identifiers-mode coffee-mode clean-aindent-mode bind-map bind-key auto-yasnippet yasnippet auto-highlight-symbol auto-compile packed anaconda-mode pythonic f dash s aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core async ac-ispell auto-complete popup doom-dracula-theme)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-)
+  )
