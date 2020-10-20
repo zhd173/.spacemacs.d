@@ -67,12 +67,21 @@ This function should only modify configuration layer settings."
      (go :variables
          go-backend 'lsp
          go-format-before-save t
-         ;; gofmt-command "goimports"
+         gofmt-command "goimports"
          go-tab-width 4
          ;; go-use-golangci-lint t
          godoc-at-point-function 'godoc-gogetdoc
          go-use-test-args "-v -coverprofile=coverage.out"
          )
+     (osx :variables
+          osx-command-as       'hyper
+          osx-option-as        'meta
+          osx-control-as       'control
+          osx-function-as      nil
+          osx-right-command-as 'left
+          osx-right-option-as  'left
+          osx-right-control-as 'left
+          osx-swap-option-and-command nil)
      git
      (ibuffer :variables ibuffer-group-buffers-by 'projects)
      (javascript :variables javascript-backend 'lsp)
@@ -90,6 +99,7 @@ This function should only modify configuration layer settings."
           org-enable-reveal-js-support t
           org-enable-bootstrap-support t
           org-enable-org-journal-support t
+          org-enable-roam-support t
           org-journal-encrypt-journal nil
           org-journal-enable-agenda-integration t
           org-projectile-file "~/Dropbox/orgs/projectile/TODOs.org"
@@ -103,7 +113,6 @@ This function should only modify configuration layer settings."
      (dap :variables
           dap-enable-mouse-support t)
      yaml
-     org-roam
      (colors :variables
              colors-colorize-identifiers nil
              colors-enable-nyan-cat-progress-bar t)
@@ -155,7 +164,7 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(parrot org-roam-server)
+   dotspacemacs-additional-packages '(parrot org-roam-server cal-china-x)
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -580,6 +589,7 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
+
   ;; Trigger completion immediately.
   ;; (setq company-idle-delay 0.2)
   ;; (setq company-minimum-prefix-length 1)
@@ -629,6 +639,60 @@ before packages are loaded."
   (nyan-mode)
   (parrot-mode)
 
+  ;; calendar
+  (require 'cal-china-x)
+  (setq mark-holidays-in-calendar t)
+  (setq cal-china-x-important-holidays cal-china-x-chinese-holidays)
+  (setq cal-china-x-general-holidays '(
+                                       ;; 农历
+                                       (holiday-lunar 1 9 "昀洎的生日")
+                                       (holiday-lunar 1 10 "奶奶和珍珍的生日")
+                                       (holiday-lunar 2 28 "我的生日")
+                                       (holiday-lunar 3 20 "奶奶的忌日")
+                                       (holiday-lunar 5 12 "爸爸的生日")
+                                       (holiday-lunar 5 25 "djj的生日")
+                                       (holiday-lunar 6 30 "夏的生日")
+                                       (holiday-lunar 7 25 "妈妈的生日")
+                                       (holiday-lunar 10 16 "璨璨的生日")
+                                       (holiday-lunar 11 20 "爷爷的生日")
+                                       ;; 阳历
+                                       (holiday-fixed 10 28 "丝丝的生日")
+                                       (holiday-fixed 11 5 "皂皂的生日")
+                                       (holiday-fixed 2 12 "滚滚的生日")
+                                       (holiday-fixed 5 20 "撞撞的生日")
+                                       (holiday-fixed 9 13 "章鱼华姐的生日")
+                                       (holiday-fixed 12 28 "冬神的生日")
+                                       (holiday-fixed 12 12 "兰博的生日")
+                                       ;; 节气
+                                       (holiday-solar-term "小寒" "小寒")
+                                       (holiday-solar-term "大寒" "大寒")
+                                       (holiday-solar-term "立春" "立春")
+                                       (holiday-solar-term "雨水" "雨水")
+                                       (holiday-solar-term "惊蛰" "惊蛰")
+                                       (holiday-solar-term "春分" "春分")
+                                       (holiday-solar-term "清明" "清明")
+                                       (holiday-solar-term "谷雨" "谷雨")
+                                       (holiday-solar-term "立夏" "立夏")
+                                       (holiday-solar-term "小满" "小满")
+                                       (holiday-solar-term "芒种" "芒种")
+                                       (holiday-solar-term "夏至" "夏至")
+                                       (holiday-solar-term "小暑" "小暑")
+                                       (holiday-solar-term "大暑" "大暑")
+                                       (holiday-solar-term "立秋" "立秋")
+                                       (holiday-solar-term "处暑" "处暑")
+                                       (holiday-solar-term "白露" "白露")
+                                       (holiday-solar-term "秋分" "秋分")
+                                       (holiday-solar-term "寒露" "寒露")
+                                       (holiday-solar-term "霜降" "霜降")
+                                       (holiday-solar-term "立冬" "立冬")
+                                       (holiday-solar-term "小雪" "小雪")
+                                       (holiday-solar-term "大雪" "大雪")
+                                       (holiday-solar-term "冬至" "冬至")
+                                       ))
+  (setq calendar-holidays
+        (append cal-china-x-important-holidays
+                cal-china-x-general-holidays))
+
   ;; go-coverage
   ;; (setq go-coverage-display-buffer-func 'display-buffer-same-window)
 
@@ -640,6 +704,7 @@ before packages are loaded."
   ;;org configs
   (setq org-image-actual-width '(700))
   (setq org-src-tab-acts-natively t)
+  (setq org-agenda-include-diary t)
   (setq org-download-screenshot-method "screencapture -i %s")
   (setq spaceline-org-clock-p t)
   (setq org-pomodoro-start-sound-p t)
@@ -692,7 +757,7 @@ before packages are loaded."
   (setq deft-directory "~/Dropbox/orgs")
   (setq deft-recursive t)
   (setq deft-extensions '("org" "md" "txt"))
-  (global-set-key (kbd "C-,") 'deft)
+  (global-set-key (kbd "C-;") 'deft)
   (with-eval-after-load 'evil
     (evil-set-initial-state 'org-brain-visualize-mode 'emacs))
   (setq org-todo-keywords
