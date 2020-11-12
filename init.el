@@ -33,6 +33,7 @@ This function should only modify configuration layer settings."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(vimscript
+     myleetcode
      emoji
      shell-scripts
      ;; ----------------------------------------------------------------
@@ -575,6 +576,10 @@ It should only modify the values of Spacemacs settings."
    ;; and todos. If non nil only the file name is shown.
    dotspacemacs-home-shorten-agenda-source nil))
 
+(defun haidong/notification (title message &optional sticky)
+  "Send a alert notification"
+  (alert message :title title :severity 'high))
+
 (defun dotspacemacs/user-env ()
   "Environment variables setup.
 This function defines the environment variables for your Emacs session. By
@@ -654,15 +659,16 @@ before packages are loaded."
                                        (holiday-lunar 6 30 "夏的生日")
                                        (holiday-lunar 7 25 "妈妈的生日")
                                        (holiday-lunar 10 16 "璨璨的生日")
+                                       (holiday-lunar 11 5 "皂皂的生日")
                                        (holiday-lunar 11 20 "爷爷的生日")
                                        ;; 阳历
                                        (holiday-fixed 10 28 "丝丝的生日")
-                                       (holiday-fixed 11 5 "皂皂的生日")
                                        (holiday-fixed 2 12 "滚滚的生日")
                                        (holiday-fixed 5 20 "撞撞的生日")
                                        (holiday-fixed 9 13 "章鱼华姐的生日")
                                        (holiday-fixed 12 28 "冬神的生日")
                                        (holiday-fixed 12 12 "兰博的生日")
+                                       (holiday-fixed 11 3 "白麒成立")
                                        ;; 节气
                                        (holiday-solar-term "小寒" "小寒")
                                        (holiday-solar-term "大寒" "大寒")
@@ -708,8 +714,12 @@ before packages are loaded."
   (setq org-download-screenshot-method "screencapture -i %s")
   (setq spaceline-org-clock-p t)
   (setq org-pomodoro-start-sound-p t)
+  (setq org-pomodoro-finished-hook '(lambda() (haidong/notification "Pomodoro Finished" "Have a break" t)))
+  (setq org-pomodoro-short-break-finished-hook '(lambda() (haidong/notification "Short Break" "Ready to Go?" t)))
+  (setq org-pomodoro-long-break-finished-hook'(lambda() (haidong/notification "Long Break" "Ready to Go?" t)))
   (setq-default org-download-image-dir "~/Dropbox/orgs/images")
   (setq org-brain-path "~/Dropbox/orgs/brain")
+  (setq org-roam-directory "~/Dropbox/orgs/brain")
   (setq org-id-track-globally t)
   (setq org-id-locations-file "~/Dropbox/orgs/.org-id-locations")
   (setq org-tag-alist '(("Blog")
@@ -758,6 +768,7 @@ before packages are loaded."
   (setq deft-recursive t)
   (setq deft-extensions '("org" "md" "txt"))
   (global-set-key (kbd "C-;") 'deft)
+  (global-set-key (kbd "C-'") 'calendar)
   (with-eval-after-load 'evil
     (evil-set-initial-state 'org-brain-visualize-mode 'emacs))
   (setq org-todo-keywords
@@ -837,6 +848,11 @@ before packages are loaded."
   (setq nyan-bar-length '15)
   (setq nyan-wavy-trail t)
   (setq nyan-minimum-window-width '70)
+  ;; leetcode
+  (setq leetcode-prefer-language "golang")
+  (setq leetcode-prefer-sql "mysql")
+  (setq leetcode-save-solutions t)
+  (setq leetcode-directory "~/Dropbox/leetcode/src")
   )
 
 ;; auto-generate custom variable definitions.
