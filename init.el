@@ -34,6 +34,7 @@ This function should only modify configuration layer settings."
    dotspacemacs-configuration-layers
    '(vimscript
      myleetcode
+     ;; github
      emoji
      shell-scripts
      ;; ----------------------------------------------------------------
@@ -165,7 +166,10 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(parrot org-roam-server cal-china-x)
+   dotspacemacs-additional-packages '(
+                                      parrot
+                                      org-roam-server
+                                      cal-china-x)
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -641,7 +645,6 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
   ;; nyan and parrot
-  (nyan-mode)
   (parrot-mode)
 
   ;; calendar
@@ -712,7 +715,7 @@ before packages are loaded."
   (setq org-src-tab-acts-natively t)
   (setq org-agenda-include-diary t)
   (setq org-download-screenshot-method "screencapture -i %s")
-  (setq spaceline-org-clock-p t)
+  (setq spaceline-org-clock-p nil)
   (setq org-pomodoro-start-sound-p t)
   (setq org-pomodoro-finished-hook '(lambda() (haidong/notification "Pomodoro Finished" "Have a break" t)))
   (setq org-pomodoro-short-break-finished-hook '(lambda() (haidong/notification "Short Break" "Ready to Go?" t)))
@@ -830,6 +833,7 @@ before packages are loaded."
   (setq doom-modeline-major-mode-icon t)
   (setq doom-modeline-major-mode-color-icon t)
   (setq doom-modeline-buffer-encoding t)
+  (setq doom-modeline-buffer-file-name-style 'auto)
   (setq doom-modeline-buffer-state-icon t)
   (setq doom-modeline-minor-modes (featurep 'minions))
   (setq doom-modeline-enable-word-count t)
@@ -837,6 +841,8 @@ before packages are loaded."
   (setq doom-modeline-vcs-max-length '12)
   (setq doom-modeline-lsp t)
   (setq doom-modeline-irc t)
+  ;; (setq doom-modeline-github t)
+  ;; (setq doom-modeline-mu4e t)
   (setq doom-modeline-irc-stylize 'identity)
   (setq doom-modeline-persp-name t)
   (setq doom-modeline-checker-simple-format t)
@@ -847,7 +853,7 @@ before packages are loaded."
   (setq nyan-animate-nyancat t)
   (setq nyan-bar-length '15)
   (setq nyan-wavy-trail t)
-  (setq nyan-minimum-window-width '70)
+  (setq nyan-minimum-window-width '50)
   ;; leetcode
   (setq leetcode-prefer-language "golang")
   (setq leetcode-prefer-sql "mysql")
