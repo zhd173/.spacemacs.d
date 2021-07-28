@@ -32,9 +32,18 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(vimscript
-     myleetcode
+   '(nginx
+     vimscript
+     (sql :variables
+          sql-backend 'lsp
+          sql-capitalize-keywords t
+          sql-lsp-sqls-workspace-config-path "~/Dropbox/config/emacs/spacemacs.d/sql/sql.json")
+     (rust :variables
+           rust-backend 'lsp
+           cargo-process-reload-on-modify t
+           rust-format-on-save t)
      ;; github
+     (docker :variables docker-dockerfile-backend 'lsp)
      emoji
      shell-scripts
      ;; ----------------------------------------------------------------
@@ -87,7 +96,7 @@ This function should only modify configuration layer settings."
      git
      (ibuffer :variables ibuffer-group-buffers-by 'projects)
      (javascript :variables javascript-backend 'lsp)
-     (java :variables java-backend 'lsp)
+     ;; (java :variables java-backend 'lsp)
      ipython-notebook
      helm
      (markdown :variables
@@ -106,14 +115,14 @@ This function should only modify configuration layer settings."
           org-journal-enable-agenda-integration t
           org-projectile-file "~/Dropbox/orgs/projectile/TODOs.org"
           org-journal-dir "~/Dropbox/orgs/journal/"
-          ;; org-journal-file-type "weekly"
-          org-journal-file-format "%Y-%m-%d.org"
-          org-journal-date-prefix "#+TITLE: "
-          org-journal-date-format "%A, %B %d %Y"
-          org-journal-time-prefix "* "
-          org-journal-time-format "")
-     (dap :variables
-          dap-enable-mouse-support t)
+          org-journal-file-type 'monthly
+          org-journal-file-format "%Y-%m.org"
+          org-journal-time-format ""
+          org-journal-file-header "#+TITLE: Monthly Journal\n#+STARTUP: folded"
+          ;; org-journal-time-prefix "* "
+          )
+     ;; (dap :variables
+     ;;      dap-enable-mouse-support t)
      yaml
      (colors :variables
              colors-colorize-identifiers nil
@@ -125,18 +134,21 @@ This function should only modify configuration layer settings."
                  typescript-backend 'tide
                  typescript-fmt-on-save t)
      (python :variables
-             python-backend 'anaconda
-             ;; python-backend 'lsp
+             python-backend 'lsp
              python-formatter 'black
+             python-pipenv-activate nil
              ;; python-formatter 'yapf
+             python-fill-column 120
              python-format-on-save t
-             python-sort-imports-on-save t
+             python-sort-imports-on-save nil
              python-test-runner 'pytest)
      auto-completion
      imenu-list
      html
      react
-     json
+     (json :variables
+           json-fmt-tool 'web-beautify
+           json-fmt-on-save t)
      better-defaults
      syntax-checking
      (deft :variables
@@ -151,6 +163,7 @@ This function should only modify configuration layer settings."
      (neotree :variables
               neo-theme 'icons
               neo-vc-integration '(face))
+     myleetcode
      ;; (treemacs :variables
      ;;           treemacs-use-follow-mode t
      ;;           treemacs-use-filewatch-mode t
@@ -168,6 +181,7 @@ This function should only modify configuration layer settings."
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '(
                                       parrot
+                                      company-tabnine
                                       org-roam-server
                                       cal-china-x)
 
@@ -175,7 +189,7 @@ This function should only modify configuration layer settings."
    dotspacemacs-frozen-packages '()
 
    ;; A list of packages that will not be installed and loaded.
-   dotspacemacs-excluded-packages '()
+   dotspacemacs-excluded-packages '(dap-mode)
 
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
@@ -644,8 +658,16 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+  ;; start server
+  (server-start)
+
   ;; nyan and parrot
   (parrot-mode)
+
+  (setq insert-directory-program "/bin/ls")
+
+  ;; tabnine
+  ;; (add-to-list 'company-backends #'company-tabnine)
 
   ;; calendar
   (require 'cal-china-x)
@@ -657,8 +679,9 @@ before packages are loaded."
                                        (holiday-lunar 1 10 "奶奶和珍珍的生日")
                                        (holiday-lunar 2 28 "我的生日")
                                        (holiday-lunar 3 20 "奶奶的忌日")
-                                       (holiday-lunar 5 12 "爸爸的生日")
+                                       (holiday-lunar 4 27 "爸爸的生日")
                                        (holiday-lunar 5 25 "djj的生日")
+                                       (holiday-lunar 5 28 "田昱的生日")
                                        (holiday-lunar 6 30 "夏的生日")
                                        (holiday-lunar 7 25 "妈妈的生日")
                                        (holiday-lunar 10 16 "璨璨的生日")
@@ -672,31 +695,7 @@ before packages are loaded."
                                        (holiday-fixed 12 28 "冬神的生日")
                                        (holiday-fixed 12 12 "兰博的生日")
                                        (holiday-fixed 11 3 "白麒成立")
-                                       ;; 节气
-                                       (holiday-solar-term "小寒" "小寒")
-                                       (holiday-solar-term "大寒" "大寒")
-                                       (holiday-solar-term "立春" "立春")
-                                       (holiday-solar-term "雨水" "雨水")
-                                       (holiday-solar-term "惊蛰" "惊蛰")
-                                       (holiday-solar-term "春分" "春分")
-                                       (holiday-solar-term "清明" "清明")
-                                       (holiday-solar-term "谷雨" "谷雨")
-                                       (holiday-solar-term "立夏" "立夏")
-                                       (holiday-solar-term "小满" "小满")
-                                       (holiday-solar-term "芒种" "芒种")
-                                       (holiday-solar-term "夏至" "夏至")
-                                       (holiday-solar-term "小暑" "小暑")
-                                       (holiday-solar-term "大暑" "大暑")
-                                       (holiday-solar-term "立秋" "立秋")
-                                       (holiday-solar-term "处暑" "处暑")
-                                       (holiday-solar-term "白露" "白露")
-                                       (holiday-solar-term "秋分" "秋分")
-                                       (holiday-solar-term "寒露" "寒露")
-                                       (holiday-solar-term "霜降" "霜降")
-                                       (holiday-solar-term "立冬" "立冬")
-                                       (holiday-solar-term "小雪" "小雪")
-                                       (holiday-solar-term "大雪" "大雪")
-                                       (holiday-solar-term "冬至" "冬至")
+                                       (holiday-fixed 4 14 "白麒开业")
                                        ))
   (setq calendar-holidays
         (append cal-china-x-important-holidays
@@ -816,8 +815,15 @@ before packages are loaded."
             (org-projectile-todo-files)))
 
   ;; python configs
-  (setq blacken-line-length '100)
-  (setq flycheck-flake8-maximum-line-length '100)
+  (setq python-shell-extra-pythonpaths '("/usr/local/opt/python@3.8/bin/python3"))
+  ;; (setq python-shell-exec-path "/usr/local/opt/python@3.8/bin/python3")
+  (setq blacken-line-length '120)
+  (setq flycheck-flake8-maximum-line-length '120)
+  (setq lsp-pyls-plugins-autopep8-enabled t)
+  (setq lsp-pyls-plugins-flake8-max-line-length '120)
+  (setq lsp-pyls-plugins-flake8-ignore '("E501"))
+  (setq lsp-pyls-plugins-flake8-config '".flake8rc")
+  (setq lsp-pyls-plugins-pylint-enabled t)
 
   ;; plantuml
   (setq plantuml-output-type "svg")
