@@ -34,13 +34,10 @@ This function should only modify configuration layer settings."
    dotspacemacs-configuration-layers
    '(nginx
      vimscript
-     (sql :variables
-          sql-backend 'lsp
-          sql-capitalize-keywords t
-          sql-lsp-sqls-workspace-config-path "~/Dropbox/config/emacs/spacemacs.d/sql/sql.json")
      (rust :variables
            rust-backend 'lsp
            cargo-process-reload-on-modify t
+           lsp-rust-server 'rls
            rust-format-on-save t)
      ;; github
      (docker :variables docker-dockerfile-backend 'lsp)
@@ -100,9 +97,7 @@ This function should only modify configuration layer settings."
      ipython-notebook
      helm
      (markdown :variables
-               markdown-live-preview-engine 'vmd
                markdown-mmm-auto-modes '("c" "c++" "python" "scala" ("elisp" "emacs-lisp")))
-     protobuf
      (multiple-cursors :variables
                        multiple-cursors-backend 'evil-mc)
      (org :variables
@@ -135,6 +130,7 @@ This function should only modify configuration layer settings."
                  typescript-fmt-on-save t)
      (python :variables
              python-backend 'lsp
+             python-lsp-server 'pyright
              python-formatter 'black
              python-pipenv-activate nil
              ;; python-formatter 'yapf
@@ -163,7 +159,6 @@ This function should only modify configuration layer settings."
      (neotree :variables
               neo-theme 'icons
               neo-vc-integration '(face))
-     myleetcode
      ;; (treemacs :variables
      ;;           treemacs-use-follow-mode t
      ;;           treemacs-use-filewatch-mode t
@@ -182,7 +177,6 @@ This function should only modify configuration layer settings."
    dotspacemacs-additional-packages '(
                                       parrot
                                       company-tabnine
-                                      org-roam-server
                                       cal-china-x)
 
    ;; A list of packages that cannot be updated.
@@ -254,7 +248,9 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil then Spacelpa repository is the primary source to install
    ;; a locked version of packages. If nil then Spacemacs will install the
-   ;; latest version of packages from MELPA. (default nil)
+   ;; latest version of packages from MELPA. Spacelpa is currently in
+   ;; experimental state please use only for testing purposes.
+   ;; (default nil)
    dotspacemacs-use-spacelpa nil
 
    ;; If non-nil then verify the signature for downloaded Spacelpa archives.
@@ -296,7 +292,7 @@ It should only modify the values of Spacemacs settings."
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
    ;; Possible values for list-type are:
-   ;; `recents' `bookmarks' `projects' `agenda' `todos'.
+   ;; `recents' `recents-by-project' `bookmarks' `projects' `agenda' `todos'.
    ;; List sizes may be nil, in which case
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
    dotspacemacs-startup-lists '((agenda . 5)
@@ -307,6 +303,12 @@ It should only modify the values of Spacemacs settings."
    ;; True if the home buffer should respond to resize events. (default t)
    dotspacemacs-startup-buffer-responsive t
 
+   ;; Show numbers before the startup list lines. (default t)
+   dotspacemacs-show-startup-list-numbers t
+
+   ;; The minimum delay in seconds between number key presses. (default 0.4)
+   dotspacemacs-startup-buffer-multi-digit-delay 0.4
+
    ;; Default major mode for a new empty buffer. Possible values are mode
    ;; names such as `text-mode'; and `nil' to use Fundamental mode.
    ;; (default `text-mode')
@@ -314,6 +316,14 @@ It should only modify the values of Spacemacs settings."
 
    ;; Default major mode of the scratch buffer (default `text-mode')
    dotspacemacs-scratch-mode 'text-mode
+
+   ;; If non-nil, *scratch* buffer will be persistent. Things you write down in
+   ;; *scratch* buffer will be saved and restored automatically.
+   dotspacemacs-scratch-buffer-persistent nil
+
+   ;; If non-nil, `kill-buffer' on *scratch* buffer
+   ;; will bury it instead of killing.
+   dotspacemacs-scratch-buffer-unkillable nil
 
    ;; Initial message in the scratch buffer, such as "Welcome to Spacemacs!"
    ;; (default nil)
@@ -341,7 +351,9 @@ It should only modify the values of Spacemacs settings."
    ;; (default t)
    dotspacemacs-colorize-cursor-according-to-state t
 
-   ;; Default font or prioritized list of fonts.
+   ;; Default font or prioritized list of fonts. The `:size' can be specified as
+   ;; a non-negative integer (pixel size), or a floating-point (point size).
+   ;; Point size is recommended, because it's device independent. (default 10.0)
    dotspacemacs-default-font '("Source Code Pro"
                                :size 13.0
                                :weight normal
@@ -479,12 +491,16 @@ It should only modify the values of Spacemacs settings."
    ;; when it reaches the top or bottom of the screen. (default t)
    dotspacemacs-smooth-scrolling t
 
+   ;; Show the scroll bar while scrolling. The auto hide time can be configured
+   ;; by setting this variable to a number. (default t)
+   dotspacemacs-scroll-bar-while-scrolling nil
+
    ;; Control line numbers activation.
    ;; If set to `t', `relative' or `visual' then line numbers are enabled in all
    ;; `prog-mode' and `text-mode' derivatives. If set to `relative', line
    ;; numbers are relative. If set to `visual', line numbers are also relative,
-   ;; but lines are only visual lines are counted. For example, folded lines
-   ;; will not be counted and wrapped lines are counted as multiple lines.
+   ;; but only visual lines are counted. For example, folded lines will not be
+   ;; counted and wrapped lines are counted as multiple lines.
    ;; This variable can also be set to a property list for finer control:
    ;; '(:relative nil
    ;;   :visual nil
@@ -499,13 +515,18 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil)
    dotspacemacs-line-numbers 'relative
 
-   ;; Code folding method. Possible values are `evil' and `origami'.
+   ;; Code folding method. Possible values are `evil', `origami' and `vimish'.
    ;; (default 'evil)
    dotspacemacs-folding-method 'evil
 
-   ;; If non-nil `smartparens-strict-mode' will be enabled in programming modes.
+   ;; If non-nil and `dotspacemacs-activate-smartparens-mode' is also non-nil,
+   ;; `smartparens-strict-mode' will be enabled in programming modes.
    ;; (default nil)
    dotspacemacs-smartparens-strict-mode nil
+
+   ;; If non-nil smartparens-mode will be enabled in programming modes.
+   ;; (default t)
+   dotspacemacs-activate-smartparens-mode t
 
    ;; If non-nil pressing the closing parenthesis `)' key in insert mode passes
    ;; over any automatically added closing parenthesis, bracket, quote, etc...
@@ -553,12 +574,18 @@ It should only modify the values of Spacemacs settings."
    ;; %n - Narrow if appropriate
    ;; %z - mnemonics of buffer, terminal, and keyboard coding systems
    ;; %Z - like %z, but including the end-of-line format
+   ;; If nil then Spacemacs uses default `frame-title-format' to avoid
+   ;; performance issues, instead of calculating the frame title by
+   ;; `spacemacs/title-prepare' all the time.
    ;; (default "%I@%S")
    dotspacemacs-frame-title-format "%I@%S"
 
    ;; Format specification for setting the icon title format
    ;; (default nil - same as frame-title-format)
    dotspacemacs-icon-title-format nil
+
+   ;; Show trailing whitespace (default t)
+   dotspacemacs-show-trailing-whitespace t
 
    ;; Delete whitespace while saving buffer. Possible values are `all'
    ;; to aggressively delete empty line and long sequences of whitespace,
@@ -567,12 +594,15 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil)
    dotspacemacs-whitespace-cleanup nil
 
-   ;; If non nil activate `clean-aindent-mode' which tries to correct
-   ;; virtual indentation of simple modes. This can interfer with mode specific
+   ;; If non-nil activate `clean-aindent-mode' which tries to correct
+   ;; virtual indentation of simple modes. This can interfere with mode specific
    ;; indent handling like has been reported for `go-mode'.
    ;; If it does deactivate it here.
    ;; (default t)
    dotspacemacs-use-clean-aindent-mode t
+
+   ;; Accept SPC as y for prompts if non-nil. (default nil)
+   dotspacemacs-use-SPC-as-y nil
 
    ;; If non-nil shift your number row to match the entered keyboard layout
    ;; (only in insert state). Currently supported keyboard layouts are:
@@ -591,12 +621,11 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-pretty-docs nil
 
    ;; If nil the home buffer shows the full path of agenda items
-   ;; and todos. If non nil only the file name is shown.
-   dotspacemacs-home-shorten-agenda-source nil))
+   ;; and todos. If non-nil only the file name is shown.
+   dotspacemacs-home-shorten-agenda-source nil
 
-(defun haidong/notification (title message &optional sticky)
-  "Send a alert notification"
-  (alert message :title title :severity 'high))
+   ;; If non-nil then byte-compile some of Spacemacs files.
+   dotspacemacs-byte-compile nil)
 
 (defun dotspacemacs/user-env ()
   "Environment variables setup.
@@ -611,7 +640,7 @@ See the header of this file for more information."
 This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
-If you are unsure, try setting them in `dotspacemacs/user-config' first."
+If you are unsure, try setting them in `dotspacemacs/user-config' first.")
 
   ;; Trigger completion immediately.
   ;; (setq company-idle-delay 0.2)
@@ -619,6 +648,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   ;; (setq company-selection-wrap-around t)
   ;; (setq company-tooltip-align-annotations nil)
   ;; (setq company-show-numbers t)
+  (setq org-roam-v2-ack t)
 
   ;; Replace melpa repo
   ;; (setq configuration-layer-elpa-archives
@@ -720,51 +750,9 @@ before packages are loaded."
   (setq org-pomodoro-short-break-finished-hook '(lambda() (haidong/notification "Short Break" "Ready to Go?" t)))
   (setq org-pomodoro-long-break-finished-hook'(lambda() (haidong/notification "Long Break" "Ready to Go?" t)))
   (setq-default org-download-image-dir "~/Dropbox/orgs/images")
-  (setq org-brain-path "~/Dropbox/orgs/brain")
   (setq org-roam-directory "~/Dropbox/orgs/brain")
   (setq org-id-track-globally t)
   (setq org-id-locations-file "~/Dropbox/orgs/.org-id-locations")
-  (setq org-tag-alist '(("Blog")
-                        ("Reading")
-                        ("Music")
-                        ("Productivity")
-                        ("Car")
-                        ("Apartment")
-                        ("Friends")
-                        ("Travel")
-                        ("Finance")
-                        ("Health")
-                        (:startgrouptag)
-                        ("Project")
-                        (:grouptags)
-                        ("dmall-sym-api")
-                        (:endgrouptag)
-                        (:startgrouptag)
-                        ("Programing")
-                        (:grouptags)
-                        ("CloudNative")
-                        ("SoftwareEngineering")
-                        ("Go")
-                        ("Python")
-                        ("Linux")
-                        ("AI")
-                        ("Monitor")
-                        (:endgrouptag)
-                        (:startgrouptag)
-                        ("CloudNative")
-                        (:grouptags)
-                        ("Kubernetes")
-                        ("istio")
-                        ("ServiceMesh")
-                        (:endgrouptag)
-                        (:startgrouptag)
-                        ("Game")
-                        (:grouptags)
-                        ("GameDevelopment")
-                        ("GameDesign")
-                        ("GameEvaluation")
-                        ("GameStrategy")
-                        (:endgrouptag)))
   (setq org-brain-title-max-length 12)
   (setq deft-directory "~/Dropbox/orgs")
   (setq deft-recursive t)
@@ -774,7 +762,7 @@ before packages are loaded."
   (with-eval-after-load 'evil
     (evil-set-initial-state 'org-brain-visualize-mode 'emacs))
   (setq org-todo-keywords
-        '((sequencep "TODO" "DONE")))
+        '((sequencep "TODO" "DONE" "CANCEL")))
   (setq org-agenda-files (list "~/Dropbox/orgs/agenda.org"))
   (setq org-capture-templates
         '(("d" "Daily" entry (file+olp+datetree "~/Dropbox/orgs/agenda.org" "Daily")
@@ -784,27 +772,6 @@ before packages are loaded."
           ("j" "Journal entry" entry (function org-journal-find-location)
            "* %(format-time-string org-journal-time-format)%^{Title}\n%i%?")))
   (require 'org-roam-protocol)
-  (setq org-roam-graph-viewer "/Applications/Firefox.app/Contents/MacOS/firefox")
-  (setq org-roam-capture-templates
-        '(("r" "ref" plain (function org-roam--capture-get-point)
-           "%?"
-           :file-name "%<%Y%m%d%H%M%S>-${slug}"
-           :head "#+TITLE: ${title}\n#+ROAM_KEY: ${ref}\n"
-           :unnarrowed t)
-          ("d" "default" plain (function org-roam--capture-get-point)
-           "%?"
-           :file-name "%<%Y%m%d%H%M%S>-${slug}"
-           :head "#+TITLE: ${title}\n"
-           :unnarrowed t)))
-
-  (setq org-roam-server-host "0.0.0.0"
-        org-roam-server-port 8089
-        org-roam-server-export-inline-images t
-        org-roam-server-authenticate nil
-        org-roam-server-network-arrows nil
-        org-roam-server-network-label-truncate t
-        org-roam-server-network-label-truncate-length 60
-        org-roam-server-network-label-wrap-length 20)
 
   ;; add projectile TODOs into agenda
   (with-eval-after-load 'org-agenda
@@ -812,7 +779,8 @@ before packages are loaded."
     (mapcar '(lambda (file)
                (when (file-exists-p file)
                  (push file org-agenda-files)))
-            (org-projectile-todo-files)))
+            (org-projectile-todo-files)
+            ))
 
   ;; python configs
   (setq python-shell-extra-pythonpaths '("/usr/local/opt/python@3.8/bin/python3"))
