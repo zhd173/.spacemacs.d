@@ -37,7 +37,7 @@ This function should only modify configuration layer settings."
      (rust :variables
            rust-backend 'lsp
            cargo-process-reload-on-modify t
-           lsp-rust-server 'rls
+           lsp-rust-server 'rust-analyzer
            rust-format-on-save t)
      ;; github
      (docker :variables docker-dockerfile-backend 'lsp)
@@ -174,9 +174,11 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(
-                                      parrot
+   dotspacemacs-additional-packages '(parrot
                                       company-tabnine
+                                      websocket
+                                      f
+                                      simple-httpd
                                       cal-china-x)
 
    ;; A list of packages that cannot be updated.
@@ -296,9 +298,8 @@ It should only modify the values of Spacemacs settings."
    ;; List sizes may be nil, in which case
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
    dotspacemacs-startup-lists '((agenda . 5)
-                                (todos . 5)
-                                (recents . 10)
-                                (projects . 5))
+                                (projects . 5)
+                                (recents . 10))
 
    ;; True if the home buffer should respond to resize events. (default t)
    dotspacemacs-startup-buffer-responsive t
@@ -833,6 +834,8 @@ before packages are loaded."
   (setq leetcode-prefer-sql "mysql")
   (setq leetcode-save-solutions t)
   (setq leetcode-directory "~/Dropbox/leetcode/src")
+
+  ;; org-roam-ui
   )
 
 ;; auto-generate custom variable definitions.
