@@ -1,3 +1,4 @@
+*.~undo-tree~
 .spacemacs.env
 .DS_Store
 custom.el

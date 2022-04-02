@@ -32,11 +32,14 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(nginx
+   '(protobuf
+     nginx
      vimscript
      (rust :variables
            rust-backend 'lsp
            cargo-process-reload-on-modify t
+           lsp-rust-analyzer-proc-macro-enable t
+           lsp-rust-analyzer-diagnostics-disabled ["missing-unsafe"]
            lsp-rust-server 'rust-analyzer
            rust-format-on-save t)
      ;; github
@@ -132,7 +135,7 @@ This function should only modify configuration layer settings."
              python-backend 'lsp
              python-lsp-server 'pyright
              python-formatter 'black
-             python-pipenv-activate nil
+             python-pipenv-activate t
              ;; python-formatter 'yapf
              python-fill-column 120
              python-format-on-save t
@@ -156,15 +159,16 @@ This function should only modify configuration layer settings."
      version-control
      debug
      ;; spell-checking
-     (neotree :variables
-              neo-theme 'icons
-              neo-vc-integration '(face))
-     ;; (treemacs :variables
-     ;;           treemacs-use-follow-mode t
-     ;;           treemacs-use-filewatch-mode t
-     ;;           treemacs-use-git-mode 'deferred
-     ;;           treemacs-lock-width t
-     ;;           )
+     ;; (neotree :variables
+     ;;          neo-theme 'icons
+     ;;          neo-vc-integration '(face))
+     (treemacs :variables
+               treemacs-use-follow-mode t
+               treemacs-use-all-the-icons-theme t
+               treemacs-use-filewatch-mode t
+               treemacs-use-git-mode 'deferred
+               treemacs-lock-width t
+               )
      )
 
    ;; List of additional packages that will be installed without being
@@ -204,9 +208,13 @@ It should only modify the values of Spacemacs settings."
   ;; This setq-default sexp is an exhaustive list of all the supported
   ;; spacemacs settings.
   (setq-default
-   ;; If non-nil then enable support for the portable dumper. You'll need
-   ;; to compile Emacs 27 from source following the instructions in file
+   ;; If non-nil then enable support for the portable dumper. You'll need to
+   ;; compile Emacs 27 from source following the instructions in file
    ;; EXPERIMENTAL.org at to root of the git repository.
+   ;;
+   ;; WARNING: pdumper does not work with Native Compilation, so it's disabled
+   ;; regardless of the following setting when native compilation is in effect.
+   ;;
    ;; (default nil)
    dotspacemacs-enable-emacs-pdumper nil
 
@@ -297,9 +305,12 @@ It should only modify the values of Spacemacs settings."
    ;; `recents' `recents-by-project' `bookmarks' `projects' `agenda' `todos'.
    ;; List sizes may be nil, in which case
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
-   dotspacemacs-startup-lists '((agenda . 5)
-                                (projects . 5)
-                                (recents . 10))
+   ;; The exceptional case is `recents-by-project', where list-type must be a
+   ;; pair of numbers, e.g. `(recents-by-project . (7 .  5))', where the first
+   ;; number is the project limit and the second the limit on the recent files
+   ;; within a project.
+   dotspacemacs-startup-lists '((recents . 5)
+                                (projects . 7))
 
    ;; True if the home buffer should respond to resize events. (default t)
    dotspacemacs-startup-buffer-responsive t
@@ -309,6 +320,11 @@ It should only modify the values of Spacemacs settings."
 
    ;; The minimum delay in seconds between number key presses. (default 0.4)
    dotspacemacs-startup-buffer-multi-digit-delay 0.4
+
+   ;; If non-nil, show file icons for entries and headings on Spacemacs home buffer.
+   ;; This has no effect in terminal or if "all-the-icons" package or the font
+   ;; is not installed. (default nil)
+   dotspacemacs-startup-buffer-show-icons t
 
    ;; Default major mode for a new empty buffer. Possible values are mode
    ;; names such as `text-mode'; and `nil' to use Fundamental mode.
@@ -734,12 +750,6 @@ before packages are loaded."
 
   ;; go-coverage
   ;; (setq go-coverage-display-buffer-func 'display-buffer-same-window)
-
-  ;; git configs
-  (global-git-commit-mode t)
-  (setq magit-repository-directories
-        '(("~/dmall/" . 2) ("~/code/" . 2)))
-
   ;;org configs
   (setq org-image-actual-width '(700))
   (setq org-src-tab-acts-natively t)
@@ -763,7 +773,7 @@ before packages are loaded."
   (with-eval-after-load 'evil
     (evil-set-initial-state 'org-brain-visualize-mode 'emacs))
   (setq org-todo-keywords
-        '((sequencep "TODO" "DONE" "CANCEL")))
+        '((sequencep "TODO" "VERIFY" "|" "DONE" "CANCEL")))
   (setq org-agenda-files (list "~/Dropbox/orgs/agenda.org"))
   (setq org-capture-templates
         '(("d" "Daily" entry (file+olp+datetree "~/Dropbox/orgs/agenda.org" "Daily")
@@ -802,27 +812,27 @@ before packages are loaded."
 
   ;; doom configs
   ;; doom-modeline settings
-  (setq doom-modeline-icon (display-graphic-p))
-  (setq doom-modeline-bar-width '3)
-  (setq doom-modeline-icon t)
-  (setq doom-modeline-major-mode-icon t)
-  (setq doom-modeline-major-mode-color-icon t)
-  (setq doom-modeline-buffer-encoding t)
-  (setq doom-modeline-buffer-file-name-style 'auto)
-  (setq doom-modeline-buffer-state-icon t)
-  (setq doom-modeline-minor-modes (featurep 'minions))
-  (setq doom-modeline-enable-word-count t)
-  (setq doom-modeline-buffer-modification-icon t)
-  (setq doom-modeline-vcs-max-length '12)
-  (setq doom-modeline-lsp t)
-  (setq doom-modeline-irc t)
+  ;; (setq doom-modeline-icon (display-graphic-p))
+  ;; (setq doom-modeline-bar-width '3)
+  ;; (setq doom-modeline-icon t)
+  ;; (setq doom-modeline-major-mode-icon t)
+  ;; (setq doom-modeline-major-mode-color-icon t)
+  ;; (setq doom-modeline-buffer-encoding t)
+  ;; (setq doom-modeline-buffer-file-name-style 'auto)
+  ;; (setq doom-modeline-buffer-state-icon t)
+  ;; (setq doom-modeline-minor-modes (featurep 'minions))
+  ;; (setq doom-modeline-enable-word-count t)
+  ;; (setq doom-modeline-buffer-modification-icon t)
+  ;; (setq doom-modeline-vcs-max-length '12)
+  ;; (setq doom-modeline-lsp t)
+  ;; (setq doom-modeline-irc t)
   ;; (setq doom-modeline-github t)
   ;; (setq doom-modeline-mu4e t)
-  (setq doom-modeline-irc-stylize 'identity)
-  (setq doom-modeline-persp-name t)
-  (setq doom-modeline-checker-simple-format t)
-  (setq doom-modeline-env-enable-python t)
-  (setq doom-modeline-env-enable-go t)
+  ;; (setq doom-modeline-irc-stylize 'identity)
+  ;; (setq doom-modeline-persp-name t)
+  ;; (setq doom-modeline-checker-simple-format t)
+  ;; (setq doom-modeline-env-enable-python t)
+  ;; (setq doom-modeline-env-enable-go t)
 
   ;; nyan
   (setq nyan-animate-nyancat t)
