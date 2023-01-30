@@ -42,10 +42,11 @@ This function should only modify configuration layer settings."
            lsp-rust-analyzer-diagnostics-disabled ["missing-unsafe"]
            lsp-rust-server 'rust-analyzer
            rust-format-on-save t)
-     ;; github
      (docker :variables docker-dockerfile-backend 'lsp)
      emoji
      shell-scripts
+     (chinese :variables
+              chinese-default-input-method 'pinyin)
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
@@ -93,22 +94,27 @@ This function should only modify configuration layer settings."
           osx-right-option-as  'left
           osx-right-control-as 'left
           osx-swap-option-and-command nil)
-     git
+     (git :variables
+          ;; git-enable-magit-delta-plugin t
+          ;; git-magit-status-fullscreen nil
+          ;; git-enable-magit-gitflow-plugin t
+          git-enable-magit-todos-plugin t
+          )
      (ibuffer :variables ibuffer-group-buffers-by 'projects)
      (javascript :variables javascript-backend 'lsp)
      ;; (java :variables java-backend 'lsp)
-     ipython-notebook
      helm
      (markdown :variables
                markdown-mmm-auto-modes '("c" "c++" "python" "scala" ("elisp" "emacs-lisp")))
      (multiple-cursors :variables
                        multiple-cursors-backend 'evil-mc)
      (org :variables
-          org-enable-github-support t
           org-enable-reveal-js-support t
           org-enable-bootstrap-support t
           org-enable-org-journal-support t
           org-enable-roam-support t
+          org-enable-roam-protocol t
+          org-enable-roam-ui t
           org-journal-encrypt-journal nil
           org-journal-enable-agenda-integration t
           org-projectile-file "~/Dropbox/orgs/projectile/TODOs.org"
@@ -124,7 +130,7 @@ This function should only modify configuration layer settings."
      yaml
      (colors :variables
              colors-colorize-identifiers nil
-             colors-enable-nyan-cat-progress-bar t)
+             )
      (typescript :variables
                  typescript-fmt-tool 'tide
                  typescript-linter 'tslint
@@ -159,16 +165,16 @@ This function should only modify configuration layer settings."
      version-control
      debug
      ;; spell-checking
-     ;; (neotree :variables
-     ;;          neo-theme 'icons
-     ;;          neo-vc-integration '(face))
-     (treemacs :variables
-               treemacs-use-follow-mode t
-               treemacs-use-all-the-icons-theme t
-               treemacs-use-filewatch-mode t
-               treemacs-use-git-mode 'deferred
-               treemacs-lock-width t
-               )
+     (neotree :variables
+              neo-theme 'icons
+              neo-vc-integration '(nil))
+     ;; (treemacs :variables
+     ;;           treemacs-use-follow-mode t
+     ;;           treemacs-use-all-the-icons-theme t
+     ;;           treemacs-use-filewatch-mode t
+     ;;           treemacs-use-git-mode 'deferred
+     ;;           treemacs-lock-width t
+     ;;           )
      )
 
    ;; List of additional packages that will be installed without being
@@ -178,18 +184,13 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(parrot
-                                      company-tabnine
-                                      websocket
-                                      f
-                                      simple-httpd
-                                      cal-china-x)
+   dotspacemacs-additional-packages '(anki-editor)
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
 
    ;; A list of packages that will not be installed and loaded.
-   dotspacemacs-excluded-packages '(dap-mode)
+   dotspacemacs-excluded-packages '()
 
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
@@ -298,6 +299,13 @@ It should only modify the values of Spacemacs settings."
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
    dotspacemacs-startup-banner 'official
+
+   ;; Scale factor controls the scaling (size) of the startup banner. Default
+   ;; value is `auto' for scaling the logo automatically to fit all buffer
+   ;; contents, to a maximum of the full image height and a minimum of 3 line
+   ;; heights. If set to a number (int or float) it is used as a constant
+   ;; scaling factor for the default logo size.
+   dotspacemacs-startup-banner-scale 'auto
 
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
@@ -492,6 +500,11 @@ It should only modify the values of Spacemacs settings."
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
    dotspacemacs-inactive-transparency 90
 
+   ;; A value from the range (0..100), in increasing opacity, which describes the
+   ;; transparency level of a frame background when it's active or selected. Transparency
+   ;; can be toggled through `toggle-background-transparency'. (default 90)
+   dotspacemacs-background-transparency 90
+
    ;; If non-nil show the titles of transient states. (default t)
    dotspacemacs-show-transient-state-title t
 
@@ -601,7 +614,9 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil - same as frame-title-format)
    dotspacemacs-icon-title-format nil
 
-   ;; Show trailing whitespace (default t)
+   ;; Color highlight trailing whitespace in all prog-mode and text-mode derived
+   ;; modes such as c++-mode, python-mode, emacs-lisp, html-mode, rst-mode etc.
+   ;; (default t)
    dotspacemacs-show-trailing-whitespace t
 
    ;; Delete whitespace while saving buffer. Possible values are `all'
@@ -642,7 +657,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-home-shorten-agenda-source nil
 
    ;; If non-nil then byte-compile some of Spacemacs files.
-   dotspacemacs-byte-compile nil)
+   dotspacemacs-byte-compile nil))
 
 (defun dotspacemacs/user-env ()
   "Environment variables setup.
@@ -650,54 +665,25 @@ This function defines the environment variables for your Emacs session. By
 default it calls `spacemacs/load-spacemacs-env' which loads the environment
 variables declared in `~/.spacemacs.env' or `~/.spacemacs.d/.spacemacs.env'.
 See the header of this file for more information."
-  (spacemacs/load-spacemacs-env))
+  (spacemacs/load-spacemacs-env)
+)
 
 (defun dotspacemacs/user-init ()
   "Initialization for user code:
 This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
-If you are unsure, try setting them in `dotspacemacs/user-config' first.")
+If you are unsure, try setting them in `dotspacemacs/user-config' first."
+)
 
-  ;; Trigger completion immediately.
-  ;; (setq company-idle-delay 0.2)
-  ;; (setq company-minimum-prefix-length 1)
-  ;; (setq company-selection-wrap-around t)
-  ;; (setq company-tooltip-align-annotations nil)
-  ;; (setq company-show-numbers t)
-  (setq org-roam-v2-ack t)
-
-  ;; Replace melpa repo
-  ;; (setq configuration-layer-elpa-archives
-  ;;    '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-  ;;      ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
-  ;;      ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
-
-  ;; 设置中英文等宽
-  ;; (set-face-attribute
-  ;;  'default nil
-  ;;  :font (font-spec :name "-*-Source Code Pro-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1"
-  ;;                   :weight 'normal
-  ;;                   :slant 'normal
-  ;;                   :size 14))
-  ;; (dolist (charset '(kana han symbol cjk-misc bopomofo))
-  ;;   (set-fontset-font
-  ;;    (frame-parameter nil 'font)
-  ;;    charset
-  ;;    (font-spec :name "-*-Hiragino Sans GB-normal-normal-normal-*-*-*-*-*-p-0-iso10646-1"
-  ;;               :weight 'normal
-  ;;               :slant 'normal
-  ;;               :size 16)))
-
-  ;; end of user init
-  )
 
 (defun dotspacemacs/user-load ()
   "Library to load while dumping.
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
 dump."
-  )
+)
+
 
 (defun dotspacemacs/user-config ()
   "Configuration for user code:
@@ -708,48 +694,19 @@ before packages are loaded."
   ;; start server
   (server-start)
 
-  ;; nyan and parrot
-  (parrot-mode)
+  ;; pyim setting
+  (setq default-input-method "pyim")
+  (global-set-key (kbd "C-\\") 'toggle-input-method)
+  (pyim-basedict-enable)
 
   (setq insert-directory-program "/bin/ls")
+  (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
 
-  ;; tabnine
-  ;; (add-to-list 'company-backends #'company-tabnine)
+  ;; anki-editor key
+  (spacemacs/set-leader-keys
+    "ati" 'anki-editor-insert-note)
 
-  ;; calendar
-  (require 'cal-china-x)
-  (setq mark-holidays-in-calendar t)
-  (setq cal-china-x-important-holidays cal-china-x-chinese-holidays)
-  (setq cal-china-x-general-holidays '(
-                                       ;; 农历
-                                       (holiday-lunar 1 9 "昀洎的生日")
-                                       (holiday-lunar 1 10 "奶奶和珍珍的生日")
-                                       (holiday-lunar 2 28 "我的生日")
-                                       (holiday-lunar 3 20 "奶奶的忌日")
-                                       (holiday-lunar 4 27 "爸爸的生日")
-                                       (holiday-lunar 5 25 "djj的生日")
-                                       (holiday-lunar 5 28 "田昱的生日")
-                                       (holiday-lunar 6 30 "夏的生日")
-                                       (holiday-lunar 7 25 "妈妈的生日")
-                                       (holiday-lunar 10 16 "璨璨的生日")
-                                       (holiday-lunar 11 5 "皂皂的生日")
-                                       (holiday-lunar 11 20 "爷爷的生日")
-                                       ;; 阳历
-                                       (holiday-fixed 10 28 "丝丝的生日")
-                                       (holiday-fixed 2 12 "滚滚的生日")
-                                       (holiday-fixed 5 20 "撞撞的生日")
-                                       (holiday-fixed 9 13 "章鱼华姐的生日")
-                                       (holiday-fixed 12 28 "冬神的生日")
-                                       (holiday-fixed 12 12 "兰博的生日")
-                                       (holiday-fixed 11 3 "白麒成立")
-                                       (holiday-fixed 4 14 "白麒开业")
-                                       ))
-  (setq calendar-holidays
-        (append cal-china-x-important-holidays
-                cal-china-x-general-holidays))
 
-  ;; go-coverage
-  ;; (setq go-coverage-display-buffer-func 'display-buffer-same-window)
   ;;org configs
   (setq org-image-actual-width '(700))
   (setq org-src-tab-acts-natively t)
@@ -764,7 +721,6 @@ before packages are loaded."
   (setq org-roam-directory "~/Dropbox/orgs/brain")
   (setq org-id-track-globally t)
   (setq org-id-locations-file "~/Dropbox/orgs/.org-id-locations")
-  (setq org-brain-title-max-length 12)
   (setq deft-directory "~/Dropbox/orgs")
   (setq deft-recursive t)
   (setq deft-extensions '("org" "md" "txt"))
@@ -775,27 +731,11 @@ before packages are loaded."
   (setq org-todo-keywords
         '((sequencep "TODO" "VERIFY" "|" "DONE" "CANCEL")))
   (setq org-agenda-files (list "~/Dropbox/orgs/agenda.org"))
-  (setq org-capture-templates
-        '(("d" "Daily" entry (file+olp+datetree "~/Dropbox/orgs/agenda.org" "Daily")
-           "* TODO %?\n")
-          ("s" "SomeDay" entry (file+olp+datetree "~/Dropbox/orgs/agenda.org" "SomeDay")
-           "* TODO %?\n")
-          ("j" "Journal entry" entry (function org-journal-find-location)
-           "* %(format-time-string org-journal-time-format)%^{Title}\n%i%?")))
-  (require 'org-roam-protocol)
 
-  ;; add projectile TODOs into agenda
-  (with-eval-after-load 'org-agenda
-    (require 'org-projectile)
-    (mapcar '(lambda (file)
-               (when (file-exists-p file)
-                 (push file org-agenda-files)))
-            (org-projectile-todo-files)
-            ))
+  ;; latex configs
 
   ;; python configs
   (setq python-shell-extra-pythonpaths '("/usr/local/opt/python@3.8/bin/python3"))
-  ;; (setq python-shell-exec-path "/usr/local/opt/python@3.8/bin/python3")
   (setq blacken-line-length '120)
   (setq flycheck-flake8-maximum-line-length '120)
   (setq lsp-pyls-plugins-autopep8-enabled t)
@@ -826,7 +766,6 @@ before packages are loaded."
   ;; (setq doom-modeline-vcs-max-length '12)
   ;; (setq doom-modeline-lsp t)
   ;; (setq doom-modeline-irc t)
-  ;; (setq doom-modeline-github t)
   ;; (setq doom-modeline-mu4e t)
   ;; (setq doom-modeline-irc-stylize 'identity)
   ;; (setq doom-modeline-persp-name t)
@@ -834,26 +773,34 @@ before packages are loaded."
   ;; (setq doom-modeline-env-enable-python t)
   ;; (setq doom-modeline-env-enable-go t)
 
-  ;; nyan
-  (setq nyan-animate-nyancat t)
-  (setq nyan-bar-length '15)
-  (setq nyan-wavy-trail t)
-  (setq nyan-minimum-window-width '50)
   ;; leetcode
-  (setq leetcode-prefer-language "golang")
-  (setq leetcode-prefer-sql "mysql")
-  (setq leetcode-save-solutions t)
-  (setq leetcode-directory "~/Dropbox/leetcode/src")
+  ;; (setq leetcode-prefer-language "golang")
+  ;; (setq leetcode-prefer-sql "mysql")
+  ;; (setq leetcode-save-solutions t)
+  ;; (setq leetcode-directory "~/Dropbox/leetcode/src")
 
   ;; org-roam-ui
   )
 
 ;; auto-generate custom variable definitions.
-(setq custom-file (expand-file-name "custom.el" dotspacemacs-directory))
-(load custom-file 'no-error 'no-message)
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
-  )
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(org-agenda-files
+   '("/Users/zhanghaidong/Dropbox/orgs/agenda.org" "/Users/zhanghaidong/Dropbox/orgs/journal/2023-01.org"))
+ '(package-selected-packages
+   '(anki-editor dap-mode lsp-docker lsp-treemacs bui treemacs cfrs pfuture yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vterm volatile-highlights vimrc-mode vim-powerline vi-tilde-fringe uuidgen use-package unfill undo-tree toml-mode toc-org tide terminal-here term-cursor tagedit symon symbol-overlay string-inflection sphinx-doc spacemacs-whitespace-cleanup spacemacs-purpose-popwin spaceline-all-the-icons space-doc smeargle slim-mode shfmt shell-pop scss-mode sass-mode rust-mode ron-mode rjsx-mode reveal-in-osx-finder restart-emacs realgud rainbow-mode rainbow-identifiers rainbow-delimiters quickrun pytest pylookup pyim-basedict pyim pyenv-mode pydoc py-isort pug-mode protobuf-mode prettier-js posframe popwin poetry plantuml-mode pippel pipenv pip-requirements persp-mode pdf-view-restore password-generator parrot paradox pangu-spacing ox-twbs overseer osx-trash osx-dictionary osx-clipboard orgit-forge org-superstar org-roam org-rich-yank org-re-reveal org-projectile org-present org-pomodoro org-mime org-journal org-download org-contrib org-cliplink open-junk-file npm-mode nose nodejs-repl nginx-mode neotree nameless mwim multi-term multi-line mmm-mode markdown-toc magit-todos macrostep lsp-ui lsp-python-ms lsp-pyright lsp-origami lorem-ipsum livid-mode live-py-mode link-hint launchctl json-reformat json-navigator json-mode js2-refactor js-doc inspector insert-shebang info+ indent-guide importmagic impatient-mode ibuffer-projectile hybrid-mode hungry-delete holy-mode highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc gnuplot gitignore-templates git-timemachine git-modes git-messenger git-link git-gutter-fringe gh-md fuzzy font-lock+ flycheck-rust flycheck-pos-tip flycheck-package flycheck-elsa flycheck-bashate flx-ido fish-mode find-by-pinyin-dired fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-evilified-state evil-escape evil-ediff evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emr emojify emoji-cheat-sheet-plus emmet-mode elisp-slime-nav elisp-def ein editorconfig dumb-jump drag-stuff dotenv-mode doom-themes doom-modeline dockerfile-mode docker dired-quick-sort diminish devdocs deft dactyl-mode cython-mode company-web company-tabnine company-shell company-go company-emoji company-anaconda column-enforce-mode color-identifiers-mode code-cells clean-aindent-mode chinese-conv centered-cursor-mode cargo cal-china-x browse-at-remote blacken auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent ace-window ace-pinyin ace-link ace-jump-helm-line ac-ispell)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(highlight-parentheses-highlight ((nil (:weight ultra-bold))) t))
+)
