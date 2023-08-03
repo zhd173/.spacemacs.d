@@ -27,7 +27,7 @@ This function should only modify configuration layer settings."
    dotspacemacs-ask-for-lazy-installation t
 
    ;; List of additional paths where to look for configuration layers.
-   ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
+   ;; Paths must have a trailing slash (i.e. "~/.mycontribs/")
    dotspacemacs-configuration-layer-path '()
 
    ;; List of configuration layers to load.
@@ -105,8 +105,8 @@ This function should only modify configuration layer settings."
      ;; (multiple-cursors :variables
      ;;                   multiple-cursors-backend 'evil-mc)
      (org :variables
-          org-enable-reveal-js-support t
-          org-enable-bootstrap-support t
+          ;; org-enable-reveal-js-support t
+          ;; org-enable-bootstrap-support t
           org-enable-org-journal-support t
           org-enable-roam-support t
           org-enable-roam-protocol t
@@ -159,7 +159,7 @@ This function should only modify configuration layer settings."
      ;; pdf
      version-control
      ;; debug
-     ;; spell-checking
+     spell-checking
      ;; (neotree :variables
      ;;          neo-theme 'icons
      ;;          neo-vc-integration '(nil))
@@ -172,12 +172,14 @@ This function should only modify configuration layer settings."
                )
      )
 
-   ;; List of additional packages that will be installed without being
-   ;; wrapped in a layer. If you need some configuration for these
-   ;; packages, then consider creating a layer. You can also put the
-   ;; configuration in `dotspacemacs/user-config'.
-   ;; To use a local version of a package, use the `:location' property:
-   ;; '(your-package :location "~/path/to/your-package/")
+
+   ;; List of additional packages that will be installed without being wrapped
+   ;; in a layer (generally the packages are installed only and should still be
+   ;; loaded using load/require/use-package in the user-config section below in
+   ;; this file). If you need some configuration for these packages, then
+   ;; consider creating a layer. You can also put the configuration in
+   ;; `dotspacemacs/user-config'. To use a local version of a package, use the
+   ;; `:location' property: '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '(anki-editor)
 
@@ -364,8 +366,7 @@ It should only modify the values of Spacemacs settings."
    ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
    ;; dotspacemacs-mode-line-theme '(all-the-icons :separator arrow :separator-scale 1.5)
-   dotspacemacs-mode-line-theme 'doom
-   ;; dotspacemacs-mode-line-theme '(spacemacs :separator arrow :separator-scale 1.5)
+   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.5)
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
@@ -469,7 +470,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
-   dotspacemacs-fullscreen-at-startup nil
+   dotspacemacs-fullscreen-at-startup t
 
    ;; If non-nil `spacemacs/toggle-fullscreen' will not use native fullscreen.
    ;; Use to disable fullscreen animations in OSX. (default nil)
@@ -477,12 +478,12 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
-   ;; (default nil) (Emacs 24.4+ only)
+   ;; (default t) (Emacs 24.4+ only)
    dotspacemacs-maximized-at-startup nil
 
    ;; If non-nil the frame is undecorated when Emacs starts up. Combine this
-   ;; variable with `dotspacemacs-maximized-at-startup' in OSX to obtain
-   ;; borderless fullscreen. (default nil)
+   ;; variable with `dotspacemacs-maximized-at-startup' to obtain fullscreen
+   ;; without external boxes. Also disables the internal border. (default nil)
    dotspacemacs-undecorated-at-startup nil
 
    ;; A value from the range (0..100), in increasing opacity, which describes
@@ -740,44 +741,19 @@ before packages are loaded."
   (setq lsp-pyls-plugins-pylint-enabled t)
 
   ;; plantuml
-  (setq plantuml-output-type "svg")
+  ;; (setq plantuml-output-type "svg")
 
   ;; go configs
-  (setq flycheck-golangci-lint-config "~/Dropbox/config/golangci-lint/.golangci.yml")
-
-  ;; doom configs
-  ;; doom-modeline settings
-  ;; (setq doom-modeline-icon (display-graphic-p))
-  ;; (setq doom-modeline-bar-width '3)
-  ;; (setq doom-modeline-icon t)
-  ;; (setq doom-modeline-major-mode-icon t)
-  ;; (setq doom-modeline-major-mode-color-icon t)
-  ;; (setq doom-modeline-buffer-encoding t)
-  ;; (setq doom-modeline-buffer-file-name-style 'auto)
-  ;; (setq doom-modeline-buffer-state-icon t)
-  ;; (setq doom-modeline-minor-modes (featurep 'minions))
-  ;; (setq doom-modeline-enable-word-count t)
-  ;; (setq doom-modeline-buffer-modification-icon t)
-  ;; (setq doom-modeline-vcs-max-length '12)
-  ;; (setq doom-modeline-lsp t)
-  ;; (setq doom-modeline-irc t)
-  ;; (setq doom-modeline-mu4e t)
-  ;; (setq doom-modeline-irc-stylize 'identity)
-  ;; (setq doom-modeline-persp-name t)
-  ;; (setq doom-modeline-checker-simple-format t)
-  ;; (setq doom-modeline-env-enable-python t)
-  ;; (setq doom-modeline-env-enable-go t)
+  ;; (setq flycheck-golangci-lint-config "~/Dropbox/config/golangci-lint/.golangci.yml")
 
   ;; leetcode
-  ;; (setq leetcode-prefer-language "golang")
+  ;; (setq leetcode-prefer-language "rust")
   ;; (setq leetcode-prefer-sql "mysql")
   ;; (setq leetcode-save-solutions t)
   ;; (setq leetcode-directory "~/Dropbox/leetcode/src")
 
   ;; org-roam-ui
   )
-
-;; auto-generate custom variable definitions.
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
 This is an auto-generated function, do not modify its content directly, use
@@ -789,13 +765,11 @@ This function is called at the very end of Spacemacs initialization."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(org-agenda-files
-   '("/Users/zhanghaidong/Dropbox/orgs/agenda.org" "/Users/zhanghaidong/Dropbox/orgs/journal/2023-01.org" "/Users/zhanghaidong/Library/CloudStorage/Dropbox/orgs/journal/2023-08.org"))
- '(package-selected-packages
-   '(anki-editor dap-mode lsp-docker lsp-treemacs bui treemacs cfrs pfuture yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vterm volatile-highlights vimrc-mode vim-powerline vi-tilde-fringe uuidgen use-package unfill undo-tree toml-mode toc-org tide terminal-here term-cursor tagedit symon symbol-overlay string-inflection sphinx-doc spacemacs-whitespace-cleanup spacemacs-purpose-popwin spaceline-all-the-icons space-doc smeargle slim-mode shfmt shell-pop scss-mode sass-mode rust-mode ron-mode rjsx-mode reveal-in-osx-finder restart-emacs realgud rainbow-mode rainbow-identifiers rainbow-delimiters quickrun pytest pylookup pyim-basedict pyim pyenv-mode pydoc py-isort pug-mode protobuf-mode prettier-js posframe popwin poetry plantuml-mode pippel pipenv pip-requirements persp-mode pdf-view-restore password-generator parrot paradox pangu-spacing ox-twbs overseer osx-trash osx-dictionary osx-clipboard orgit-forge org-superstar org-roam org-rich-yank org-re-reveal org-projectile org-present org-pomodoro org-mime org-journal org-download org-contrib org-cliplink open-junk-file npm-mode nose nodejs-repl nginx-mode neotree nameless mwim multi-term multi-line mmm-mode markdown-toc magit-todos macrostep lsp-ui lsp-python-ms lsp-pyright lsp-origami lorem-ipsum livid-mode live-py-mode link-hint launchctl json-reformat json-navigator json-mode js2-refactor js-doc inspector insert-shebang info+ indent-guide importmagic impatient-mode ibuffer-projectile hybrid-mode hungry-delete holy-mode highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc gnuplot gitignore-templates git-timemachine git-modes git-messenger git-link git-gutter-fringe gh-md fuzzy font-lock+ flycheck-rust flycheck-pos-tip flycheck-package flycheck-elsa flycheck-bashate flx-ido fish-mode find-by-pinyin-dired fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-evilified-state evil-escape evil-ediff evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emr emojify emoji-cheat-sheet-plus emmet-mode elisp-slime-nav elisp-def ein editorconfig dumb-jump drag-stuff dotenv-mode doom-themes doom-modeline dockerfile-mode docker dired-quick-sort diminish devdocs deft dactyl-mode cython-mode company-web company-tabnine company-shell company-go company-emoji company-anaconda column-enforce-mode color-identifiers-mode code-cells clean-aindent-mode chinese-conv centered-cursor-mode cargo cal-china-x browse-at-remote blacken auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent ace-window ace-pinyin ace-link ace-jump-helm-line ac-ispell)))
+   '("/Users/zhanghaidong/Dropbox/orgs/agenda.org" "/Users/zhanghaidong/Library/CloudStorage/Dropbox/orgs/journal/2023-08.org")))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(highlight-parentheses-highlight ((nil (:weight ultra-bold))) t))
+ )
 )
