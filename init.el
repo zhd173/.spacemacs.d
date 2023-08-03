@@ -181,7 +181,7 @@ This function should only modify configuration layer settings."
    ;; `dotspacemacs/user-config'. To use a local version of a package, use the
    ;; `:location' property: '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(anki-editor)
+   dotspacemacs-additional-packages '(anki-editor gptel)
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -690,6 +690,13 @@ before packages are loaded."
   ;; start server
   (server-start)
 
+  ;; ChatGPT
+  (require 'gptel)
+  (spacemacs/set-leader-keys
+    "ags" 'gptel-send)
+  (spacemacs/set-leader-keys
+    "agm" 'gptel-menu)
+
   ;; pyim setting
   ;; (setq default-input-method "pyim")
   ;; (global-set-key (kbd "C-\\") 'toggle-input-method)
@@ -702,7 +709,6 @@ before packages are loaded."
   (spacemacs/set-leader-keys
     "ati" 'anki-editor-insert-note)
 
-
   ;;org configs
   (setq org-image-actual-width '(700))
   (setq org-src-tab-acts-natively t)
@@ -714,7 +720,6 @@ before packages are loaded."
   (setq org-pomodoro-short-break-finished-hook '(lambda() (haidong/notification "Short Break" "Ready to Go?" t)))
   (setq org-pomodoro-long-break-finished-hook'(lambda() (haidong/notification "Long Break" "Ready to Go?" t)))
   (setq-default org-download-image-dir "~/Dropbox/orgs/images")
-  (setq org-roam-directory "~/Dropbox/orgs/brain")
   (setq org-id-track-globally t)
   (setq org-id-locations-file "~/Dropbox/orgs/.org-id-locations")
   (setq deft-directory "~/Dropbox/orgs")
@@ -727,6 +732,10 @@ before packages are loaded."
   (setq org-todo-keywords
         '((sequencep "TODO" "|" "DONE" "CANCEL")))
   (setq org-agenda-files (list "~/Dropbox/orgs/agenda.org"))
+
+  ;; org-roam
+  (setq org-roam-directory "~/Dropbox/orgs/brain")
+
 
   ;; latex configs
 
@@ -751,8 +760,6 @@ before packages are loaded."
   ;; (setq leetcode-prefer-sql "mysql")
   ;; (setq leetcode-save-solutions t)
   ;; (setq leetcode-directory "~/Dropbox/leetcode/src")
-
-  ;; org-roam-ui
   )
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
