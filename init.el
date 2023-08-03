@@ -33,8 +33,6 @@ This function should only modify configuration layer settings."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(protobuf
-     nginx
-     vimscript
      (rust :variables
            rust-backend 'lsp
            cargo-process-reload-on-modify t
@@ -42,21 +40,19 @@ This function should only modify configuration layer settings."
            lsp-rust-analyzer-diagnostics-disabled ["missing-unsafe"]
            lsp-rust-server 'rust-analyzer
            rust-format-on-save t)
-     (docker :variables docker-dockerfile-backend 'lsp)
-     emoji
-     shell-scripts
-     (chinese :variables
-              chinese-default-input-method 'pinyin)
+     ;; shell-scripts
+     ;; (chinese :variables
+     ;;          chinese-default-input-method 'pinyin)
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      auto-completion
-     (plantuml :variables
-               plantuml-jar-path "~/Dropbox/orgs/tools/plantuml.jar"
-               plantuml-indent-level 4
-               org-plantuml-jar-path "~/Dropbox/orgs/tools/plantuml.jar")
+     ;; (plantuml :variables
+     ;;           plantuml-jar-path "~/Dropbox/orgs/tools/plantuml.jar"
+     ;;           plantuml-indent-level 4
+     ;;           org-plantuml-jar-path "~/Dropbox/orgs/tools/plantuml.jar")
      emacs-lisp
      (lsp :variables
           lsp-ui-doc-enable t
@@ -76,15 +72,15 @@ This function should only modify configuration layer settings."
           ;; lsp-ui-sideline-update-mode 'line
           ;; lsp-ui-sideline-show-symbol t
           )
-     (go :variables
-         go-backend 'lsp
-         go-format-before-save t
-         gofmt-command "goimports"
-         go-tab-width 4
-         ;; go-use-golangci-lint t
-         godoc-at-point-function 'godoc-gogetdoc
-         go-use-test-args "-v -coverprofile=coverage.out"
-         )
+     ;; (go :variables
+     ;;     go-backend 'lsp
+     ;;     go-format-before-save t
+     ;;     gofmt-command "goimports"
+     ;;     go-tab-width 4
+     ;;     ;; go-use-golangci-lint t
+     ;;     godoc-at-point-function 'godoc-gogetdoc
+     ;;     go-use-test-args "-v -coverprofile=coverage.out"
+     ;;     )
      (osx :variables
           osx-command-as       'hyper
           osx-option-as        'meta
@@ -101,13 +97,13 @@ This function should only modify configuration layer settings."
           git-enable-magit-todos-plugin t
           )
      (ibuffer :variables ibuffer-group-buffers-by 'projects)
-     (javascript :variables javascript-backend 'lsp)
+     ;; (javascript :variables javascript-backend 'lsp)
      ;; (java :variables java-backend 'lsp)
-     helm
+     ;; helm
      (markdown :variables
                markdown-mmm-auto-modes '("c" "c++" "python" "scala" ("elisp" "emacs-lisp")))
-     (multiple-cursors :variables
-                       multiple-cursors-backend 'evil-mc)
+     ;; (multiple-cursors :variables
+     ;;                   multiple-cursors-backend 'evil-mc)
      (org :variables
           org-enable-reveal-js-support t
           org-enable-bootstrap-support t
@@ -131,12 +127,12 @@ This function should only modify configuration layer settings."
      (colors :variables
              colors-colorize-identifiers nil
              )
-     (typescript :variables
-                 typescript-fmt-tool 'tide
-                 typescript-linter 'tslint
-                 tide-tsserver-executable "/usr/local/bin/tsserver"
-                 typescript-backend 'tide
-                 typescript-fmt-on-save t)
+     ;; (typescript :variables
+     ;;             typescript-fmt-tool 'tide
+     ;;             typescript-linter 'tslint
+     ;;             tide-tsserver-executable "/usr/local/bin/tsserver"
+     ;;             typescript-backend 'tide
+     ;;             typescript-fmt-on-save t)
      (python :variables
              python-backend 'lsp
              python-lsp-server 'pyright
@@ -145,25 +141,24 @@ This function should only modify configuration layer settings."
              ;; python-formatter 'yapf
              python-fill-column 120
              python-format-on-save t
-             python-sort-imports-on-save nil
              python-test-runner 'pytest)
      auto-completion
      imenu-list
-     html
-     react
+     ;; html
+     ;; react
      (json :variables
            json-fmt-tool 'web-beautify
            json-fmt-on-save t)
      better-defaults
      syntax-checking
-     (deft :variables
-       deft-zetteldeft nil)
-     (shell :variables
-            shell-default-height 30
-            shell-default-position 'bottom)
-     pdf
+     ;; (deft :variables
+     ;;   deft-zetteldeft nil)
+     ;; (shell :variables
+     ;;        shell-default-height 30
+     ;;        shell-default-position 'bottom)
+     ;; pdf
      version-control
-     debug
+     ;; debug
      ;; spell-checking
      (neotree :variables
               neo-theme 'icons
@@ -695,9 +690,9 @@ before packages are loaded."
   (server-start)
 
   ;; pyim setting
-  (setq default-input-method "pyim")
-  (global-set-key (kbd "C-\\") 'toggle-input-method)
-  (pyim-basedict-enable)
+  ;; (setq default-input-method "pyim")
+  ;; (global-set-key (kbd "C-\\") 'toggle-input-method)
+  ;; (pyim-basedict-enable)
 
   (setq insert-directory-program "/bin/ls")
   (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
@@ -729,7 +724,7 @@ before packages are loaded."
   (with-eval-after-load 'evil
     (evil-set-initial-state 'org-brain-visualize-mode 'emacs))
   (setq org-todo-keywords
-        '((sequencep "TODO" "VERIFY" "|" "DONE" "CANCEL")))
+        '((sequencep "TODO" "|" "DONE" "CANCEL")))
   (setq org-agenda-files (list "~/Dropbox/orgs/agenda.org"))
 
   ;; latex configs
@@ -794,7 +789,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(org-agenda-files
-   '("/Users/zhanghaidong/Dropbox/orgs/agenda.org" "/Users/zhanghaidong/Dropbox/orgs/journal/2023-01.org"))
+   '("/Users/zhanghaidong/Dropbox/orgs/agenda.org" "/Users/zhanghaidong/Dropbox/orgs/journal/2023-01.org" "/Users/zhanghaidong/Library/CloudStorage/Dropbox/orgs/journal/2023-08.org"))
  '(package-selected-packages
    '(anki-editor dap-mode lsp-docker lsp-treemacs bui treemacs cfrs pfuture yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vterm volatile-highlights vimrc-mode vim-powerline vi-tilde-fringe uuidgen use-package unfill undo-tree toml-mode toc-org tide terminal-here term-cursor tagedit symon symbol-overlay string-inflection sphinx-doc spacemacs-whitespace-cleanup spacemacs-purpose-popwin spaceline-all-the-icons space-doc smeargle slim-mode shfmt shell-pop scss-mode sass-mode rust-mode ron-mode rjsx-mode reveal-in-osx-finder restart-emacs realgud rainbow-mode rainbow-identifiers rainbow-delimiters quickrun pytest pylookup pyim-basedict pyim pyenv-mode pydoc py-isort pug-mode protobuf-mode prettier-js posframe popwin poetry plantuml-mode pippel pipenv pip-requirements persp-mode pdf-view-restore password-generator parrot paradox pangu-spacing ox-twbs overseer osx-trash osx-dictionary osx-clipboard orgit-forge org-superstar org-roam org-rich-yank org-re-reveal org-projectile org-present org-pomodoro org-mime org-journal org-download org-contrib org-cliplink open-junk-file npm-mode nose nodejs-repl nginx-mode neotree nameless mwim multi-term multi-line mmm-mode markdown-toc magit-todos macrostep lsp-ui lsp-python-ms lsp-pyright lsp-origami lorem-ipsum livid-mode live-py-mode link-hint launchctl json-reformat json-navigator json-mode js2-refactor js-doc inspector insert-shebang info+ indent-guide importmagic impatient-mode ibuffer-projectile hybrid-mode hungry-delete holy-mode highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc gnuplot gitignore-templates git-timemachine git-modes git-messenger git-link git-gutter-fringe gh-md fuzzy font-lock+ flycheck-rust flycheck-pos-tip flycheck-package flycheck-elsa flycheck-bashate flx-ido fish-mode find-by-pinyin-dired fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-evilified-state evil-escape evil-ediff evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emr emojify emoji-cheat-sheet-plus emmet-mode elisp-slime-nav elisp-def ein editorconfig dumb-jump drag-stuff dotenv-mode doom-themes doom-modeline dockerfile-mode docker dired-quick-sort diminish devdocs deft dactyl-mode cython-mode company-web company-tabnine company-shell company-go company-emoji company-anaconda column-enforce-mode color-identifiers-mode code-cells clean-aindent-mode chinese-conv centered-cursor-mode cargo cal-china-x browse-at-remote blacken auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent ace-window ace-pinyin ace-link ace-jump-helm-line ac-ispell)))
 (custom-set-faces
