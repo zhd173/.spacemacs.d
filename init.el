@@ -34,13 +34,10 @@ This function should only modify configuration layer settings."
    dotspacemacs-configuration-layers
    '(protobuf
      (rust :variables
-           rust-backend 'lsp
+           ;; rust-backend 'lsp
            cargo-process-reload-on-modify t
-           lsp-rust-analyzer-proc-macro-enable t
-           lsp-rust-analyzer-diagnostics-disabled ["missing-unsafe"]
-           lsp-rust-server 'rust-analyzer
            rust-format-on-save t)
-     ;; shell-scripts
+     shell-scripts
      ;; (chinese :variables
      ;;          chinese-default-input-method 'pinyin)
      ;; ----------------------------------------------------------------
@@ -55,23 +52,8 @@ This function should only modify configuration layer settings."
      ;;           org-plantuml-jar-path "~/Dropbox/orgs/tools/plantuml.jar")
      emacs-lisp
      (lsp :variables
-          lsp-ui-doc-enable t
-          ;; lsp-ui-doc-include-signature t
-          lsp-ui-peek-enable nil
-          lsp-ui-doc-position 'at-point
-          lsp-idle-delay 0.500
-          lsp-enable-file-watchers t
-          lsp-diagnostic-package nil
-          ;; lsp-ui-doc-border (face-foreground 'default)
-          ;; lsp-ui-doc-use-childframe t
-          ;; lsp-ui-doc-use-webkit t
-          ;; lsp-ui-sideline-enable t
-          ;; lsp-ui-sideline-show-diagnostics t
-          ;; lsp-ui-sideline-show-hover t
-          ;; lsp-ui-sideline-show-code-actions t
-          ;; lsp-ui-sideline-update-mode 'line
-          ;; lsp-ui-sideline-show-symbol t
-          )
+          lsp-rust-server 'rust-analyzer
+          lsp-lens-enable t)
      ;; (go :variables
      ;;     go-backend 'lsp
      ;;     go-format-before-save t
@@ -159,17 +141,17 @@ This function should only modify configuration layer settings."
      ;; pdf
      version-control
      ;; debug
-     spell-checking
-     ;; (neotree :variables
-     ;;          neo-theme 'icons
-     ;;          neo-vc-integration '(nil))
-     (treemacs :variables
-               treemacs-use-follow-mode t
-               treemacs-use-all-the-icons-theme t
-               treemacs-use-filewatch-mode t
-               treemacs-use-git-mode 'deferred
-               treemacs-lock-width t
-               )
+     ;; spell-checking
+     (neotree :variables
+              neo-theme 'icons
+              neo-vc-integration '(nil))
+     ;; (treemacs :variables
+     ;;           treemacs-use-follow-mode t
+     ;;           treemacs-use-all-the-icons-theme t
+     ;;           treemacs-use-filewatch-mode t
+     ;;           treemacs-use-git-mode 'deferred
+     ;;           treemacs-lock-width t
+     ;;           )
      )
 
 
@@ -692,10 +674,13 @@ before packages are loaded."
 
   ;; ChatGPT
   (require 'gptel)
-  (spacemacs/set-leader-keys
-    "ags" 'gptel-send)
-  (spacemacs/set-leader-keys
-    "agm" 'gptel-menu)
+  ;; (spacemacs/set-leader-keys
+  ;;   "ags" 'gptel-send)
+  ;; (spacemacs/set-leader-keys
+  ;;   "agm" 'gptel-menu)
+  ;; (spacemacs/set-leader-keys
+  ;;   "agg" 'gptel)
+  (setq gptel-default-mode 'org-mode)
 
   ;; pyim setting
   ;; (setq default-input-method "pyim")
@@ -772,7 +757,9 @@ This function is called at the very end of Spacemacs initialization."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(org-agenda-files
-   '("/Users/zhanghaidong/Dropbox/orgs/agenda.org" "/Users/zhanghaidong/Library/CloudStorage/Dropbox/orgs/journal/2023-08.org")))
+   '("/Users/zhanghaidong/Dropbox/orgs/agenda.org" "/Users/zhanghaidong/Library/CloudStorage/Dropbox/orgs/journal/2023-08.org"))
+ '(package-selected-packages
+   '(neotree company-shell fish-mode flycheck-bashate insert-shebang shfmt reformatter yasnippet-snippets yapfify yaml-mode ws-butler writeroom-mode winum which-key web-beautify volatile-highlights vim-powerline vi-tilde-fringe uuidgen use-package unfill undo-tree treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil treemacs-all-the-icons toml-mode toc-org term-cursor symon symbol-overlay string-inflection string-edit-at-point sphinx-doc spacemacs-whitespace-cleanup spacemacs-purpose-popwin spaceline space-doc smeargle rust-mode ron-mode reveal-in-osx-finder restart-emacs rainbow-mode rainbow-identifiers rainbow-delimiters quickrun pytest pylookup pyenv-mode pydoc py-isort protobuf-mode prettier-js popwin poetry pippel pipenv pip-requirements password-generator paradox overseer osx-trash osx-dictionary osx-clipboard orgit-forge org-superstar org-roam-ui org-rich-yank org-projectile org-present org-pomodoro org-mime org-journal org-download org-contrib org-cliplink open-junk-file nose nameless mwim multi-line mmm-mode markdown-toc magit-todos macrostep lsp-ui lsp-python-ms lsp-pyright lsp-origami lorem-ipsum live-py-mode link-hint launchctl json-reformat json-navigator json-mode inspector info+ indent-guide importmagic ibuffer-projectile hybrid-mode hungry-delete htmlize holy-mode highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-git-grep helm-descbinds helm-company helm-c-yasnippet helm-ag gptel google-translate golden-ratio gnuplot gitignore-templates git-timemachine git-modes git-messenger git-link git-gutter-fringe gh-md fuzzy flycheck-rust flycheck-pos-tip flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-evilified-state evil-escape evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu emr elisp-slime-nav elisp-def editorconfig dumb-jump drag-stuff dotenv-mode doom-themes dired-quick-sort diminish devdocs dap-mode cython-mode company-anaconda column-enforce-mode color-identifiers-mode code-cells clean-aindent-mode centered-cursor-mode cargo browse-at-remote blacken auto-yasnippet auto-highlight-symbol auto-compile anki-editor aggressive-indent ace-link ace-jump-helm-line ac-ispell)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
