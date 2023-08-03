@@ -160,16 +160,16 @@ This function should only modify configuration layer settings."
      version-control
      ;; debug
      ;; spell-checking
-     (neotree :variables
-              neo-theme 'icons
-              neo-vc-integration '(nil))
-     ;; (treemacs :variables
-     ;;           treemacs-use-follow-mode t
-     ;;           treemacs-use-all-the-icons-theme t
-     ;;           treemacs-use-filewatch-mode t
-     ;;           treemacs-use-git-mode 'deferred
-     ;;           treemacs-lock-width t
-     ;;           )
+     ;; (neotree :variables
+     ;;          neo-theme 'icons
+     ;;          neo-vc-integration '(nil))
+     (treemacs :variables
+               treemacs-use-follow-mode t
+               treemacs-use-all-the-icons-theme t
+               treemacs-use-filewatch-mode t
+               treemacs-use-git-mode 'deferred
+               treemacs-lock-width t
+               )
      )
 
    ;; List of additional packages that will be installed without being
