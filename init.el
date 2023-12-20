@@ -34,8 +34,7 @@ This function should only modify configuration layer settings."
    dotspacemacs-configuration-layers
    '(protobuf
      (rust :variables
-           ;; rust-backend 'lsp
-           cargo-process-reload-on-modify t
+           rust-backend 'lsp
            rust-format-on-save t)
      shell-scripts
      ;; (chinese :variables
@@ -53,6 +52,13 @@ This function should only modify configuration layer settings."
      emacs-lisp
      (lsp :variables
           lsp-rust-server 'rust-analyzer
+          cargo-process-reload-on-modify t
+          lsp-ui-sideline-show-hover nil
+          lsp-ui-sideline-show-code-actions nil
+          lsp-modeline-code-actions-segments '(name count)
+          lsp-ui-doc-position 'at-point
+          lsp-ui-doc-show-with-cursor t
+          lsp-ui-doc-show-with-mouse nil
           lsp-lens-enable t)
      ;; (go :variables
      ;;     go-backend 'lsp
@@ -84,8 +90,8 @@ This function should only modify configuration layer settings."
      ;; helm
      (markdown :variables
                markdown-mmm-auto-modes '("c" "c++" "python" "scala" ("elisp" "emacs-lisp")))
-     ;; (multiple-cursors :variables
-     ;;                   multiple-cursors-backend 'evil-mc)
+     (multiple-cursors :variables
+                       multiple-cursors-backend 'evil-mc)
      (org :variables
           ;; org-enable-reveal-js-support t
           ;; org-enable-bootstrap-support t
@@ -103,8 +109,8 @@ This function should only modify configuration layer settings."
           org-journal-file-header "#+TITLE: Monthly Journal\n#+STARTUP: folded"
           ;; org-journal-time-prefix "* "
           )
-     ;; (dap :variables
-     ;;      dap-enable-mouse-support t)
+     (dap :variables
+          dap-enable-mouse-support t)
      yaml
      (colors :variables
              colors-colorize-identifiers nil
@@ -124,7 +130,6 @@ This function should only modify configuration layer settings."
              python-fill-column 120
              python-format-on-save t
              python-test-runner 'pytest)
-     auto-completion
      imenu-list
      ;; html
      ;; react
@@ -163,8 +168,13 @@ This function should only modify configuration layer settings."
    ;; `dotspacemacs/user-config'. To use a local version of a package, use the
    ;; `:location' property: '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(anki-editor gptel)
-
+   dotspacemacs-additional-packages
+   '(anki-editor
+     (copilot :location (recipe
+                         :fetcher github
+                         :repo "zerolfx/copilot.el"
+                         :files ("*.el" "dist")))
+     )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
 
@@ -452,7 +462,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
-   dotspacemacs-fullscreen-at-startup t
+   dotspacemacs-fullscreen-at-startup nil
 
    ;; If non-nil `spacemacs/toggle-fullscreen' will not use native fullscreen.
    ;; Use to disable fullscreen animations in OSX. (default nil)
@@ -672,15 +682,34 @@ before packages are loaded."
   ;; start server
   (server-start)
 
+  ;; copilot
+  ;; accept completion from copilot and fallback to company
+  (with-eval-after-load 'company
+    ;; disable inline previews
+    (delq 'company-preview-if-just-one-frontend company-frontends))
+  (with-eval-after-load 'copilot
+    (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
+    (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
+    (define-key copilot-completion-map (kbd "C-TAB") 'copilot-accept-completion-by-word)
+    (define-key copilot-completion-map (kbd "C-<tab>") 'copilot-accept-completion-by-word))
+  (add-hook 'prog-mode-hook 'copilot-mode)
+
+  ;; lsp-bridge
+  ;; (add-to-list 'load-path "/Users/zhanghaidong/code/lsp-bridge")
+  ;; (require 'yasnippet)
+  ;; (yas-global-mode 1)
+  ;; (require 'lsp-bridge)
+  ;; (global-lsp-bridge-mode)
+
   ;; ChatGPT
-  (require 'gptel)
+  ;; (require 'gptel)
   ;; (spacemacs/set-leader-keys
   ;;   "ags" 'gptel-send)
   ;; (spacemacs/set-leader-keys
   ;;   "agm" 'gptel-menu)
   ;; (spacemacs/set-leader-keys
   ;;   "agg" 'gptel)
-  (setq gptel-default-mode 'org-mode)
+  ;; (setq gptel-default-mode 'org-mode)
 
   ;; pyim setting
   ;; (setq default-input-method "pyim")
@@ -756,10 +785,53 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(magit-todos-insert-after '(bottom) nil nil "Changed by setter of obsolete option `magit-todos-insert-at'")
  '(org-agenda-files
-   '("/Users/zhanghaidong/Dropbox/orgs/agenda.org" "/Users/zhanghaidong/Library/CloudStorage/Dropbox/orgs/journal/2023-08.org"))
+   '("/Users/zhanghaidong/Dropbox/orgs/agenda.org"
+     "/Users/zhanghaidong/Library/CloudStorage/Dropbox/orgs/journal/2023-12.org"))
  '(package-selected-packages
-   '(neotree company-shell fish-mode flycheck-bashate insert-shebang shfmt reformatter yasnippet-snippets yapfify yaml-mode ws-butler writeroom-mode winum which-key web-beautify volatile-highlights vim-powerline vi-tilde-fringe uuidgen use-package unfill undo-tree treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil treemacs-all-the-icons toml-mode toc-org term-cursor symon symbol-overlay string-inflection string-edit-at-point sphinx-doc spacemacs-whitespace-cleanup spacemacs-purpose-popwin spaceline space-doc smeargle rust-mode ron-mode reveal-in-osx-finder restart-emacs rainbow-mode rainbow-identifiers rainbow-delimiters quickrun pytest pylookup pyenv-mode pydoc py-isort protobuf-mode prettier-js popwin poetry pippel pipenv pip-requirements password-generator paradox overseer osx-trash osx-dictionary osx-clipboard orgit-forge org-superstar org-roam-ui org-rich-yank org-projectile org-present org-pomodoro org-mime org-journal org-download org-contrib org-cliplink open-junk-file nose nameless mwim multi-line mmm-mode markdown-toc magit-todos macrostep lsp-ui lsp-python-ms lsp-pyright lsp-origami lorem-ipsum live-py-mode link-hint launchctl json-reformat json-navigator json-mode inspector info+ indent-guide importmagic ibuffer-projectile hybrid-mode hungry-delete htmlize holy-mode highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-git-grep helm-descbinds helm-company helm-c-yasnippet helm-ag gptel google-translate golden-ratio gnuplot gitignore-templates git-timemachine git-modes git-messenger git-link git-gutter-fringe gh-md fuzzy flycheck-rust flycheck-pos-tip flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-evilified-state evil-escape evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu emr elisp-slime-nav elisp-def editorconfig dumb-jump drag-stuff dotenv-mode doom-themes dired-quick-sort diminish devdocs dap-mode cython-mode company-anaconda column-enforce-mode color-identifiers-mode code-cells clean-aindent-mode centered-cursor-mode cargo browse-at-remote blacken auto-yasnippet auto-highlight-symbol auto-compile anki-editor aggressive-indent ace-link ace-jump-helm-line ac-ispell)))
+   '(neotree company-shell fish-mode flycheck-bashate insert-shebang shfmt
+             reformatter yasnippet-snippets yapfify yaml-mode ws-butler
+             writeroom-mode winum which-key web-beautify volatile-highlights
+             vim-powerline vi-tilde-fringe uuidgen use-package unfill undo-tree
+             treemacs-projectile treemacs-persp treemacs-magit
+             treemacs-icons-dired treemacs-evil treemacs-all-the-icons toml-mode
+             toc-org term-cursor symon symbol-overlay string-inflection
+             string-edit-at-point sphinx-doc spacemacs-whitespace-cleanup
+             spacemacs-purpose-popwin spaceline space-doc smeargle ron-mode
+             reveal-in-osx-finder restart-emacs rainbow-mode rainbow-identifiers
+             rainbow-delimiters quickrun pytest pylookup pyenv-mode pydoc
+             py-isort protobuf-mode prettier-js popwin poetry pippel pipenv
+             pip-requirements password-generator paradox overseer osx-trash
+             osx-dictionary osx-clipboard orgit-forge org-superstar
+             org-rich-yank org-projectile org-present org-pomodoro org-mime
+             org-download org-contrib org-cliplink open-junk-file nose nameless
+             mwim multi-line mmm-mode markdown-toc macrostep lsp-python-ms
+             lsp-pyright lsp-origami lorem-ipsum live-py-mode link-hint
+             launchctl json-reformat json-navigator json-mode inspector info+
+             indent-guide importmagic ibuffer-projectile hybrid-mode
+             hungry-delete htmlize holy-mode highlight-parentheses
+             highlight-numbers highlight-indentation hide-comnt help-fns+
+             helm-xref helm-themes helm-swoop helm-pydoc helm-purpose
+             helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make
+             helm-lsp helm-ls-git helm-git-grep helm-descbinds helm-company
+             helm-c-yasnippet helm-ag gptel google-translate golden-ratio
+             gnuplot gitignore-templates git-timemachine git-modes git-messenger
+             git-link git-gutter-fringe gh-md fuzzy flycheck-rust
+             flycheck-pos-tip flycheck-package flycheck-elsa flx-ido
+             fancy-battery eyebrowse expand-region evil-visualstar
+             evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line
+             evil-surround evil-numbers evil-nerd-commenter evil-matchit
+             evil-lisp-state evil-lion evil-indent-plus evil-iedit-state
+             evil-goggles evil-exchange evil-evilified-state evil-escape
+             evil-easymotion evil-collection evil-cleverparens evil-args
+             evil-anzu eval-sexp-fu emr elisp-slime-nav elisp-def editorconfig
+             dumb-jump drag-stuff dotenv-mode doom-themes dired-quick-sort
+             diminish devdocs dap-mode cython-mode company-anaconda
+             column-enforce-mode color-identifiers-mode code-cells
+             clean-aindent-mode centered-cursor-mode cargo browse-at-remote
+             blacken auto-yasnippet auto-highlight-symbol auto-compile
+             anki-editor aggressive-indent ace-link ace-jump-helm-line ac-ispell)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
