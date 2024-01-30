@@ -34,8 +34,8 @@ This function should only modify configuration layer settings."
    dotspacemacs-configuration-layers
    '(protobuf
      (rust :variables
-           rust-backend 'lsp
-           rust-format-on-save t)
+           ;; rust-format-on-save t
+           )
      shell-scripts
      ;; (chinese :variables
      ;;          chinese-default-input-method 'pinyin)
@@ -170,10 +170,10 @@ This function should only modify configuration layer settings."
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages
    '(anki-editor
-     (copilot :location (recipe
-                         :fetcher github
-                         :repo "zerolfx/copilot.el"
-                         :files ("*.el" "dist")))
+     ;; (copilot :location (recipe
+     ;;                     :fetcher github
+     ;;                     :repo "zerolfx/copilot.el"
+     ;;                     :files ("*.el" "dist")))
      )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -574,7 +574,8 @@ It should only modify the values of Spacemacs settings."
    ;; List of search tool executable names. Spacemacs uses the first installed
    ;; tool of the list. Supported tools are `rg', `ag', `pt', `ack' and `grep'.
    ;; (default '("rg" "ag" "pt" "ack" "grep"))
-   dotspacemacs-search-tools '("rg" "ag" "pt" "ack" "grep")
+   ;; dotspacemacs-search-tools '("rg" "ag" "pt" "ack" "grep")
+   dotspacemacs-search-tools '("ag" "pt" "ack" "grep")
 
    ;; Format specification for setting the frame title.
    ;; %a - the `abbreviated-file-name', or `buffer-name'
@@ -684,15 +685,15 @@ before packages are loaded."
 
   ;; copilot
   ;; accept completion from copilot and fallback to company
-  (with-eval-after-load 'company
-    ;; disable inline previews
-    (delq 'company-preview-if-just-one-frontend company-frontends))
-  (with-eval-after-load 'copilot
-    (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
-    (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
-    (define-key copilot-completion-map (kbd "C-TAB") 'copilot-accept-completion-by-word)
-    (define-key copilot-completion-map (kbd "C-<tab>") 'copilot-accept-completion-by-word))
-  (add-hook 'prog-mode-hook 'copilot-mode)
+  ;; (with-eval-after-load 'company
+  ;;   ;; disable inline previews
+  ;;   (delq 'company-preview-if-just-one-frontend company-frontends))
+  ;; (with-eval-after-load 'copilot
+  ;;   (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
+  ;;   (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
+  ;;   (define-key copilot-completion-map (kbd "C-TAB") 'copilot-accept-completion-by-word)
+  ;;   (define-key copilot-completion-map (kbd "C-<tab>") 'copilot-accept-completion-by-word))
+  ;; (add-hook 'prog-mode-hook 'copilot-mode)
 
   ;; lsp-bridge
   ;; (add-to-list 'load-path "/Users/zhanghaidong/code/lsp-bridge")
@@ -723,32 +724,55 @@ before packages are loaded."
   (spacemacs/set-leader-keys
     "ati" 'anki-editor-insert-note)
 
-  ;;org configs
-  (setq org-image-actual-width '(700))
-  (setq org-src-tab-acts-natively t)
-  (setq org-agenda-include-diary t)
-  (setq org-download-screenshot-method "screencapture -i %s")
-  (setq spaceline-org-clock-p nil)
-  (setq org-pomodoro-start-sound-p t)
-  (setq org-pomodoro-finished-hook '(lambda() (haidong/notification "Pomodoro Finished" "Have a break" t)))
-  (setq org-pomodoro-short-break-finished-hook '(lambda() (haidong/notification "Short Break" "Ready to Go?" t)))
-  (setq org-pomodoro-long-break-finished-hook'(lambda() (haidong/notification "Long Break" "Ready to Go?" t)))
-  (setq-default org-download-image-dir "~/Dropbox/orgs/images")
-  (setq org-id-track-globally t)
-  (setq org-id-locations-file "~/Dropbox/orgs/.org-id-locations")
-  (setq deft-directory "~/Dropbox/orgs")
-  (setq deft-recursive t)
-  (setq deft-extensions '("org" "md" "txt"))
-  (global-set-key (kbd "C-;") 'deft)
-  (global-set-key (kbd "C-'") 'calendar)
-  (with-eval-after-load 'evil
-    (evil-set-initial-state 'org-brain-visualize-mode 'emacs))
-  (setq org-todo-keywords
-        '((sequencep "TODO" "|" "DONE" "CANCEL")))
-  (setq org-agenda-files (list "~/Dropbox/orgs/agenda.org"))
 
-  ;; org-roam
-  (setq org-roam-directory "~/Dropbox/orgs/brain")
+  (with-eval-after-load 'org
+    ;;org configs
+    (setq org-image-actual-width '(700))
+    (setq org-src-tab-acts-natively t)
+    (setq org-agenda-include-diary t)
+    (setq org-download-screenshot-method "screencapture -i %s")
+    (setq spaceline-org-clock-p nil)
+    (setq org-pomodoro-start-sound-p t)
+    (setq org-pomodoro-finished-hook '(lambda() (haidong/notification "Pomodoro Finished" "Have a break" t)))
+    (setq org-pomodoro-short-break-finished-hook '(lambda() (haidong/notification "Short Break" "Ready to Go?" t)))
+    (setq org-pomodoro-long-break-finished-hook'(lambda() (haidong/notification "Long Break" "Ready to Go?" t)))
+    (setq-default org-download-image-dir "~/Dropbox/orgs/images")
+    (setq org-id-track-globally t)
+    (setq org-id-locations-file "~/Dropbox/orgs/.org-id-locations")
+    (setq deft-directory "~/Dropbox/orgs")
+    (setq deft-recursive t)
+    (setq deft-extensions '("org" "md" "txt"))
+    (global-set-key (kbd "C-;") 'deft)
+    (global-set-key (kbd "C-'") 'calendar)
+    (with-eval-after-load 'evil
+      (evil-set-initial-state 'org-brain-visualize-mode 'emacs))
+    (setq org-todo-keywords
+          '((sequencep "TODO" "|" "DONE" "CANCEL")))
+    (setq org-agenda-files (list "~/Dropbox/orgs/agenda.org"))
+
+    ;; org-roam
+    (setq org-roam-directory "~/Dropbox/orgs/brain")
+    ;; (add-hook 'after-init-hook 'org-roam-mode)
+    (setq org-roam-capture-templates
+          '(("d" "default" plain "%?"
+             :target (file+head "main/${slug}.org"
+                                "#+title: ${title}\n#+CREATED: %U\n\#+TAGS:\n\n")
+             :unnarrowed t)
+
+            ("a" "art" plain "%?"
+             :target (file+head "art/${slug}.org"
+                                "#+title: ${title}\n#+CREATED: %U\n\#+TAGS: art\n\n")
+             :unnarrowed t)
+
+            ("p" "programming" plain "%?"
+             :target (file+head "programming/${slug}.org"
+                                "#+title: ${title}\n#+CREATED: %U\n\#+TAGS: programming\n\n")
+             :unnarrowed t)
+
+            ("h" "humanities" plain "%?"
+             :target (file+head "humanities/${slug}.org"
+                                "#+title: ${title}\n#+CREATED: %U\n\#+TAGS: humanities\n\n")
+             :unnarrowed t))))
 
 
   ;; latex configs
@@ -762,6 +786,11 @@ before packages are loaded."
   (setq lsp-pyls-plugins-flake8-ignore '("E501"))
   (setq lsp-pyls-plugins-flake8-config '".flake8rc")
   (setq lsp-pyls-plugins-pylint-enabled t)
+
+  ;; company configs
+  (setq company-minimum-prefix-length '4)
+  (setq company-idle-delay '1)
+
 
   ;; plantuml
   ;; (setq plantuml-output-type "svg")
@@ -788,7 +817,7 @@ This function is called at the very end of Spacemacs initialization."
  '(magit-todos-insert-after '(bottom) nil nil "Changed by setter of obsolete option `magit-todos-insert-at'")
  '(org-agenda-files
    '("/Users/zhanghaidong/Dropbox/orgs/agenda.org"
-     "/Users/zhanghaidong/Library/CloudStorage/Dropbox/orgs/journal/2023-12.org"))
+     "/Users/zhanghaidong/Library/CloudStorage/Dropbox/orgs/journal/2024-01.org"))
  '(package-selected-packages
    '(neotree company-shell fish-mode flycheck-bashate insert-shebang shfmt
              reformatter yasnippet-snippets yapfify yaml-mode ws-butler
