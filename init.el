@@ -32,7 +32,8 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(protobuf
+   '(html
+     protobuf
      (rust :variables
            ;; rust-format-on-save t
            )
@@ -108,12 +109,20 @@ This function should only modify configuration layer settings."
           org-journal-time-format ""
           org-journal-file-header "#+TITLE: Monthly Journal\n#+STARTUP: folded"
           ;; org-journal-time-prefix "* "
+          org-todo-dependencies-strategy 'naive-auto
+          org-enable-notifications t
+          org-start-notification-daemon-on-startup t
+          org-enable-valign t
+          org-enable-appear-support t
           )
      (dap :variables
           dap-enable-mouse-support t)
      yaml
      (colors :variables
-             colors-colorize-identifiers nil
+             colors-colorize-identifiers 'all
+             colors-default-rainbow-identifiers-sat 42
+             colors-default-rainbow-identifiers-light 86
+             colors-enable-nyan-cat-progress-bar t
              )
      ;; (typescript :variables
      ;;             typescript-fmt-tool 'tide
@@ -131,7 +140,7 @@ This function should only modify configuration layer settings."
              python-format-on-save t
              python-test-runner 'pytest)
      imenu-list
-     ;; html
+     html
      ;; react
      (json :variables
            json-fmt-tool 'web-beautify
@@ -357,14 +366,15 @@ It should only modify the values of Spacemacs settings."
    ;; refer to the DOCUMENTATION.org for more info on how to create your own
    ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
-   ;; dotspacemacs-mode-line-theme '(all-the-icons :separator arrow :separator-scale 1.5)
    dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.5)
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
    dotspacemacs-colorize-cursor-according-to-state t
 
-   ;; Default font or prioritized list of fonts. The `:size' can be specified as
+   ;; Default font or prioritized list of fonts. This setting has no effect when
+   ;; running Emacs in terminal. The font set here will be used for default and
+   ;; fixed-pitch faces. The `:size' can be specified as
    ;; a non-negative integer (pixel size), or a floating-point (point size).
    ;; Point size is recommended, because it's device independent. (default 10.0)
    dotspacemacs-default-font '("Source Code Pro"
@@ -445,6 +455,10 @@ It should only modify the values of Spacemacs settings."
    ;; Which-key frame position. Possible values are `right', `bottom' and
    ;; `right-then-bottom'. right-then-bottom tries to display the frame to the
    ;; right; if there is insufficient space it displays it at the bottom.
+   ;; It is also possible to use a posframe with the following cons cell
+   ;; `(posframe . position)' where position can be one of `center',
+   ;; `top-center', `bottom-center', `top-left-corner', `top-right-corner',
+   ;; `top-right-corner', `bottom-left-corner' or `bottom-right-corner'
    ;; (default 'bottom)
    dotspacemacs-which-key-position 'bottom
 
@@ -454,6 +468,11 @@ It should only modify the values of Spacemacs settings."
    ;; displays the buffer in a same-purpose window even if the buffer can be
    ;; displayed in the current window. (default nil)
    dotspacemacs-switch-to-buffer-prefers-purpose nil
+
+   ;; Whether side windows (such as those created by treemacs or neotree)
+   ;; are kept or minimized by `spacemacs/toggle-maximize-window' (SPC w m).
+   ;; (default t)
+   dotspacemacs-maximize-window-keep-side-windows t
 
    ;; If non-nil a progress bar is displayed when spacemacs is loading. This
    ;; may increase the boot time on some systems and emacs builds, set it to
@@ -471,7 +490,7 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (default t) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup nil
+   dotspacemacs-maximized-at-startup t
 
    ;; If non-nil the frame is undecorated when Emacs starts up. Combine this
    ;; variable with `dotspacemacs-maximized-at-startup' to obtain fullscreen
@@ -574,8 +593,14 @@ It should only modify the values of Spacemacs settings."
    ;; List of search tool executable names. Spacemacs uses the first installed
    ;; tool of the list. Supported tools are `rg', `ag', `pt', `ack' and `grep'.
    ;; (default '("rg" "ag" "pt" "ack" "grep"))
-   ;; dotspacemacs-search-tools '("rg" "ag" "pt" "ack" "grep")
-   dotspacemacs-search-tools '("ag" "pt" "ack" "grep")
+   dotspacemacs-search-tools '("rg" "ag" "pt" "ack" "grep")
+
+   ;; The backend used for undo/redo functionality. Possible values are
+   ;; `undo-fu', `undo-redo' and `undo-tree' see also `evil-undo-system'.
+   ;; Note that saved undo history does not get transferred when changing
+   ;; your undo system. The default is currently `undo-fu' as `undo-tree'
+   ;; is not maintained anymore and `undo-redo' is very basic."
+   dotspacemacs-undo-system 'undo-fu
 
    ;; Format specification for setting the frame title.
    ;; %a - the `abbreviated-file-name', or `buffer-name'
@@ -655,7 +680,7 @@ default it calls `spacemacs/load-spacemacs-env' which loads the environment
 variables declared in `~/.spacemacs.env' or `~/.spacemacs.d/.spacemacs.env'.
 See the header of this file for more information."
   (spacemacs/load-spacemacs-env)
-)
+  )
 
 (defun dotspacemacs/user-init ()
   "Initialization for user code:
@@ -663,7 +688,7 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-)
+  )
 
 
 (defun dotspacemacs/user-load ()
@@ -671,7 +696,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
 dump."
-)
+  )
 
 
 (defun dotspacemacs/user-config ()
@@ -725,54 +750,38 @@ before packages are loaded."
     "ati" 'anki-editor-insert-note)
 
 
+  ;;org configs
+
   (with-eval-after-load 'org
-    ;;org configs
     (setq org-image-actual-width '(700))
     (setq org-src-tab-acts-natively t)
     (setq org-agenda-include-diary t)
-    (setq org-download-screenshot-method "screencapture -i %s")
     (setq spaceline-org-clock-p nil)
+    (setq org-agenda-files (list "~/Dropbox/orgs/agenda.org"))
+    (setq org-download-screenshot-method "screencapture -i %s")
+
     (setq org-pomodoro-start-sound-p t)
     (setq org-pomodoro-finished-hook '(lambda() (haidong/notification "Pomodoro Finished" "Have a break" t)))
     (setq org-pomodoro-short-break-finished-hook '(lambda() (haidong/notification "Short Break" "Ready to Go?" t)))
     (setq org-pomodoro-long-break-finished-hook'(lambda() (haidong/notification "Long Break" "Ready to Go?" t)))
+
     (setq-default org-download-image-dir "~/Dropbox/orgs/images")
     (setq org-id-track-globally t)
     (setq org-id-locations-file "~/Dropbox/orgs/.org-id-locations")
+
     (setq deft-directory "~/Dropbox/orgs")
     (setq deft-recursive t)
     (setq deft-extensions '("org" "md" "txt"))
+
     (global-set-key (kbd "C-;") 'deft)
     (global-set-key (kbd "C-'") 'calendar)
-    (with-eval-after-load 'evil
-      (evil-set-initial-state 'org-brain-visualize-mode 'emacs))
+
     (setq org-todo-keywords
           '((sequencep "TODO" "|" "DONE" "CANCEL")))
-    (setq org-agenda-files (list "~/Dropbox/orgs/agenda.org"))
 
     ;; org-roam
     (setq org-roam-directory "~/Dropbox/orgs/brain")
-    ;; (add-hook 'after-init-hook 'org-roam-mode)
-    (setq org-roam-capture-templates
-          '(("d" "default" plain "%?"
-             :target (file+head "main/${slug}.org"
-                                "#+title: ${title}\n#+CREATED: %U\n\#+TAGS:\n\n")
-             :unnarrowed t)
-
-            ("a" "art" plain "%?"
-             :target (file+head "art/${slug}.org"
-                                "#+title: ${title}\n#+CREATED: %U\n\#+TAGS: art\n\n")
-             :unnarrowed t)
-
-            ("p" "programming" plain "%?"
-             :target (file+head "programming/${slug}.org"
-                                "#+title: ${title}\n#+CREATED: %U\n\#+TAGS: programming\n\n")
-             :unnarrowed t)
-
-            ("h" "humanities" plain "%?"
-             :target (file+head "humanities/${slug}.org"
-                                "#+title: ${title}\n#+CREATED: %U\n\#+TAGS: humanities\n\n")
-             :unnarrowed t))))
+    )
 
 
   ;; latex configs
@@ -809,62 +818,67 @@ before packages are loaded."
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(magit-todos-insert-after '(bottom) nil nil "Changed by setter of obsolete option `magit-todos-insert-at'")
- '(org-agenda-files
-   '("/Users/zhanghaidong/Dropbox/orgs/agenda.org"
-     "/Users/zhanghaidong/Library/CloudStorage/Dropbox/orgs/journal/2024-01.org"))
- '(package-selected-packages
-   '(neotree company-shell fish-mode flycheck-bashate insert-shebang shfmt
-             reformatter yasnippet-snippets yapfify yaml-mode ws-butler
-             writeroom-mode winum which-key web-beautify volatile-highlights
-             vim-powerline vi-tilde-fringe uuidgen use-package unfill undo-tree
-             treemacs-projectile treemacs-persp treemacs-magit
-             treemacs-icons-dired treemacs-evil treemacs-all-the-icons toml-mode
-             toc-org term-cursor symon symbol-overlay string-inflection
-             string-edit-at-point sphinx-doc spacemacs-whitespace-cleanup
-             spacemacs-purpose-popwin spaceline space-doc smeargle ron-mode
-             reveal-in-osx-finder restart-emacs rainbow-mode rainbow-identifiers
-             rainbow-delimiters quickrun pytest pylookup pyenv-mode pydoc
-             py-isort protobuf-mode prettier-js popwin poetry pippel pipenv
-             pip-requirements password-generator paradox overseer osx-trash
-             osx-dictionary osx-clipboard orgit-forge org-superstar
-             org-rich-yank org-projectile org-present org-pomodoro org-mime
-             org-download org-contrib org-cliplink open-junk-file nose nameless
-             mwim multi-line mmm-mode markdown-toc macrostep lsp-python-ms
-             lsp-pyright lsp-origami lorem-ipsum live-py-mode link-hint
-             launchctl json-reformat json-navigator json-mode inspector info+
-             indent-guide importmagic ibuffer-projectile hybrid-mode
-             hungry-delete htmlize holy-mode highlight-parentheses
-             highlight-numbers highlight-indentation hide-comnt help-fns+
-             helm-xref helm-themes helm-swoop helm-pydoc helm-purpose
-             helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make
-             helm-lsp helm-ls-git helm-git-grep helm-descbinds helm-company
-             helm-c-yasnippet helm-ag gptel google-translate golden-ratio
-             gnuplot gitignore-templates git-timemachine git-modes git-messenger
-             git-link git-gutter-fringe gh-md fuzzy flycheck-rust
-             flycheck-pos-tip flycheck-package flycheck-elsa flx-ido
-             fancy-battery eyebrowse expand-region evil-visualstar
-             evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line
-             evil-surround evil-numbers evil-nerd-commenter evil-matchit
-             evil-lisp-state evil-lion evil-indent-plus evil-iedit-state
-             evil-goggles evil-exchange evil-evilified-state evil-escape
-             evil-easymotion evil-collection evil-cleverparens evil-args
-             evil-anzu eval-sexp-fu emr elisp-slime-nav elisp-def editorconfig
-             dumb-jump drag-stuff dotenv-mode doom-themes dired-quick-sort
-             diminish devdocs dap-mode cython-mode company-anaconda
-             column-enforce-mode color-identifiers-mode code-cells
-             clean-aindent-mode centered-cursor-mode cargo browse-at-remote
-             blacken auto-yasnippet auto-highlight-symbol auto-compile
-             anki-editor aggressive-indent ace-link ace-jump-helm-line ac-ispell)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-)
+  (custom-set-variables
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(magit-todos-insert-after '(bottom) nil nil "Changed by setter of obsolete option `magit-todos-insert-at'")
+   '(org-agenda-files
+     '("/Users/zhanghaidong/Dropbox/orgs/agenda.org"
+       "/Users/zhanghaidong/Library/CloudStorage/Dropbox/orgs/journal/2024-12.org"))
+   '(package-selected-packages
+     '(ac-ispell ace-jump-helm-line ace-link add-node-modules-path aggressive-indent
+                 anki-editor auto-compile auto-highlight-symbol auto-yasnippet
+                 blacken browse-at-remote cargo centered-cursor-mode
+                 clean-aindent-mode code-cells color-identifiers-mode
+                 column-enforce-mode company-anaconda company-shell company-web
+                 counsel counsel-css cython-mode dap-mode devdocs diminish
+                 dired-quick-sort doom-themes dotenv-mode drag-stuff dumb-jump
+                 editorconfig elisp-def elisp-slime-nav emmet-mode emr
+                 eval-sexp-fu evil-anzu evil-args evil-cleverparens
+                 evil-collection evil-easymotion evil-escape evil-evilified-state
+                 evil-exchange evil-goggles evil-iedit-state evil-indent-plus
+                 evil-lion evil-lisp-state evil-matchit evil-nerd-commenter
+                 evil-numbers evil-surround evil-textobj-line evil-tutor
+                 evil-unimpaired evil-visual-mark-mode evil-visualstar
+                 expand-region eyebrowse fancy-battery fish-mode flx-ido
+                 flycheck-bashate flycheck-elsa flycheck-package flycheck-pos-tip
+                 flycheck-rust fuzzy gh-md git-gutter-fringe git-link
+                 git-messenger git-modes git-timemachine gitignore-templates
+                 gnuplot golden-ratio google-translate gptel haml-mode helm-ag
+                 helm-c-yasnippet helm-company helm-css-scss helm-descbinds
+                 helm-git-grep helm-ls-git helm-lsp helm-make helm-mode-manager
+                 helm-org helm-org-rifle helm-projectile helm-purpose helm-pydoc
+                 helm-swoop helm-themes helm-xref help-fns+ hide-comnt
+                 highlight-indentation highlight-numbers highlight-parentheses
+                 holy-mode htmlize hungry-delete hybrid-mode ibuffer-projectile
+                 impatient-mode importmagic indent-guide info+ insert-shebang
+                 inspector ivy json-mode json-navigator json-reformat launchctl
+                 link-hint live-py-mode lorem-ipsum lsp-origami lsp-pyright
+                 lsp-python-ms macrostep markdown-toc mmm-mode multi-line mwim
+                 nameless neotree nose open-junk-file org-cliplink org-contrib
+                 org-download org-mime org-pomodoro org-present org-projectile
+                 org-rich-yank org-superstar orgit-forge osx-clipboard
+                 osx-dictionary osx-trash overseer paradox password-generator
+                 pip-requirements pipenv pippel poetry popwin prettier-js
+                 protobuf-mode pug-mode py-isort pydoc pyenv-mode pylookup pytest
+                 quickrun rainbow-delimiters rainbow-identifiers rainbow-mode
+                 reformatter restart-emacs reveal-in-osx-finder ron-mode sass-mode
+                 scss-mode shfmt slim-mode smeargle space-doc spaceline
+                 spacemacs-purpose-popwin spacemacs-whitespace-cleanup sphinx-doc
+                 string-edit-at-point string-inflection swiper symbol-overlay
+                 symon tagedit term-cursor toc-org toml-mode
+                 treemacs-all-the-icons treemacs-evil treemacs-icons-dired
+                 treemacs-magit treemacs-persp treemacs-projectile undo-tree
+                 unfill use-package uuidgen vi-tilde-fringe vim-powerline
+                 volatile-highlights web-beautify web-completion-data web-mode
+                 which-key winum writeroom-mode ws-butler yaml-mode yapfify
+                 yasnippet-snippets)))
+  (custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   )
+  )
