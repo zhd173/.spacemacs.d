@@ -330,7 +330,7 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil, show file icons for entries and headings on Spacemacs home buffer.
    ;; This has no effect in terminal or if "all-the-icons" package or the font
    ;; is not installed. (default nil)
-   dotspacemacs-startup-buffer-show-icons t
+   dotspacemacs-startup-buffer-show-icons nil
 
    ;; Default major mode for a new empty buffer. Possible values are mode
    ;; names such as `text-mode'; and `nil' to use Fundamental mode.
@@ -751,13 +751,13 @@ before packages are loaded."
 
 
   ;;org configs
-
   (with-eval-after-load 'org
+    (setq alert-default-style 'notifications)
     (setq org-image-actual-width '(700))
     (setq org-src-tab-acts-natively t)
     (setq org-agenda-include-diary t)
     (setq spaceline-org-clock-p nil)
-    (setq org-agenda-files (list "~/Dropbox/orgs/agenda.org"))
+    (setq org-agenda-files (list "~/Dropbox/orgs/agenda/"))
     (setq org-download-screenshot-method "screencapture -i %s")
 
     (setq org-pomodoro-start-sound-p t)
@@ -775,9 +775,6 @@ before packages are loaded."
 
     (global-set-key (kbd "C-;") 'deft)
     (global-set-key (kbd "C-'") 'calendar)
-
-    (setq org-todo-keywords
-          '((sequencep "TODO" "|" "DONE" "CANCEL")))
 
     ;; org-roam
     (setq org-roam-directory "~/Dropbox/orgs/brain")
@@ -800,6 +797,14 @@ before packages are loaded."
   (setq company-minimum-prefix-length '4)
   (setq company-idle-delay '1)
 
+  ;; llm
+  ;; (setq
+  ;;  gptel-model 'mistral:latest
+  ;;  gptel-backend (gptel-make-ollama "Ollama"
+  ;;                                   :host "localhost:11434"
+  ;;                                   :stream t
+  ;;                                   :models '(mistral:latest)))
+
 
   ;; plantuml
   ;; (setq plantuml-output-type "svg")
@@ -818,63 +823,6 @@ before packages are loaded."
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
-  (custom-set-variables
-   ;; custom-set-variables was added by Custom.
-   ;; If you edit it by hand, you could mess it up, so be careful.
-   ;; Your init file should contain only one such instance.
-   ;; If there is more than one, they won't work right.
-   '(magit-todos-insert-after '(bottom) nil nil "Changed by setter of obsolete option `magit-todos-insert-at'")
-   '(org-agenda-files
-     '("/Users/zhanghaidong/Dropbox/orgs/agenda.org"
-       "/Users/zhanghaidong/Library/CloudStorage/Dropbox/orgs/journal/2024-12.org"))
-   '(package-selected-packages
-     '(ac-ispell ace-jump-helm-line ace-link add-node-modules-path aggressive-indent
-                 anki-editor auto-compile auto-highlight-symbol auto-yasnippet
-                 blacken browse-at-remote cargo centered-cursor-mode
-                 clean-aindent-mode code-cells color-identifiers-mode
-                 column-enforce-mode company-anaconda company-shell company-web
-                 counsel counsel-css cython-mode dap-mode devdocs diminish
-                 dired-quick-sort doom-themes dotenv-mode drag-stuff dumb-jump
-                 editorconfig elisp-def elisp-slime-nav emmet-mode emr
-                 eval-sexp-fu evil-anzu evil-args evil-cleverparens
-                 evil-collection evil-easymotion evil-escape evil-evilified-state
-                 evil-exchange evil-goggles evil-iedit-state evil-indent-plus
-                 evil-lion evil-lisp-state evil-matchit evil-nerd-commenter
-                 evil-numbers evil-surround evil-textobj-line evil-tutor
-                 evil-unimpaired evil-visual-mark-mode evil-visualstar
-                 expand-region eyebrowse fancy-battery fish-mode flx-ido
-                 flycheck-bashate flycheck-elsa flycheck-package flycheck-pos-tip
-                 flycheck-rust fuzzy gh-md git-gutter-fringe git-link
-                 git-messenger git-modes git-timemachine gitignore-templates
-                 gnuplot golden-ratio google-translate gptel haml-mode helm-ag
-                 helm-c-yasnippet helm-company helm-css-scss helm-descbinds
-                 helm-git-grep helm-ls-git helm-lsp helm-make helm-mode-manager
-                 helm-org helm-org-rifle helm-projectile helm-purpose helm-pydoc
-                 helm-swoop helm-themes helm-xref help-fns+ hide-comnt
-                 highlight-indentation highlight-numbers highlight-parentheses
-                 holy-mode htmlize hungry-delete hybrid-mode ibuffer-projectile
-                 impatient-mode importmagic indent-guide info+ insert-shebang
-                 inspector ivy json-mode json-navigator json-reformat launchctl
-                 link-hint live-py-mode lorem-ipsum lsp-origami lsp-pyright
-                 lsp-python-ms macrostep markdown-toc mmm-mode multi-line mwim
-                 nameless neotree nose open-junk-file org-cliplink org-contrib
-                 org-download org-mime org-pomodoro org-present org-projectile
-                 org-rich-yank org-superstar orgit-forge osx-clipboard
-                 osx-dictionary osx-trash overseer paradox password-generator
-                 pip-requirements pipenv pippel poetry popwin prettier-js
-                 protobuf-mode pug-mode py-isort pydoc pyenv-mode pylookup pytest
-                 quickrun rainbow-delimiters rainbow-identifiers rainbow-mode
-                 reformatter restart-emacs reveal-in-osx-finder ron-mode sass-mode
-                 scss-mode shfmt slim-mode smeargle space-doc spaceline
-                 spacemacs-purpose-popwin spacemacs-whitespace-cleanup sphinx-doc
-                 string-edit-at-point string-inflection swiper symbol-overlay
-                 symon tagedit term-cursor toc-org toml-mode
-                 treemacs-all-the-icons treemacs-evil treemacs-icons-dired
-                 treemacs-magit treemacs-persp treemacs-projectile undo-tree
-                 unfill use-package uuidgen vi-tilde-fringe vim-powerline
-                 volatile-highlights web-beautify web-completion-data web-mode
-                 which-key winum writeroom-mode ws-butler yaml-mode yapfify
-                 yasnippet-snippets)))
   (custom-set-faces
    ;; custom-set-faces was added by Custom.
    ;; If you edit it by hand, you could mess it up, so be careful.
