@@ -96,19 +96,17 @@ This function should only modify configuration layer settings."
      (org :variables
           ;; org-enable-reveal-js-support t
           ;; org-enable-bootstrap-support t
-          org-enable-org-journal-support t
           org-enable-roam-support t
           org-enable-roam-protocol t
           org-enable-roam-ui t
-          org-journal-encrypt-journal nil
-          org-journal-enable-agenda-integration t
           org-projectile-file "~/Dropbox/orgs/projectile/TODOs.org"
+          org-enable-org-journal-support t
+          org-journal-enable-agenda-integration t
           org-journal-dir "~/Dropbox/orgs/journal/"
           org-journal-file-type 'monthly
           org-journal-file-format "%Y-%m.org"
-          org-journal-time-format ""
+          org-journal-time-format "%H:%M"
           org-journal-file-header "#+TITLE: Monthly Journal\n#+STARTUP: folded"
-          ;; org-journal-time-prefix "* "
           org-todo-dependencies-strategy 'naive-auto
           org-enable-notifications t
           org-start-notification-daemon-on-startup t
@@ -823,6 +821,13 @@ before packages are loaded."
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
+  (custom-set-variables
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(org-agenda-files
+     '("/Users/zhanghaidong/Dropbox/orgs/agenda/agenda.org" "/Users/zhanghaidong/Dropbox/orgs/agenda/habit.org" "/Users/zhanghaidong/Dropbox/orgs/journal/2025-04.org")))
   (custom-set-faces
    ;; custom-set-faces was added by Custom.
    ;; If you edit it by hand, you could mess it up, so be careful.
